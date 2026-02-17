@@ -1,0 +1,13 @@
+[project]
+name = "dafer-ai"
+version = "0.1.0"
+description = "A 16-week deep dive into AI, ML, and Deep Learning"
+requires-python = ">=3.10"
+
+[tool.poetry]
+name = "dafer-ai"
+version = "0.1.0"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
