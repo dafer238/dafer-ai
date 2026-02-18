@@ -1,5 +1,14 @@
 Week 05 — Probability & Noise (Likelihood)
 
+## Prerequisites
+
+- **Week 00b** — Gaussian distribution definition; the preview of MLE in the "From probability to loss functions" section.
+- **Week 03** — linear regression, so you can see _why_ MSE is the natural loss under Gaussian assumptions.
+
+## What this week delivers
+
+This week closes the loop opened in Week 00b: MSE is not arbitrary — it is the correct loss when noise is Gaussian. Understanding this lets you choose different loss functions when the noise model is different (heavy-tailed data, count data, binary outcomes). Everything learned here reappears in Week 06 (uncertainty quantification) and beyond.
+
 Overview
 Tie loss-based ML to probabilistic modeling. Understand how likelihood assumptions lead to common losses and how to evaluate model fit.
 
@@ -36,3 +45,8 @@ Reading
 
 Deliverable
 - Notebook with MLE derivations, implementations, and comparison to least-squares.
+
+## What comes next
+
+- **Week 06** extends this to uncertainty quantification: credible intervals, calibration, and Bayesian inference.
+- Every loss function you encounter from Week 07 onwards is a negative log-likelihood under some noise model.

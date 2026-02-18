@@ -1,5 +1,15 @@
 Week 03 — Classical ML Foundations
 
+## Prerequisites
+
+- **Week 00a** — supervised learning problem setup; the concept of features, labels, training/validation/test split.
+- **Week 00b** — matrix multiply (the forward pass of linear regression is literally `X @ w`), derivatives, and EDA.
+- **Week 01–02** — gradient descent, because you will compare gradient-based and closed-form solutions.
+
+## What this week delivers
+
+Linear and logistic regression are not "simple" models — they are the foundation every more complex model is built on. A neural network is just stacked linear models with nonlinearities. Understanding these models deeply, including the bias-variance tradeoff, is a prerequisite to diagnosing any model in the course.
+
 Overview
 Solidify foundations in linear and logistic models, understand closed-form vs iterative solutions, and connect statistical interpretations to ML practice.
 
@@ -33,3 +43,9 @@ Readings
 
 Deliverable
 - Notebook with derivations, code, plots, and a short mini-project applying linear models to a small real dataset.
+
+## What comes next
+
+- **Week 04** adds regularization to the models built here (Ridge = L2 on the weights of linear regression).
+- **Week 05** provides the probabilistic justification for least-squares loss (Gaussian MLE).
+- **Week 07** re-interprets linear regression as a single-layer neural network without activation function.

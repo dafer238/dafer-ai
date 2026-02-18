@@ -1,5 +1,14 @@
 Week 16 — Deployment & Capstone
 
+## Prerequisites
+
+- **All previous weeks** — you need a trained, evaluated model to deploy.
+- **Week 04** (evaluation discipline) and **Week 06** (uncertainty) — a deployed system without proper evaluation and uncertainty reporting is dangerous, not useful.
+
+## What this week delivers
+
+The full ML lifecycle: data → model → evaluate → deploy → monitor. You have built every component in isolation; this week you connect them. The capstone is the proof.
+
 Overview
 Finalize an end-to-end demo: package a trained model, expose a simple API for inference, and show monitoring and basic lifecycle management.
 

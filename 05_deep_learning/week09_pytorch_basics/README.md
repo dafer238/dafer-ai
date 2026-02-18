@@ -1,5 +1,13 @@
 Week 09 — PyTorch Fundamentals
 
+## Prerequisites
+
+- **Week 07–08** — neural network from scratch in NumPy. This week's central exercise is re-implementing that exact network in PyTorch and verifying identical outputs. You must have the NumPy version first.
+
+## What this week delivers
+
+PyTorch is the tool every remaining week uses. After Week 09 you should find working in PyTorch as natural as working in NumPy. The key insight is that autograd is just the chain rule you derived in Week 07 — it is now automated.
+
 Overview
 Get practical with a modern DL framework: tensors, autograd, `nn.Module`, and training loops. Re-implement a from-scratch model using PyTorch primitives.
 
@@ -33,3 +41,8 @@ Reading/resources
 
 Deliverable
 - Notebook showing PyTorch rewrite, gradient comparisons, and checkpointing example.
+
+## What comes next
+
+- **Week 10** adds DataLoaders, schedulers, and efficient training — the production harness around the model you built this week.
+- **Week 11–16** all use the PyTorch patterns established here.

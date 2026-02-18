@@ -1,5 +1,15 @@
 Week 07 — Neural Networks From Scratch
 
+## Prerequisites
+
+- **Week 00b** — the chain rule. Backpropagation is the chain rule applied repeatedly through a composition of functions.
+- **Week 03** — linear regression is a single-layer neural network without activation. The extension to multiple layers and nonlinearities is the only new concept.
+- **Week 01–02** — gradient descent. The training loop is identical; only the gradient computation changes.
+
+## What this week delivers
+
+You will implement every part of a neural network by hand: forward pass, loss, backward pass, and parameter update. After this week, PyTorch autograd (Week 09) will have no mystery — you will know exactly what it is computing.
+
 Overview
 Implement neural networks from first principles to fully understand forward/backprop, activations, initialization, and debugging.
 
@@ -35,3 +45,8 @@ Reading & resources
 
 Deliverable
 - Notebook implementing NN from scratch, gradient checks, and experiments showing initialization/activation effects.
+
+## What comes next
+
+- **Week 08** uses the same NumPy implementation to study training pathologies (vanishing gradients, dead neurons).
+- **Week 09** re-implements this week's network in PyTorch; you verify both give identical outputs — that's how you know autograd is correct.

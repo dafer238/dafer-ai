@@ -1,5 +1,14 @@
 Week 04 — Regularization & Validation
 
+## Prerequisites
+
+- **Week 03** — linear/logistic regression. Regularization is a modification of those models.
+- **Week 00a** — overfitting/underfitting vocabulary; train/validation/test split concept.
+
+## What this week delivers
+
+Regularization is the primary tool for making models generalize. The ideas here (penalizing complexity, using held-out data to select hyperparameters) recur in every subsequent week — dropout (Week 12), BatchNorm (Week 12), early stopping (Week 09), and fine-tuning frozen layers (Week 15) are all forms of regularization.
+
 Overview
 Learn techniques to control overfitting and select models robustly. Emphasize practical cross-validation and visualization.
 
@@ -34,3 +43,8 @@ Reading
 
 Deliverable
 - Notebook with experiments showing effects of regularization and how to choose hyperparameters defensibly.
+
+## What comes next
+
+- **Week 12** revisits regularization for deep learning: Dropout and BatchNorm replace L1/L2 as the primary tools.
+- **Week 15** applies the same concept to transfer learning: freezing layers is regularization by parameter constraint.

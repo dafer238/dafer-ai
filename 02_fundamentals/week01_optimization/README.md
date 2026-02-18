@@ -1,5 +1,14 @@
 Week 01 — Optimization Intuition (Loss as Energy)
 
+## Prerequisites
+
+- **Week 00a** — you need the training loop concept (forward → loss → backward → update), the definition of _loss function_, and the definition of _parameters_ before this week makes sense.
+- **Week 00b** — you need NumPy fluency, partial derivatives, and the chain rule. The update rule $w \leftarrow w - \eta \nabla L$ uses all three.
+
+## What this week delivers
+
+By the end of Week 01 you can implement gradient descent from scratch and understand _why_ it works. This is the engine that every later week will modify (Week 02 adds momentum and Adam) or apply at scale (Week 09 via PyTorch autograd).
+
 Overview
 Build physical intuition for loss landscapes and optimization dynamics. Focus on experiments that reveal how hyperparameters shape training trajectories.
 
@@ -46,3 +55,9 @@ Deliverables
 
 Notes
 - Emphasize clean plots and reproducible notebooks; include commentary on failures (divergence, oscillation).
+
+## What comes next
+
+- **Week 02** extends the optimizer: momentum, RMSProp, Adam — all built on the same update-rule idea.
+- **Week 03** applies gradient descent to a real supervised problem (linear regression) for the first time.
+- **Week 07** re-derives this loop for multi-layer networks via backpropagation.

@@ -1,5 +1,13 @@
 Week 02 — Advanced Optimization
 
+## Prerequisites
+
+- **Week 01** — vanilla gradient descent, learning rate effects, and loss landscapes. Week 02 answers "what is wrong with plain gradient descent?" — which requires having seen plain gradient descent first.
+
+## What this week delivers
+
+You will understand _why_ modern training uses Adam rather than vanilla SGD, and when each optimizer is appropriate. This understanding will inform every training experiment from Week 03 onwards.
+
 Overview
 Dive into practical optimizer design and tuning. Compare algorithms empirically and learn diagnostics for optimizer choice.
 
@@ -38,3 +46,8 @@ Readings
 
 Deliverable
 - Notebook comparing optimizers on at least two problems with clear plots and a short write-up.
+
+## What comes next
+
+- **Week 03** applies the optimizer to the first real supervised learning problem (linear/logistic regression).
+- **Week 09** re-visits optimizer choice using PyTorch's `torch.optim` rather than NumPy implementations.

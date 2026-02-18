@@ -1,5 +1,13 @@
 Week 08 — Training Pathologies
 
+## Prerequisites
+
+- **Week 07** — neural networks from scratch. You need to have implemented backprop to understand why gradients vanish or explode across layers.
+
+## What this week delivers
+
+Knowing that a network trains badly is not the same as knowing _why_. This week gives you practical diagnostics: gradient norm tracking, activation distribution visualization, and a toolbox of fixes (He init, BatchNorm, gradient clipping). These diagnostic skills carry through to every deep learning week.
+
 Overview
 Study common failure modes (vanishing/exploding gradients, saturated activations) and practical fixes (initialization, normalization, architecture choices).
 
@@ -32,3 +40,8 @@ Reading
 
 Deliverable
 - Notebook demonstrating diagnosis and fixes for at least one pathology with plots and a short write-up.
+
+## What comes next
+
+- **Week 09** moves to PyTorch, where gradient norm monitoring is done with one line: `[p.grad.norm() for p in model.parameters()]`. The concepts are identical; only the syntax changes.
+- **Week 12** revisits BatchNorm in the context of CNNs and deep regularization.

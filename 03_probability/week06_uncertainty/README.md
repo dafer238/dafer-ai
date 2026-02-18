@@ -1,5 +1,14 @@
 Week 06 — Uncertainty & Statistics
 
+## Prerequisites
+
+- **Week 05** — likelihood and MLE. Uncertainty quantification is the natural extension: not just _what is the best parameter estimate_ but _how confident are we in it_?
+- **Week 00b** — Gaussian distribution and the concept of variance. The Bayesian and frequentist frameworks both build on this.
+
+## What this week delivers
+
+A model that produces a single number is usually less useful than one that also tells you how much to trust that number. This week gives you the tools to produce, evaluate, and communicate uncertainty. Calibration errors and overconfident predictions are among the most common silent failures in deployed ML systems.
+
 Overview
 This week focuses on quantifying uncertainty in predictions, distinguishing aleatoric (data) vs epistemic (model) uncertainty, and learning practical diagnostics (calibration, credible/confidence intervals, posterior predictive checks).
 
@@ -75,3 +84,8 @@ Deliverable suggestions
 
 Notes
 - Emphasize reproducible notebooks, clear visual diagnostics (coverage plots, calibration curves), and short writeups explaining when methods succeed or fail.
+
+## What comes next
+
+- **Week 07** — neural networks from scratch. The probabilistic view of loss (negative log-likelihood) learned here makes the choice of activation function and output layer in a NN interpretable rather than arbitrary.
+- **Week 16** (Deployment & Capstone) — uncertainty reporting is part of a responsible deployed system; the calibration tools built here feed directly into the capstone.
