@@ -283,7 +283,7 @@ Vectorized code is 10–1000× faster and cleaner. Build the habit now.
 - **3Blue1Brown — Essence of Linear Algebra** (YouTube) — watch chapters 1–5 (vectors, linear transforms, dot product)
 - **3Blue1Brown — Essence of Calculus** (YouTube) — watch chapters 1–4 (derivative, chain rule)
 - **Khan Academy — Probability & Statistics** — "Random variables" and "Normal distributions" sections
-- **Python Data Science Handbook**, Jake VanderPlas — Chapter 2 (NumPy) and Chapter 3 (pandas)
+- **Python Data Science Handbook**, Jake VanderPlas — Chapter 2 (NumPy) and Chapter 3 (pandas). Suppedited however by polars.
 
 ---
 
