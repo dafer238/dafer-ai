@@ -11,3 +11,4 @@ build/
 *.pth
 *.onnx
 data/raw/
+data/MNIST/
