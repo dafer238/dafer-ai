@@ -10,5 +10,5 @@ build/
 *.pt
 *.pth
 *.onnx
-data/raw/
-data/MNIST/
+data/
+*cache*/
