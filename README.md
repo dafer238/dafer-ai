@@ -1,6 +1,6 @@
 # dafer-ai
 
-An 18-week deep dive into Artificial Intelligence, Machine Learning, and Deep Learning,
+A 20-week deep dive into Artificial Intelligence, Machine Learning, and Deep Learning,
 with an emphasis on **first principles**, **physical intuition**, and **real-world systems**.
 
 ## Focus Areas
@@ -20,32 +20,36 @@ with an emphasis on **first principles**, **physical intuition**, and **real-wor
 
 ```
 01_intro/
-    week00_ai_landscape/        ← What is ML? Paradigms, vocabulary, the training loop
-    week00b_math_and_data/      ← NumPy, derivatives, probability, EDA
+    week00_ai_landscape/             ← What is ML? Paradigms, vocabulary, the training loop
+    week00b_math_and_data/           ← NumPy, derivatives, probability, EDA
 02_fundamentals/
-    week01_optimization/        ← Gradient descent, loss landscapes
-    week02_advanced_optimizers/ ← Momentum, Adam, LR schedules
-    week03_linear_models/       ← Linear & logistic regression from scratch
-    week04_regularization/      ← L1/L2, cross-validation
+    week01_optimization/             ← Gradient descent, loss landscapes
+    week02_advanced_optimizers/      ← Momentum, Adam, LR schedules
+    week03_linear_models/            ← Linear & logistic regression from scratch
+    week04_dimensionality_reduction/ ← PCA, SVD, whitening
+    week05_clustering/               ← k-means, DBSCAN, hierarchical, GMM
+    week06_regularization/           ← L1/L2, cross-validation
 03_probability/
-    week05_likelihood/          ← MLE, loss functions as negative log-likelihoods
-    week06_uncertainty/         ← Monte Carlo, Bayes, calibration
+    week07_likelihood/               ← MLE, loss functions as negative log-likelihoods
+    week08_uncertainty/              ← Monte Carlo, Bayes, calibration
+    week09_time_series/              ← Decomposition, ARIMA, SARIMA, walk-forward CV
+    week10_surrogate_models/         ← GP regression, kernels, EI, Bayesian optimisation
 04_neural_networks/
-    week07_nn_from_scratch/     ← Fully connected NN, backprop
-    week08_training_pathologies/← Vanishing gradients, BatchNorm, diagnostics
+    week11_nn_from_scratch/          ← Fully connected NN, backprop
+    week12_training_pathologies/     ← Vanishing gradients, BatchNorm, diagnostics
 05_deep_learning/
-    week09_pytorch_basics/      ← Autograd, nn.Module, training loops
-    week10_training_at_scale/   ← DataLoaders, schedulers, GPU
-    week11_cnn_representations/ ← CNNs, inductive bias, representation learning
-    week12_regularization_dl/   ← Dropout, BatchNorm at scale
+    week13_pytorch_basics/           ← Autograd, nn.Module, training loops
+    week14_training_at_scale/        ← DataLoaders, schedulers, GPU
+    week15_cnn_representations/      ← CNNs, inductive bias, representation learning
+    week16_regularization_dl/        ← Dropout, BatchNorm at scale
 06_sequence_models/
-    week13_attention/           ← Attention from scratch
-    week14_transformers/        ← Full transformer block
+    week17_attention/                ← Attention from scratch
+    week18_transformers/             ← Full transformer block
 07_transfer_learning/
-    week15_finetuning/          ← Fine-tuning, adapters, feature extraction
+    week19_finetuning/               ← Fine-tuning, adapters, feature extraction
 08_deployment/
-    week16_deployment/          ← FastAPI, Docker, monitoring
-capstone/                       ← End-to-end project
+    week20_deployment/               ← FastAPI, Docker, monitoring
+capstone/                            ← End-to-end project
 ```
 
 Each week has:

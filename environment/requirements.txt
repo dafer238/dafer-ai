@@ -2,6 +2,7 @@ numpy
 fastapi
 uvicorn
 scipy
+statsmodels
 polars
 matplotlib
 seaborn
