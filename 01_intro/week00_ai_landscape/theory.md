@@ -2,18 +2,41 @@
 
 ## Table of Contents
 
-1. [Notation Conventions](#1-notation-conventions)
-2. [From Classical Programming to Machine Learning](#2-from-classical-programming-to-machine-learning)
-3. [The Three Learning Paradigms](#3-the-three-learning-paradigms)
-4. [The Supervised Learning Framework](#4-the-supervised-learning-framework)
-5. [Unsupervised Learning](#5-unsupervised-learning)
-6. [Reinforcement Learning](#6-reinforcement-learning)
-7. [The Training Loop](#7-the-training-loop)
-8. [What Is a Model?](#8-what-is-a-model)
-9. [Hypothesis Spaces and Inductive Bias](#9-hypothesis-spaces-and-inductive-bias)
-10. [The Four Practitioner Choices](#10-the-four-practitioner-choices)
-11. [The Evaluation Mindset](#11-the-evaluation-mindset)
-12. [References](#12-references)
+- [The AI Landscape: A Rigorous Introduction](#the-ai-landscape-a-rigorous-introduction)
+  - [Table of Contents](#table-of-contents)
+  - [1. Notation Conventions](#1-notation-conventions)
+  - [2. From Classical Programming to Machine Learning](#2-from-classical-programming-to-machine-learning)
+  - [3. The Three Learning Paradigms](#3-the-three-learning-paradigms)
+    - [3.1 Supervised Learning](#31-supervised-learning)
+    - [3.2 Unsupervised Learning](#32-unsupervised-learning)
+    - [3.3 Reinforcement Learning](#33-reinforcement-learning)
+  - [4. The Supervised Learning Framework](#4-the-supervised-learning-framework)
+    - [4.1 Data](#41-data)
+    - [4.2 Model](#42-model)
+    - [4.3 Loss Function](#43-loss-function)
+    - [4.4 Optimisation](#44-optimisation)
+    - [4.5 Generalisation](#45-generalisation)
+  - [5. Unsupervised Learning](#5-unsupervised-learning)
+    - [5.1 Clustering](#51-clustering)
+    - [5.2 Dimensionality Reduction](#52-dimensionality-reduction)
+    - [5.3 Density Estimation](#53-density-estimation)
+    - [5.4 Connections Between Paradigms](#54-connections-between-paradigms)
+  - [6. Reinforcement Learning](#6-reinforcement-learning)
+  - [7. The Training Loop](#7-the-training-loop)
+  - [8. What Is a Model?](#8-what-is-a-model)
+  - [9. Hypothesis Spaces and Inductive Bias](#9-hypothesis-spaces-and-inductive-bias)
+    - [9.1 The Hypothesis Space](#91-the-hypothesis-space)
+    - [9.2 Inductive Bias](#92-inductive-bias)
+    - [9.3 Capacity, Underfitting, and Overfitting](#93-capacity-underfitting-and-overfitting)
+  - [10. The Four Practitioner Choices](#10-the-four-practitioner-choices)
+    - [10.1 Architecture](#101-architecture)
+    - [10.2 Loss Function](#102-loss-function)
+    - [10.3 Optimiser](#103-optimiser)
+    - [10.4 Regularisation](#104-regularisation)
+  - [11. The Evaluation Mindset](#11-the-evaluation-mindset)
+    - [Data Splits](#data-splits)
+    - [Key Vocabulary](#key-vocabulary)
+  - [12. References](#12-references)
 
 ---
 
@@ -68,6 +91,10 @@ $$\theta^* = \arg\min_\theta \frac{1}{n}\sum_{i=1}^{n}(y_i - f_\theta(x_i))^2$$
 
 This simple example already contains every element of the ML pipeline: a model ($f_\theta$), a loss (mean squared error), and an optimisation target ($\arg\min$).
 
+> **Intuition.** Think of the parameters $\theta$ as knobs on a control panel. Each knob setting produces a different input–output mapping. The loss function is a meter that reads "how wrong you are." Optimisation is the systematic process of turning the knobs to make the meter read as close to zero as possible. The remarkable insight of ML is that this knob-turning can be automated via calculus — the gradient tells you *which direction* to turn each knob, and *by how much*.
+
+> **Suggested experiment.** Before Week 01, try the following in Python: define $f(w) = (w - 3)^2$, plot it, and manually perform gradient descent starting at $w = 0$ with learning rate $\eta = 0.1$. Observe how the updates $w \leftarrow w - \eta \cdot 2(w - 3)$ move $w$ toward $3$. Vary $\eta$ to see overshooting ($\eta = 1.5$) and slow convergence ($\eta = 0.01$).
+
 ---
 
 ## 3. The Three Learning Paradigms
@@ -87,6 +114,8 @@ The learner has access to a training set of labelled pairs $\{(\mathbf{x}_i, y_i
 
 **Analogy.** The model is a student; the labelled data is a teacher who marks each answer as correct or incorrect. The loss function quantifies how badly the student performed.
 
+> **When to use supervised learning.** Whenever labelled data is available and the task is clearly defined as "predict $y$ from $\mathbf{x}$." The key constraint is that labels must exist and be trustworthy. In practice, obtaining high-quality labels is often the bottleneck — this motivates unsupervised and semi-supervised approaches.
+
 ### 3.2 Unsupervised Learning
 
 The learner has access only to inputs $\{\mathbf{x}_i\}_{i=1}^{n}$ — no labels. The goal is to discover structure: groups, compressed representations, or probability distributions.
@@ -100,6 +129,8 @@ The learner has access only to inputs $\{\mathbf{x}_i\}_{i=1}^{n}$ — no labels
 | **Generative Modelling**     | Sample new $\mathbf{x} \sim p(\mathbf{x})$ | VAEs, GANs, diffusion models |
 
 **Analogy.** The model is a scientist given a pile of unlabelled specimens; it must discover categories by itself.
+
+> **When to use unsupervised learning.** When labels are absent or the goal is exploratory — discovering groups in customer data, compressing high-dimensional sensor readings for visualisation, or detecting anomalies without prior examples of failures. Unsupervised methods are also used as **preprocessing** for supervised tasks (e.g., PCA before regression, or embeddings from autoencoders as features).
 
 ### 3.3 Reinforcement Learning
 
@@ -156,6 +187,15 @@ $$R(\theta) = \mathbb{E}_{(\mathbf{x}, y) \sim p(\mathbf{x}, y)}\left[\ell(y, f_
 
 Since $p(\mathbf{x}, y)$ is unknown, one approximates $R(\theta)$ using held-out data (validation and test sets). The gap between training and validation error reveals whether the model **overfits** (memorises training data) or **underfits** (fails to capture the underlying pattern).
 
+> **Intuition.** Imagine memorising the answers to a practice exam word for word. You score perfectly on that specific exam (zero training error), but when the real exam presents different questions on the same topics, you fail (high test error). A model that generalises has learned the *topics*, not the specific questions. Regularisation (Week 06) is the mathematical machinery for encouraging this behaviour.
+
+> **The three error regimes:**
+> | Regime | Training error | Validation error | Diagnosis | Remedy |
+> |---|---|---|---|---|
+> | Underfitting | High | High | Model too simple | Increase capacity, train longer |
+> | Good fit | Low | Low | Appropriate complexity | Deploy and monitor |
+> | Overfitting | Very low | High (or rising) | Model memorises noise | Regularise, add data, reduce capacity |
+
 ---
 
 ## 5. Unsupervised Learning
@@ -176,9 +216,23 @@ $$\Sigma = \frac{1}{n-1}(X - \bar{X})^\top(X - \bar{X})$$
 
 This is the subject of Week 04.
 
+> **Intuition.** Imagine a photograph of $1000 \times 1000$ pixels — that is a point in $\mathbb{R}^{1{,}000{,}000}$. Yet natural images occupy a tiny manifold within that vast space (most random pixel arrangements are noise). PCA and autoencoders find coordinate systems aligned with this manifold, discarding the dimensions that carry only noise. The result: a compact representation that preserves the information that matters.
+
 ### 5.3 Density Estimation
 
 Estimate the probability density function $p(\mathbf{x})$ from samples. Gaussian Mixture Models combine clustering and density estimation, and connect to the MLE framework developed in Week 07.
+
+> **Concrete example.** Given height measurements from a population that includes adults and children, a single Gaussian is a poor fit (bimodal data). A mixture of two Gaussians captures the two subpopulations, simultaneously clustering the data and estimating the density.
+
+### 5.4 Connections Between Paradigms
+
+The boundaries between supervised and unsupervised learning are not rigid:
+
+- **Semi-supervised learning**: a small number of labelled examples combined with a large unlabelled set. The unsupervised component discovers structure; the supervised component leverages labels.
+- **Self-supervised learning**: the model creates its own labels from the data (e.g., predicting masked words in a sentence). This is the paradigm behind modern language models and is technically supervised, but requires no human annotation.
+- **Representation learning**: unsupervised methods (autoencoders, contrastive learning) produce features that improve downstream supervised tasks.
+
+These hybrid paradigms are increasingly dominant in practice, but the foundational tools remain the same: loss functions, gradients, and optimisation.
 
 ---
 
@@ -198,6 +252,18 @@ $$V^\pi(s) = \sum_{a} \pi(a \mid s) \left[r(s, a) + \gamma \sum_{s'} p(s' \mid s
 
 Deep RL approximates $V^\pi$ or $\pi$ with neural networks — which requires all the optimisation and network-building skills from this course.
 
+> **Legend for RL notation:**
+> | Symbol | Name | Meaning |
+> |---|---|---|
+> | $s_t$ | State | The agent's observation of the environment at time $t$ |
+> | $a_t$ | Action | The decision taken by the agent at time $t$ |
+> | $r_t$ | Reward | Scalar feedback signal received after taking $a_t$ in $s_t$ |
+> | $\gamma$ | Discount factor | How much the agent values future vs. immediate rewards ($0$: myopic; $\to 1$: far-sighted) |
+> | $\pi(a \mid s)$ | Policy | Probability of choosing action $a$ in state $s$ |
+> | $V^\pi(s)$ | Value function | Expected total discounted reward starting from state $s$ under policy $\pi$ |
+
+> **Intuition.** RL is like training a dog: you cannot show it the "correct" action at each moment (no labels), but you can reward good behaviour and discourage bad behaviour. Over many trials, the dog learns a policy — a mapping from situations to actions — that maximises treats.
+
 ---
 
 ## 7. The Training Loop
@@ -212,7 +278,21 @@ Every supervised algorithm in this course follows the same iterative structure:
 
 This loop is invariant to model complexity. Whether fitting a 2-parameter linear model or a 70-billion-parameter language model, the structure is identical; only the scale changes.
 
-> **Notebook reference.** The starter notebooks from Week 01 onward implement this exact loop. In `starter.ipynb` (Week 01, Cell 7), vanilla gradient descent is implemented in NumPy following this structure. Observe how the loop components map to specific lines of code.
+> **Notebook reference.** The starter notebooks from Week 01 onward implement this exact loop. In `starter.ipynb` (Week 01), vanilla gradient descent is implemented in NumPy following this structure. Observe how the loop components map to specific lines of code.
+
+> **Pseudocode for the training loop:**
+> ```
+> initialise θ randomly
+> for epoch in 1, 2, ..., max_epochs:
+>     ŷ = f_θ(X)                    # forward pass
+>     L = loss(y, ŷ)                # loss computation
+>     g = ∇_θ L                     # backward pass (gradient)
+>     θ = θ - η * g                 # parameter update
+>     if validate(θ) stops improving:
+>         break                     # early stopping (regularisation)
+> ```
+
+> **Suggested experiment.** When you reach Week 01's notebook, add `print(f"Epoch {epoch}: loss = {L:.4f}")` inside the training loop and plot the loss over epochs. A healthy training curve decreases rapidly at first (high-error parameters are easy to fix), then flattens (diminishing returns). If the curve oscillates, the learning rate $\eta$ is too large; if it barely moves, $\eta$ is too small.
 
 ---
 
@@ -233,6 +313,8 @@ $$f_\theta(\mathbf{x}) = W_L \sigma(W_{L-1} \sigma(\cdots \sigma(W_1 \mathbf{x} 
 where $\sigma$ is a nonlinear activation function (e.g., ReLU: $\sigma(z) = \max(0, z)$). The composition of affine transformations with nonlinearities allows neural networks to approximate arbitrary continuous functions (the Universal Approximation Theorem).
 
 > **Key insight.** A neural network is stacked linear models with nonlinearities in between. Understanding linear models deeply (Week 03) is therefore a prerequisite for understanding deep networks.
+
+> **Why nonlinearities matter.** Without $\sigma$, composing affine transformations yields another affine transformation: $W_2(W_1 \mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 = (W_2 W_1)\mathbf{x} + (W_2 \mathbf{b}_1 + \mathbf{b}_2) = W'\mathbf{x} + \mathbf{b}'$. The entire network collapses to a single linear layer — depth adds no representational power. The activation function $\sigma$ breaks this linearity, and each layer can carve the input space into increasingly complex regions. This is proven in Week 11 from scratch.
 
 ---
 
@@ -273,6 +355,8 @@ The **capacity** of a model is the richness of its hypothesis space — informal
 This tension is formalised in the **bias-variance decomposition** (developed in Week 06). For now, the intuition suffices: a good model is one whose hypothesis space is rich enough to contain the truth, but constrained enough that finite data can identify it. Regularisation (Section 10.4) is the primary tool for managing this trade-off.
 
 > **Suggested experiment.** In Week 03's notebook, fit polynomial functions of degree 1, 3, 10, and 20 to a small dataset and observe how training error decreases monotonically while validation error first decreases and then increases. This U-shaped validation curve is the empirical signature of the bias-variance trade-off.
+
+> **Analogy: the Goldilocks principle.** A model with too few parameters is like trying to describe a city with a single sentence — the description is not *wrong*, but it omits everything interesting (underfitting). A model with too many parameters is like memorising the phone book — it captures every detail of the training set, including typos, and fails on any new entry (overfitting). The goal is a model that captures the *generating rules* behind the data, not the data itself.
 
 ---
 
