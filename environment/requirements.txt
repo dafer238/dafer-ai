@@ -1,6 +1,7 @@
 numpy
 fastapi
 uvicorn
+markdown
 scipy
 statsmodels
 polars

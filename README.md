@@ -18,6 +18,37 @@ with an emphasis on **first principles**, **physical intuition**, and **real-wor
 
 ## Structure
 
+## Serving the repository via Uvicorn
+
+A minimal FastAPI application (`server.py`) lives at the top level and
+will render any of the markdown files in the workspace as HTML.  This
+lets you browse the `README.md`, `theory.md` and other notes using a web
+browser over HTTP.
+
+### Quick start
+
+1. install the dependencies in your Python environment:
+
+   ```sh
+   pip install fastapi uvicorn markdown
+   ```
+
+2. run the service (bind to `0.0.0.0` on a headless Orange Pi if you
+   intend to route it elsewhere):
+
+   ```sh
+   uvicorn server:app --host 127.0.0.1 --port 8003
+   ```
+
+3. visit `http://localhost:8003/` to see the top‑level `README.md`.  Any
+   relative links to other `.md` files will work automatically, and links
+   to directories will show their `README.md`.
+
+Feel free to add a `static/` directory and uncomment the mount line in
+`server.py` if you need to serve images or CSS assets.
+
+
+
 ```
 01_intro/
     week00_ai_landscape/             ← What is ML? Paradigms, vocabulary, the training loop
