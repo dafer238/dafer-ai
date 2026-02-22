@@ -10,10 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   requestAnimationFrame(() => { sidebar.style.transition = ''; });
 
-  toggleBtn.addEventListener('click', () => {
+  function toggleSidebar() {
     const collapsed = sidebar.classList.toggle('collapsed');
     localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0');
-  });
+  }
+
+  toggleBtn.addEventListener('click', toggleSidebar);
+
+  const floatBtn = document.getElementById('sidebar-float-btn');
+  if (floatBtn) { floatBtn.addEventListener('click', toggleSidebar); }
 
   // Open folders that contain the active link
   const active = document.querySelector('.tree-file.active');
