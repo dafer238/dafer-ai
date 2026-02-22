@@ -12,8 +12,8 @@ from pathlib import Path
 from typing import Optional
 
 import yaml
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import HTMLResponse, JSONResponse
 import markdown
 
 app = FastAPI()
@@ -105,6 +105,8 @@ SKIP_NAMES = {
     "checkpoints",
     "src",
     "environment",
+    "scripts",
+    "notes",
 }
 SKIP_PREFIXES = ("cache_",)
 
@@ -305,7 +307,83 @@ def _render_nb(nb_path: Path, current_url: str) -> str:
     return _page(body, current_url)
 
 
+# ── Full-text search index ────────────────────────────────────────────────────
+
+_SEARCH_INDEX: list[dict] = []  # [{"file": str, "url": str, "title": str, "text": str}]
+
+# strip markdown formatting for plain-text index
+_MD_STRIP_RE = re.compile(
+    r"(?:"
+    r"\[([^\]]*)\]\([^)]*\)"  # [text](url) → text
+    r"|```[\s\S]*?```"  # fenced code blocks
+    r"|`[^`]+`"  # inline code
+    r"|\$\$[\s\S]*?\$\$"  # display math
+    r"|\$[^$\n]+\$"  # inline math
+    r"|[#*_~>|`]"  # leftover md punctuation
+    r")"
+)
+
+
+def _build_search_index() -> None:
+    """Walk all theory.md files and build a plain-text search index."""
+    _SEARCH_INDEX.clear()
+    for md_path in sorted(BASE_DIR.rglob("theory.md")):
+        rel = md_path.relative_to(BASE_DIR).as_posix()
+        # skip anything in hidden/build dirs
+        parts = rel.split("/")
+        if any(p.startswith(".") or p.startswith("_") or p in SKIP_NAMES for p in parts):
+            continue
+        url = "/" + rel[:-3]  # strip .md
+        raw = md_path.read_text(encoding="utf-8")
+        # Extract title from first H1
+        title_m = re.search(r"^#\s+(.+)$", raw, re.MULTILINE)
+        title = title_m.group(1).strip() if title_m else rel
+        # Strip markdown to plain text for searching
+        text = _MD_STRIP_RE.sub(lambda m: m.group(1) or " ", raw)
+        text = re.sub(r"\s+", " ", text).strip()
+        _SEARCH_INDEX.append({"file": rel, "url": url, "title": title, "text": text})
+
+
+_build_search_index()
+
+
 # ── Routes ────────────────────────────────────────────────────────────────────
+
+
+@app.get("/api/search", response_class=JSONResponse)
+def api_search(q: str = Query("", min_length=0)):
+    """Full-text search across all theory.md files. Returns JSON results with
+    matching snippets (context around each hit)."""
+    query = q.strip().lower()
+    if len(query) < 2:
+        return []
+    results: list[dict] = []
+    for doc in _SEARCH_INDEX:
+        text_lower = doc["text"].lower()
+        idx = text_lower.find(query)
+        if idx == -1:
+            continue
+        # Count occurrences
+        count = text_lower.count(query)
+        # Build snippet: ±80 chars around first occurrence
+        start = max(0, idx - 80)
+        end = min(len(doc["text"]), idx + len(query) + 80)
+        snippet = doc["text"][start:end]
+        if start > 0:
+            snippet = "…" + snippet
+        if end < len(doc["text"]):
+            snippet = snippet + "…"
+        results.append(
+            {
+                "url": doc["url"],
+                "title": doc["title"],
+                "snippet": snippet,
+                "count": count,
+            }
+        )
+    # Sort by number of occurrences (most relevant first)
+    results.sort(key=lambda r: r["count"], reverse=True)
+    return results[:20]  # cap at 20 results
 
 
 @app.get("/", response_class=HTMLResponse)

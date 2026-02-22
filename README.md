@@ -37,10 +37,10 @@ browser over HTTP.
    intend to route it elsewhere):
 
    ```sh
-   uvicorn server:app --host 127.0.0.1 --port 8003
+   uvicorn server:app --host 127.0.0.1 --port 8004
    ```
 
-3. visit `http://localhost:8003/` to see the top‑level `README.md`.  Any
+3. visit `http://localhost:8004/` to see the top‑level `README.md`.  Any
    relative links to other `.md` files will work automatically, and links
    to directories will show their `README.md`.
 

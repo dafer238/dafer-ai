@@ -1,5 +1,5 @@
-# Jupyter Book v2 (MyST) configuration
-# Docs: https://mystmd.org/guide/quickstart
+# Table of contents for the documentation server.
+# server.py reads project.toc to determine prev/next page navigation.
 version: 1
 
 project:
@@ -7,21 +7,120 @@ project:
   copyright: "2025"
   toc:
     - file: intro.md
+      title: "Home"
+
+    # ── Part I · Introduction ────────────────────────────────────────
     - title: "Part I · Introduction"
       children:
         - file: 01_intro/week00_ai_landscape/theory.md
           title: "Week 0a · The AI Landscape"
         - file: 01_intro/week00b_math_and_data/theory.md
           title: "Week 0b · Mathematics & Data"
+
+    # ── Part II · Fundamentals ───────────────────────────────────────
     - title: "Part II · Fundamentals"
       children:
         - file: 02_fundamentals/week01_optimization/theory.md
           title: "Week 1 · Optimisation"
-          children:
-            - file: 02_fundamentals/week01_optimization/starter.ipynb
-              title: "Week 1 · Notebook"
+        - file: 02_fundamentals/week01_optimization/starter.ipynb
+          title: "Week 1 · Notebook"
+        - file: 02_fundamentals/week02_advanced_optimizers/theory.md
+          title: "Week 2 · Advanced Optimisers"
+        - file: 02_fundamentals/week02_advanced_optimizers/starter.ipynb
+          title: "Week 2 · Notebook"
+        - file: 02_fundamentals/week03_linear_models/theory.md
+          title: "Week 3 · Linear Models"
+        - file: 02_fundamentals/week03_linear_models/starter.ipynb
+          title: "Week 3 · Notebook"
+        - file: 02_fundamentals/week04_dimensionality_reduction/theory.md
+          title: "Week 4 · Dimensionality Reduction"
+        - file: 02_fundamentals/week04_dimensionality_reduction/starter.ipynb
+          title: "Week 4 · Notebook"
+        - file: 02_fundamentals/week05_clustering/theory.md
+          title: "Week 5 · Clustering"
+        - file: 02_fundamentals/week05_clustering/starter.ipynb
+          title: "Week 5 · Notebook"
+        - file: 02_fundamentals/week06_regularization/theory.md
+          title: "Week 6 · Regularisation"
+        - file: 02_fundamentals/week06_regularization/starter.ipynb
+          title: "Week 6 · Notebook"
 
-site:
-  template: book-theme
-  options:
-    favicon: ""
+    # ── Part III · Probability ───────────────────────────────────────
+    - title: "Part III · Probability"
+      children:
+        - file: 03_probability/week07_likelihood/theory.md
+          title: "Week 7 · Likelihood"
+        - file: 03_probability/week07_likelihood/starter.ipynb
+          title: "Week 7 · Notebook"
+        - file: 03_probability/week08_uncertainty/theory.md
+          title: "Week 8 · Uncertainty"
+        - file: 03_probability/week08_uncertainty/starter.ipynb
+          title: "Week 8 · Notebook"
+        - file: 03_probability/week09_time_series/theory.md
+          title: "Week 9 · Time Series"
+        - file: 03_probability/week09_time_series/starter.ipynb
+          title: "Week 9 · Notebook"
+        - file: 03_probability/week10_surrogate_models/theory.md
+          title: "Week 10 · Surrogate Models"
+        - file: 03_probability/week10_surrogate_models/starter.ipynb
+          title: "Week 10 · Notebook"
+
+    # ── Part IV · Neural Networks ────────────────────────────────────
+    - title: "Part IV · Neural Networks"
+      children:
+        - file: 04_neural_networks/week11_nn_from_scratch/theory.md
+          title: "Week 11 · Neural Networks from Scratch"
+        - file: 04_neural_networks/week11_nn_from_scratch/starter.ipynb
+          title: "Week 11 · Notebook"
+        - file: 04_neural_networks/week12_training_pathologies/theory.md
+          title: "Week 12 · Training Pathologies"
+        - file: 04_neural_networks/week12_training_pathologies/starter.ipynb
+          title: "Week 12 · Notebook"
+
+    # ── Part V · Deep Learning ───────────────────────────────────────
+    - title: "Part V · Deep Learning"
+      children:
+        - file: 05_deep_learning/week13_pytorch_basics/theory.md
+          title: "Week 13 · PyTorch Basics"
+        - file: 05_deep_learning/week13_pytorch_basics/starter.ipynb
+          title: "Week 13 · Notebook"
+        - file: 05_deep_learning/week14_training_at_scale/theory.md
+          title: "Week 14 · Training at Scale"
+        - file: 05_deep_learning/week14_training_at_scale/starter.ipynb
+          title: "Week 14 · Notebook"
+        - file: 05_deep_learning/week15_cnn_representations/theory.md
+          title: "Week 15 · CNN Representations"
+        - file: 05_deep_learning/week15_cnn_representations/starter.ipynb
+          title: "Week 15 · Notebook"
+        - file: 05_deep_learning/week16_regularization_dl/theory.md
+          title: "Week 16 · Deep Learning Regularisation"
+        - file: 05_deep_learning/week16_regularization_dl/starter.ipynb
+          title: "Week 16 · Notebook"
+
+    # ── Part VI · Sequence Models ────────────────────────────────────
+    - title: "Part VI · Sequence Models"
+      children:
+        - file: 06_sequence_models/week17_attention/theory.md
+          title: "Week 17 · Attention"
+        - file: 06_sequence_models/week17_attention/starter.ipynb
+          title: "Week 17 · Notebook"
+        - file: 06_sequence_models/week18_transformers/theory.md
+          title: "Week 18 · Transformers"
+        - file: 06_sequence_models/week18_transformers/starter.ipynb
+          title: "Week 18 · Notebook"
+
+    # ── Part VII · Transfer Learning ─────────────────────────────────
+    - title: "Part VII · Transfer Learning"
+      children:
+        - file: 07_transfer_learning/week19_finetuning/theory.md
+          title: "Week 19 · Fine-Tuning"
+        - file: 07_transfer_learning/week19_finetuning/starter.ipynb
+          title: "Week 19 · Notebook"
+
+    # ── Part VIII · Deployment ───────────────────────────────────────
+    - title: "Part VIII · Deployment"
+      children:
+        - file: 08_deployment/week20_deployment/theory.md
+          title: "Week 20 · Deployment"
+        - file: 08_deployment/week20_deployment/starter.ipynb
+          title: "Week 20 · Notebook"
