@@ -52,7 +52,7 @@
 
 ## 1. Scope and Purpose
 
-Week 08 established how to quantify uncertainty in static settings (bootstrap, Bayesian intervals, calibration). This week applies those ideas to **data ordered in time**, where consecutive observations are no longer independent.
+[Week 08](../week08_uncertainty/theory.md) established how to quantify uncertainty in static settings (bootstrap, Bayesian intervals, calibration). This week applies those ideas to **data ordered in time**, where consecutive observations are no longer independent.
 
 Most real-world data streams — sensor readings, financial returns, sales figures, climate records — are time series. The key observation is that **neighbouring values are correlated**: today's temperature is similar to yesterday's, and knowing this correlation allows us to forecast tomorrow's. The classical statistical toolkit for exploiting this structure is the **ARIMA** family.
 
@@ -63,7 +63,7 @@ Most real-world data streams — sensor readings, financial returns, sales figur
 4. Identify, fit, and diagnose ARIMA and SARIMA models.
 5. Evaluate forecasts honestly using walk-forward cross-validation.
 
-**Prerequisites.** Week 03 (linear regression — AR models generalise it), Week 06 (time-series cross-validation), Week 07–08 (likelihood, residual diagnostics, calibration).
+**Prerequisites.** [Week 03](../../02_fundamentals/week03_linear_models/theory.md) (linear regression — AR models generalise it), [Week 06](../../02_fundamentals/week06_regularization/theory.md) (time-series cross-validation), [[Week 07](../week07_likelihood/theory.md)](../week07_likelihood/theory.md)–[08](../week08_uncertainty/theory.md) (likelihood, residual diagnostics, calibration).
 
 ---
 
@@ -674,7 +674,7 @@ $$\text{Var}(\hat{Y}_{T+h}) = h\sigma^2$$
 
 The prediction interval widens as $\sqrt{h}$. This is why long-horizon forecasts are fundamentally more uncertain.
 
-> **Connection to Week 08.** This is the time-series version of uncertainty propagation. Multi-step forecasts compound epistemic uncertainty at each step, analogous to how Bayesian predictive variance is wider where data is sparse.
+> **Connection to [Week 08](../week08_uncertainty/theory.md).** This is the time-series version of uncertainty propagation. Multi-step forecasts compound epistemic uncertainty at each step, analogous to how Bayesian predictive variance is wider where data is sparse.
 
 > **Notebook reference.** Exercise 5 asks you to forecast $h = 1, 3, 6, 12$ steps ahead and plot RMSE vs. horizon — you should see RMSE increase with $h$.
 
@@ -684,14 +684,14 @@ The prediction interval widens as $\sqrt{h}$. This is why long-horizon forecasts
 
 | Week                           | Connection                                                                                                            |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| **Week 03 (Linear Models)**    | AR(p) is a linear regression where the features are lagged values of $Y$                                              |
-| **Week 06 (Regularisation)**   | Walk-forward CV was introduced; Ridge applies to AR models to prevent overfitting with many lags                      |
-| **Week 07 (Likelihood)**       | ARIMA coefficients are estimated by MLE; AIC/BIC are likelihood-based model selection criteria                        |
-| **Week 08 (Uncertainty)**      | Prediction intervals for multi-step forecasts; residual calibration; Bayesian time-series models                      |
-| **Week 10 (Surrogate Models)** | Gaussian Processes use autocovariance kernels (e.g., Matérn, periodic) for temporal modelling                         |
-| **Week 11 (Neural Networks)**  | Recurrent architectures (RNNs, LSTMs) learn non-linear autoregressive dynamics                                        |
-| **Week 17 (Attention)**        | Attention replaces fixed-lag structure; the model learns which past timesteps matter                                  |
-| **Week 18 (Transformers)**     | Positional encodings play the role of time indices; Transformer-based forecasting (e.g., Temporal Fusion Transformer) |
+| **[Week 03](../../02_fundamentals/week03_linear_models/theory.md) (Linear Models)**    | AR(p) is a linear regression where the features are lagged values of $Y$                                              |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**   | Walk-forward CV was introduced; Ridge applies to AR models to prevent overfitting with many lags                      |
+| **[Week 07](../week07_likelihood/theory.md) (Likelihood)**       | ARIMA coefficients are estimated by MLE; AIC/BIC are likelihood-based model selection criteria                        |
+| **[Week 08](../week08_uncertainty/theory.md) (Uncertainty)**      | Prediction intervals for multi-step forecasts; residual calibration; Bayesian time-series models                      |
+| **[Week 10](../week10_surrogate_models/theory.md) (Surrogate Models)** | Gaussian Processes use autocovariance kernels (e.g., Matérn, periodic) for temporal modelling                         |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (Neural Networks)**  | Recurrent architectures (RNNs, LSTMs) learn non-linear autoregressive dynamics                                        |
+| **[Week 17](../../06_sequence_models/week17_attention/theory.md) (Attention)**        | Attention replaces fixed-lag structure; the model learns which past timesteps matter                                  |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)**     | Positional encodings play the role of time indices; Transformer-based forecasting (e.g., Temporal Fusion Transformer) |
 
 ---
 

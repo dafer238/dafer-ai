@@ -83,7 +83,7 @@ In machine learning, the paradigm is inverted. Given data and corresponding answ
 
 $$\text{data} + \text{answers} \longrightarrow \text{rules (learned)}$$
 
-Formally, the "rules" are encoded in a parameterised function $f_\theta$, where $\theta \in \mathbb{R}^p$ is a vector of $p$ learnable parameters. The system adjusts $\theta$ by minimising a **loss function** $\mathcal{L}(\theta)$ — a scalar that measures prediction error. The adjustment procedure is called **optimisation** (the subject of Weeks 01–02).
+Formally, the "rules" are encoded in a parameterised function $f_\theta$, where $\theta \in \mathbb{R}^p$ is a vector of $p$ learnable parameters. The system adjusts $\theta$ by minimising a **loss function** $\mathcal{L}(\theta)$ — a scalar that measures prediction error. The adjustment procedure is called **optimisation** (the subject of [Weeks 01](../../02_fundamentals/week01_optimization/theory.md#3-loss-functions)–02).
 
 **Example.** Suppose one wishes to predict energy demand $y$ from temperature $x$. A classical program might hard-code a lookup table. A machine learning approach defines $f_\theta(x) = \theta_1 x + \theta_0$, collects historical $(x_i, y_i)$ pairs, and finds $\theta^*$ such that:
 
@@ -93,7 +93,7 @@ This simple example already contains every element of the ML pipeline: a model (
 
 > **Intuition.** Think of the parameters $\theta$ as knobs on a control panel. Each knob setting produces a different input–output mapping. The loss function is a meter that reads "how wrong you are." Optimisation is the systematic process of turning the knobs to make the meter read as close to zero as possible. The remarkable insight of ML is that this knob-turning can be automated via calculus — the gradient tells you *which direction* to turn each knob, and *by how much*.
 
-> **Suggested experiment.** Before Week 01, try the following in Python: define $f(w) = (w - 3)^2$, plot it, and manually perform gradient descent starting at $w = 0$ with learning rate $\eta = 0.1$. Observe how the updates $w \leftarrow w - \eta \cdot 2(w - 3)$ move $w$ toward $3$. Vary $\eta$ to see overshooting ($\eta = 1.5$) and slow convergence ($\eta = 0.01$).
+> **Suggested experiment.** Before [Week 01](../../02_fundamentals/week01_optimization/theory.md#9-convergence-diagnostics), try the following in Python: define $f(w) = (w - 3)^2$, plot it, and manually perform gradient descent starting at $w = 0$ with learning rate $\eta = 0.1$. Observe how the updates $w \leftarrow w - \eta \cdot 2(w - 3)$ move $w$ toward $3$. Vary $\eta$ to see overshooting ($\eta = 1.5$) and slow convergence ($\eta = 0.01$).
 
 ---
 
@@ -169,7 +169,7 @@ $$\text{MSE:} \quad \mathcal{L}(\theta) = \frac{1}{n}\sum_{i=1}^{n}(y_i - f_\the
 
 $$\text{Cross-Entropy:} \quad \mathcal{L}(\theta) = -\frac{1}{n}\sum_{i=1}^{n}\sum_{k=1}^{K} y_{ik} \log \hat{y}_{ik}$$
 
-The probabilistic justification for these losses is developed in Week 07.
+The probabilistic justification for these losses is developed in [Week 07](../../03_probability/week07_likelihood/theory.md#3-likelihood-from-data-to-models).
 
 ### 4.4 Optimisation
 
@@ -177,7 +177,7 @@ Find $\theta^* = \arg\min_\theta \mathcal{L}(\theta)$. The dominant method is **
 
 $$\theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L}(\theta_t)$$
 
-where $\eta > 0$ is the **learning rate**. This is the subject of Weeks 01–02.
+where $\eta > 0$ is the **learning rate**. This is the subject of [Weeks 01](../../02_fundamentals/week01_optimization/theory.md#8-learning-rate-selection)–02.
 
 ### 4.5 Generalisation
 
@@ -187,7 +187,7 @@ $$R(\theta) = \mathbb{E}_{(\mathbf{x}, y) \sim p(\mathbf{x}, y)}\left[\ell(y, f_
 
 Since $p(\mathbf{x}, y)$ is unknown, one approximates $R(\theta)$ using held-out data (validation and test sets). The gap between training and validation error reveals whether the model **overfits** (memorises training data) or **underfits** (fails to capture the underlying pattern).
 
-> **Intuition.** Imagine memorising the answers to a practice exam word for word. You score perfectly on that specific exam (zero training error), but when the real exam presents different questions on the same topics, you fail (high test error). A model that generalises has learned the *topics*, not the specific questions. Regularisation (Week 06) is the mathematical machinery for encouraging this behaviour.
+> **Intuition.** Imagine memorising the answers to a practice exam word for word. You score perfectly on that specific exam (zero training error), but when the real exam presents different questions on the same topics, you fail (high test error). A model that generalises has learned the *topics*, not the specific questions. Regularisation ([Week 06](../../02_fundamentals/week06_regularization/theory.md#2-why-regularisation-the-overfitting-problem-revisited)) is the mathematical machinery for encouraging this behaviour.
 
 > **The three error regimes:**
 > | Regime | Training error | Validation error | Diagnosis | Remedy |
@@ -206,7 +206,7 @@ Given $\{\mathbf{x}_i\}_{i=1}^{n}$, assign each point to one of $K$ clusters. K-
 
 $$\mathcal{J} = \sum_{k=1}^{K}\sum_{\mathbf{x}_i \in C_k} \|\mathbf{x}_i - \boldsymbol{\mu}_k\|^2$$
 
-where $\boldsymbol{\mu}_k$ is the centroid of cluster $C_k$. This is covered in Week 05.
+where $\boldsymbol{\mu}_k$ is the centroid of cluster $C_k$. This is covered in [Week 05](../../02_fundamentals/week05_clustering/theory.md#3-k-means-clustering).
 
 ### 5.2 Dimensionality Reduction
 
@@ -214,13 +214,13 @@ Find a mapping $\mathbf{z}_i = g(\mathbf{x}_i) \in \mathbb{R}^k$ with $k \ll d$ 
 
 $$\Sigma = \frac{1}{n-1}(X - \bar{X})^\top(X - \bar{X})$$
 
-This is the subject of Week 04.
+This is the subject of [Week 04](../../02_fundamentals/week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view).
 
 > **Intuition.** Imagine a photograph of $1000 \times 1000$ pixels — that is a point in $\mathbb{R}^{1{,}000{,}000}$. Yet natural images occupy a tiny manifold within that vast space (most random pixel arrangements are noise). PCA and autoencoders find coordinate systems aligned with this manifold, discarding the dimensions that carry only noise. The result: a compact representation that preserves the information that matters.
 
 ### 5.3 Density Estimation
 
-Estimate the probability density function $p(\mathbf{x})$ from samples. Gaussian Mixture Models combine clustering and density estimation, and connect to the MLE framework developed in Week 07.
+Estimate the probability density function $p(\mathbf{x})$ from samples. Gaussian Mixture Models combine clustering and density estimation, and connect to the MLE framework developed in [Week 07](../../03_probability/week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle).
 
 > **Concrete example.** Given height measurements from a population that includes adults and children, a single Gaussian is a poor fit (bimodal data). A mixture of two Gaussians captures the two subpopulations, simultaneously clustering the data and estimating the density.
 
@@ -278,7 +278,7 @@ Every supervised algorithm in this course follows the same iterative structure:
 
 This loop is invariant to model complexity. Whether fitting a 2-parameter linear model or a 70-billion-parameter language model, the structure is identical; only the scale changes.
 
-> **Notebook reference.** The starter notebooks from Week 01 onward implement this exact loop. In `starter.ipynb` (Week 01), vanilla gradient descent is implemented in NumPy following this structure. Observe how the loop components map to specific lines of code.
+> **Notebook reference.** The starter notebooks from [Week 01](../../02_fundamentals/week01_optimization/theory.md#11-notebook-reference-guide) onward implement this exact loop. In `starter.ipynb` ([Week 01](../../02_fundamentals/week01_optimization/theory.md#11-notebook-reference-guide)), vanilla gradient descent is implemented in NumPy following this structure. Observe how the loop components map to specific lines of code.
 
 > **Pseudocode for the training loop:**
 > ```
@@ -292,7 +292,7 @@ This loop is invariant to model complexity. Whether fitting a 2-parameter linear
 >         break                     # early stopping (regularisation)
 > ```
 
-> **Suggested experiment.** When you reach Week 01's notebook, add `print(f"Epoch {epoch}: loss = {L:.4f}")` inside the training loop and plot the loss over epochs. A healthy training curve decreases rapidly at first (high-error parameters are easy to fix), then flattens (diminishing returns). If the curve oscillates, the learning rate $\eta$ is too large; if it barely moves, $\eta$ is too small.
+> **Suggested experiment.** When you reach [Week 01](../../02_fundamentals/week01_optimization/theory.md#11-notebook-reference-guide)'s notebook, add `print(f"Epoch {epoch}: loss = {L:.4f}")` inside the training loop and plot the loss over epochs. A healthy training curve decreases rapidly at first (high-error parameters are easy to fix), then flattens (diminishing returns). If the curve oscillates, the learning rate $\eta$ is too large; if it barely moves, $\eta$ is too small.
 
 ---
 
@@ -312,9 +312,9 @@ $$f_\theta(\mathbf{x}) = W_L \sigma(W_{L-1} \sigma(\cdots \sigma(W_1 \mathbf{x} 
 
 where $\sigma$ is a nonlinear activation function (e.g., ReLU: $\sigma(z) = \max(0, z)$). The composition of affine transformations with nonlinearities allows neural networks to approximate arbitrary continuous functions (the Universal Approximation Theorem).
 
-> **Key insight.** A neural network is stacked linear models with nonlinearities in between. Understanding linear models deeply (Week 03) is therefore a prerequisite for understanding deep networks.
+> **Key insight.** A neural network is stacked linear models with nonlinearities in between. Understanding linear models deeply ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#3-linear-regression)) is therefore a prerequisite for understanding deep networks.
 
-> **Why nonlinearities matter.** Without $\sigma$, composing affine transformations yields another affine transformation: $W_2(W_1 \mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 = (W_2 W_1)\mathbf{x} + (W_2 \mathbf{b}_1 + \mathbf{b}_2) = W'\mathbf{x} + \mathbf{b}'$. The entire network collapses to a single linear layer — depth adds no representational power. The activation function $\sigma$ breaks this linearity, and each layer can carve the input space into increasingly complex regions. This is proven in Week 11 from scratch.
+> **Why nonlinearities matter.** Without $\sigma$, composing affine transformations yields another affine transformation: $W_2(W_1 \mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 = (W_2 W_1)\mathbf{x} + (W_2 \mathbf{b}_1 + \mathbf{b}_2) = W'\mathbf{x} + \mathbf{b}'$. The entire network collapses to a single linear layer — depth adds no representational power. The activation function $\sigma$ breaks this linearity, and each layer can carve the input space into increasingly complex regions. This is proven in [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation) from scratch.
 
 ---
 
@@ -352,9 +352,9 @@ The **capacity** of a model is the richness of its hypothesis space — informal
 - **Too little capacity** → underfitting. The hypothesis space does not contain a good approximation of the true function.
 - **Too much capacity** → overfitting. The hypothesis space is so large that the model can memorise noise in the training data, and it selects a function that fits training points perfectly but generalises poorly.
 
-This tension is formalised in the **bias-variance decomposition** (developed in Week 06). For now, the intuition suffices: a good model is one whose hypothesis space is rich enough to contain the truth, but constrained enough that finite data can identify it. Regularisation (Section 10.4) is the primary tool for managing this trade-off.
+This tension is formalised in the **bias-variance decomposition** (developed in [Week 06](../../02_fundamentals/week06_regularization/theory.md#21-biasvariance-recap)). For now, the intuition suffices: a good model is one whose hypothesis space is rich enough to contain the truth, but constrained enough that finite data can identify it. Regularisation (Section 10.4) is the primary tool for managing this trade-off.
 
-> **Suggested experiment.** In Week 03's notebook, fit polynomial functions of degree 1, 3, 10, and 20 to a small dataset and observe how training error decreases monotonically while validation error first decreases and then increases. This U-shaped validation curve is the empirical signature of the bias-variance trade-off.
+> **Suggested experiment.** In [Week 03](../../02_fundamentals/week03_linear_models/theory.md#5-polynomial-regression-and-feature-expansion)'s notebook, fit polynomial functions of degree 1, 3, 10, and 20 to a small dataset and observe how training error decreases monotonically while validation error first decreases and then increases. This U-shaped validation curve is the empirical signature of the bias-variance trade-off.
 
 > **Analogy: the Goldilocks principle.** A model with too few parameters is like trying to describe a city with a single sentence — the description is not *wrong*, but it omits everything interesting (underfitting). A model with too many parameters is like memorising the phone book — it captures every detail of the training set, including typos, and fails on any new entry (overfitting). The goal is a model that captures the *generating rules* behind the data, not the data itself.
 
@@ -397,7 +397,7 @@ How to prevent over-memorising training data. Techniques include:
 - **Early stopping:** halt training when validation error increases
 - **Data augmentation:** artificially expand the training set
 
-These techniques form the subject of Weeks 06 and 16.
+These techniques form the subject of [Weeks 06](../../02_fundamentals/week06_regularization/theory.md) and 16.
 
 ---
 

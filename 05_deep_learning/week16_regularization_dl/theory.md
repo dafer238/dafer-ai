@@ -40,7 +40,7 @@
 
 ## 1. Scope and Purpose
 
-Week 06 introduced regularisation for linear models (Ridge, Lasso, cross-validation). This week is the deep-learning counterpart: the goal — controlling overfitting — is identical, but the tools change because deep networks have millions of parameters, stochastic training, and layer-specific dynamics.
+[Week 06](../../02_fundamentals/week06_regularization/theory.md) introduced regularisation for linear models (Ridge, Lasso, cross-validation). This week is the deep-learning counterpart: the goal — controlling overfitting — is identical, but the tools change because deep networks have millions of parameters, stochastic training, and layer-specific dynamics.
 
 This week delivers:
 
@@ -48,7 +48,7 @@ This week delivers:
 2. **Understanding interactions** — these techniques are not independent. Dropout + BatchNorm can conflict; weight decay + Adam behaves differently from weight decay + SGD; augmentation can substitute for explicit regularisation.
 3. **The ablation discipline** — systematically varying one regulariser at a time and recording the result in a table. This methodology carries through every subsequent experiment.
 
-**Prerequisites.** Week 06 (L1/L2 regularisation, cross-validation), Week 12 (BatchNorm), Week 13 (PyTorch training loop), Week 15 (CNN to regularise).
+**Prerequisites.** [Week 06](../../02_fundamentals/week06_regularization/theory.md) (L1/L2 regularisation, cross-validation), [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (BatchNorm), [Week 13](../week13_pytorch_basics/theory.md) (PyTorch training loop), [Week 15](../week15_cnn_representations/theory.md) (CNN to regularise).
 
 ---
 
@@ -70,7 +70,7 @@ Zhang et al. (2017) showed that standard deep networks can perfectly memorise ra
 
 ### 2.2 The Bias–Variance Lens
 
-From Week 06:
+From [Week 06](../../02_fundamentals/week06_regularization/theory.md):
 
 $$\text{Expected Error} = \text{Bias}^2 + \text{Variance} + \text{Irreducible Noise}$$
 
@@ -173,7 +173,7 @@ class MLPWithDropout(nn.Module):
 - **After activation**, before the next linear layer.
 - **Not after the output layer** — you want the full prediction, not a randomly masked one.
 - **In CNNs:** less common between conv layers (spatial dropout `nn.Dropout2d` is sometimes used). More common after the flatten→FC transition.
-- **In Transformers:** after attention and after the feedforward block (Week 18).
+- **In Transformers:** after attention and after the feedforward block ([Week 18](../../06_sequence_models/week18_transformers/theory.md)).
 
 ---
 
@@ -314,7 +314,7 @@ Data augmentation is the **most effective single regulariser** in deep learning 
 
 ## 6. BatchNorm as a Regulariser
 
-From Week 12, BatchNorm normalises activations using mini-batch statistics. This introduces **noise** because:
+From [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md), BatchNorm normalises activations using mini-batch statistics. This introduces **noise** because:
 
 - Each sample's normalisation depends on the other samples in the batch.
 - Different batches produce different $\mu_B, \sigma_B^2$.
@@ -436,7 +436,7 @@ mean_pred = predictions.mean(dim=0)     # point estimate
 uncertainty = predictions.std(dim=0)     # epistemic uncertainty
 ```
 
-This connects to Week 08 (uncertainty): MC Dropout provides uncertainty estimates without training an ensemble.
+This connects to [Week 08](../../03_probability/week08_uncertainty/theory.md) (uncertainty): MC Dropout provides uncertainty estimates without training an ensemble.
 
 > **Notebook reference.** Cell 4 trains 5 models with different seeds and averages their predictions, showing ~0.5–1% improvement over a single model.
 
@@ -458,7 +458,7 @@ criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 
 1. **Prevents overconfidence.** Without smoothing, the model is encouraged to push logits to $\pm\infty$ (to make softmax approach one-hot). This leads to poorly calibrated probabilities.
 2. **Regularises.** The model cannot achieve zero loss (the target is not a delta function), which prevents memorisation.
-3. **Improved calibration.** Probabilities better reflect true confidence (Week 08 connection).
+3. **Improved calibration.** Probabilities better reflect true confidence ([Week 08](../../03_probability/week08_uncertainty/theory.md) connection).
 
 ---
 
@@ -500,13 +500,13 @@ Regularisers interact — using all of them together is not necessarily optimal:
 
 | Week                                     | Connection                                                                                                      |
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Week 06 (Regularisation)**             | Ridge/Lasso for linear models; same $\lambda\|\theta\|^2$ penalty now applied to neural networks                |
-| **Week 08 (Uncertainty)**                | MC Dropout for uncertainty; calibration improved by label smoothing                                             |
-| **Week 12 (Training Pathologies)**       | BatchNorm's regularising side effect; interaction with dropout                                                  |
-| **Week 14 (Training at Scale)**          | Weight decay interacts with LR schedule ($\eta\lambda$ effective strength); augmentation in DataLoader pipeline |
-| **Week 15 (CNNs)**                       | The CNN built there is the model being regularised here; spatial dropout `Dropout2d`                            |
-| **Week 17–18 (Attention, Transformers)** | Dropout in attention layers and FFN; weight decay with AdamW is standard for Transformers                       |
-| **Week 19 (Fine-Tuning)**                | Fine-tuning is a form of regularisation: pretrained weights constrain the solution space                        |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**             | Ridge/Lasso for linear models; same $\lambda\|\theta\|^2$ penalty now applied to neural networks                |
+| **[Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty)**                | MC Dropout for uncertainty; calibration improved by label smoothing                                             |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)**       | BatchNorm's regularising side effect; interaction with dropout                                                  |
+| **[Week 14](../week14_training_at_scale/theory.md) (Training at Scale)**          | Weight decay interacts with LR schedule ($\eta\lambda$ effective strength); augmentation in DataLoader pipeline |
+| **[Week 15](../week15_cnn_representations/theory.md) (CNNs)**                       | The CNN built there is the model being regularised here; spatial dropout `Dropout2d`                            |
+| **[[Week 17](../../06_sequence_models/week17_attention/theory.md)](../../06_sequence_models/week17_attention/theory.md)–[18](../../06_sequence_models/week18_transformers/theory.md) (Attention, Transformers)** | Dropout in attention layers and FFN; weight decay with AdamW is standard for Transformers                       |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-Tuning)**                | Fine-tuning is a form of regularisation: pretrained weights constrain the solution space                        |
 
 ---
 
@@ -526,7 +526,7 @@ Regularisers interact — using all of them together is not necessarily optimal:
 
 | Modification                                                                                                      | What it reveals                                                      |
 | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Try Dropout2d (`nn.Dropout2d(0.25)`) after conv layers in Week 15's CNN                                           | Spatial dropout drops entire feature maps; different from per-neuron |
+| Try Dropout2d (`nn.Dropout2d(0.25)`) after conv layers in [Week 15](../week15_cnn_representations/theory.md)'s CNN                                           | Spatial dropout drops entire feature maps; different from per-neuron |
 | Sweep dropout rate $p \in \{0.1, 0.2, 0.3, 0.5, 0.7\}$ and plot                                                   | Shows optimal $p$; too high → underfitting                           |
 | Compare `Adam(weight_decay=0.01)` vs. `AdamW(weight_decay=0.01)` on same model                                    | AdamW usually gives better generalisation — decoupled decay matters  |
 | Add Mixup: $\tilde{x} = \lambda x_i + (1-\lambda)x_j$, $\tilde{y} = \lambda y_i + (1-\lambda)y_j$                 | Powerful augmentation; requires soft cross-entropy                   |

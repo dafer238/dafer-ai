@@ -45,13 +45,13 @@
 
 ## 1. Scope and Purpose
 
-Week 03 introduced linear and logistic regression: powerful tools but susceptible to **overfitting**, especially when the number of features $d$ is large relative to the number of samples $n$. Week 04 showed that PCA can reduce dimensionality before fitting, but that is an **indirect** approach — it discards variance in an unsupervised manner, without looking at the labels.
+[Week 03](../week03_linear_models/theory.md) introduced linear and logistic regression: powerful tools but susceptible to **overfitting**, especially when the number of features $d$ is large relative to the number of samples $n$. [Week 04](../week04_dimensionality_reduction/theory.md) showed that PCA can reduce dimensionality before fitting, but that is an **indirect** approach — it discards variance in an unsupervised manner, without looking at the labels.
 
-This week introduces the **direct** approach: modify the objective function to penalise complexity. This is **regularisation** and it is arguably the single most important technique in all of machine learning. Every model from here forward — neural networks (Week 11), CNNs (Week 15), transformers (Week 18) — uses some form of regularisation.
+This week introduces the **direct** approach: modify the objective function to penalise complexity. This is **regularisation** and it is arguably the single most important technique in all of machine learning. Every model from here forward — neural networks ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)), CNNs ([Week 15](../../05_deep_learning/week15_cnn_representations/theory.md)), transformers ([Week 18](../../06_sequence_models/week18_transformers/theory.md)) — uses some form of regularisation.
 
 Alongside regularisation, we cover **cross-validation**, the standard protocol for choosing the regularisation strength (and, more broadly, any hyperparameter) without overfitting to the validation data.
 
-**Prerequisites.** Week 03 (linear/logistic regression, MSE, normal equations, bias–variance tradeoff), Week 04 (SVD, eigendecomposition).
+**Prerequisites.** [Week 03](../week03_linear_models/theory.md) (linear/logistic regression, MSE, normal equations, bias–variance tradeoff), [Week 04](../week04_dimensionality_reduction/theory.md) (SVD, eigendecomposition).
 
 ---
 
@@ -59,7 +59,7 @@ Alongside regularisation, we cover **cross-validation**, the standard protocol f
 
 ### 2.1 Bias–Variance Recap
 
-Recall from Week 03 (Section 4) that the expected prediction error decomposes as:
+Recall from [Week 03](../week03_linear_models/theory.md) (Section 4) that the expected prediction error decomposes as:
 
 $$\mathbb{E}\left[(y - \hat{f}(\mathbf{x}))^2\right] = \underbrace{\text{Bias}[\hat{f}(\mathbf{x})]^2}_{\text{systematic error}} + \underbrace{\text{Var}[\hat{f}(\mathbf{x})]}_{\text{sensitivity to training set}} + \underbrace{\sigma^2}_{\text{irreducible noise}}$$
 
@@ -125,7 +125,7 @@ $$\boxed{\hat{\mathbf{w}}_{\text{Ridge}} = (X^\top X + n\lambda I)^{-1}X^\top\ma
 
 > Some references absorb the $1/n$ into the loss and write $\hat{\mathbf{w}} = (X^\top X + \lambda I)^{-1}X^\top\mathbf{y}$. The two forms are equivalent up to a rescaling of $\lambda$. Sklearn uses $\hat{\mathbf{w}} = (X^\top X + \alpha I)^{-1}X^\top\mathbf{y}$, where `alpha` plays the role of $n\lambda$.
 
-**Key observation.** Compare with the OLS solution from Week 03:
+**Key observation.** Compare with the OLS solution from [Week 03](../week03_linear_models/theory.md):
 
 | Estimator | Formula                                        | Invertible?                                                                               |
 | --------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -155,7 +155,7 @@ This is the exact same picture as in the "constraint ball" illustration in most 
 
 ### 3.4 Ridge and SVD — Shrinkage of Singular Values
 
-To understand Ridge's effect precisely, express the solution via the SVD of $X$ (Week 04). Let $X = U S V^\top$ where $S = \text{diag}(s_1, \ldots, s_p)$ with $p = \min(n, d)$.
+To understand Ridge's effect precisely, express the solution via the SVD of $X$ ([Week 04](../week04_dimensionality_reduction/theory.md)). Let $X = U S V^\top$ where $S = \text{diag}(s_1, \ldots, s_p)$ with $p = \min(n, d)$.
 
 The OLS fitted values are:
 
@@ -174,7 +174,7 @@ $$\boxed{f_j = \frac{s_j^2}{s_j^2 + n\lambda} \in [0, 1)}$$
 | $s_j \gg \sqrt{n\lambda}$ (large) | $f_j \approx 1$ | Almost no shrinkage (high-variance directions are preserved) |
 | $s_j \ll \sqrt{n\lambda}$ (small) | $f_j \approx 0$ | Nearly eliminated (noisy directions are suppressed)          |
 
-**Interpretation.** Ridge continuously shrinks all coefficients toward zero, with the strongest shrinkage applied to directions of low variance in $X$. This is exactly where overfitting is most dangerous (small singular values correspond to poorly estimated directions — see Week 04, Section 4.4).
+**Interpretation.** Ridge continuously shrinks all coefficients toward zero, with the strongest shrinkage applied to directions of low variance in $X$. This is exactly where overfitting is most dangerous (small singular values correspond to poorly estimated directions — see [Week 04](../week04_dimensionality_reduction/theory.md), Section 4.4).
 
 **Effective degrees of freedom** of Ridge regression:
 
@@ -203,13 +203,13 @@ This is exactly Ridge regression with $\lambda = \sigma^2 / (n\tau^2)$.
 
 > **Intuition.** Regularisation strength encodes your prior belief about the scale of the true weights. A strong penalty means you believe a priori that the weights are small.
 >
-> **Forward pointer.** Bayesian inference goes beyond MAP estimation — it computes the full posterior $p(\mathbf{w} \mid \mathbf{y}, X)$. This is the topic of Week 08 (Uncertainty).
+> **Forward pointer.** Bayesian inference goes beyond MAP estimation — it computes the full posterior $p(\mathbf{w} \mid \mathbf{y}, X)$. This is the topic of [Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty).
 
 ---
 
 ### 3.6 Effect on Bias and Variance
 
-The OLS estimator is **unbiased** (Gauss–Markov, Week 03) but can have **high variance** (especially when $d \approx n$ or features are correlated).
+The OLS estimator is **unbiased** (Gauss–Markov, [Week 03](../week03_linear_models/theory.md)) but can have **high variance** (especially when $d \approx n$ or features are correlated).
 
 Ridge introduces **bias** (the estimator is pulled toward zero) but **reduces variance** (by shrinking unstable coefficients). The net effect on MSE:
 
@@ -529,7 +529,7 @@ $$X = \begin{bmatrix} y_L & y_{L-1} & \cdots & y_1 \\ y_{L+1} & y_L & \cdots & y
 
 The notebook implements this with `create_lag_features(y, n_lags=5)`, yielding a design matrix of shape $(n - L, L)$.
 
-> **Forward pointer.** Lag-based models are the simplest form of sequence modelling. Week 09 (Time Series) introduces autoregressive models, and Weeks 17–18 cover attention and transformers — a fundamentally different (and far more powerful) approach to sequence data.
+> **Forward pointer.** Lag-based models are the simplest form of sequence modelling. [Week 09](../../03_probability/week09_time_series/theory.md) (Time Series) introduces autoregressive models, and [[Weeks 17](../../06_sequence_models/week17_attention/theory.md)](../../06_sequence_models/week17_attention/theory.md)–[18](../../06_sequence_models/week18_transformers/theory.md) cover attention and transformers — a fundamentally different (and far more powerful) approach to sequence data.
 
 ---
 
@@ -578,13 +578,13 @@ Compare with the Ridge solution: $w_j^{\text{Ridge}} = \frac{s_j^2}{s_j^2 + n\la
 | **L2 (Ridge)**                     | Weight magnitudes (squared)               | This week; all linear/logistic models         |
 | **L1 (Lasso)**                     | Weight magnitudes (absolute)              | This week; sparse models                      |
 | **Elastic Net**                    | Both L1 and L2                            | This week                                     |
-| **Early stopping**                 | Number of GD iterations                   | This week; neural network training (Week 11+) |
-| **PCA (dimensionality reduction)** | Number of input dimensions                | Week 04                                       |
-| **Dropout**                        | Random neuron deactivation                | Week 16 (Regularisation for DL)               |
-| **Batch Normalisation**            | Internal covariate shift                  | Week 12 (Training Pathologies)                |
-| **Data augmentation**              | Effective training set size               | Week 15 (CNNs)                                |
-| **Weight decay**                   | Same as L2, but for Adam/SGD              | Week 02, Week 14 (Training at Scale)          |
-| **Layer freezing**                 | Prevents fine-tuning of pretrained layers | Week 19 (Fine-tuning)                         |
+| **Early stopping**                 | Number of GD iterations                   | This week; neural network training ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)+) |
+| **PCA (dimensionality reduction)** | Number of input dimensions                | [Week 04](../week04_dimensionality_reduction/theory.md)                                       |
+| **Dropout**                        | Random neuron deactivation                | [Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation for DL)               |
+| **Batch Normalisation**            | Internal covariate shift                  | [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)                |
+| **Data augmentation**              | Effective training set size               | [Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)                                |
+| **Weight decay**                   | Same as L2, but for Adam/SGD              | [Week 02](../week02_advanced_optimizers/theory.md), [Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)          |
+| **Layer freezing**                 | Prevents fine-tuning of pretrained layers | [Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-tuning)                         |
 
 > **The fundamental principle.** All regularisation techniques reduce the effective complexity of the model, either explicitly (penalising the objective) or implicitly (early stopping, dropout, data augmentation). The right amount of regularisation makes the model capture the signal without memorising the noise.
 
@@ -594,18 +594,18 @@ Compare with the Ridge solution: $w_j^{\text{Ridge}} = \frac{s_j^2}{s_j^2 + n\la
 
 | Week                                | Connection                                                                                                 |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **Week 01 (Optimisation)**          | GD minimises the penalised objective; ridge adds $\lambda I$ to the Hessian (better conditioning)          |
-| **Week 02 (Advanced Optimisers)**   | Weight decay in Adam is L2 regularisation; decoupled weight decay (AdamW) is subtly different              |
-| **Week 03 (Linear Models)**         | Ridge/Lasso are direct modifications of linear regression; bias–variance tradeoff motivates regularisation |
-| **Week 04 (PCA)**                   | Ridge shrinks SVD components (Section 3.4); PCA truncation is an extreme form of shrinkage                 |
-| **Week 05 (Clustering)**            | Regularised GMMs (adding $\epsilon I$ to covariance) prevent singular matrices — same idea as Ridge        |
-| **Week 07 (Likelihood)**            | MAP estimation connects regularisation to Bayesian priors                                                  |
-| **Week 08 (Uncertainty)**           | Full Bayesian inference goes beyond point estimation; regularisation is the MAP approximation              |
-| **Week 09 (Time Series)**           | Time-series CV is essential for any sequential prediction task                                             |
-| **Week 11 (NNs)**                   | Weight decay (L2) is the standard regulariser for neural networks                                          |
-| **Week 12 (Training Pathologies)**  | Batch normalisation has a regularising effect (mini-batch noise)                                           |
-| **Week 16 (Regularisation for DL)** | Dropout, data augmentation, label smoothing — all regularisation techniques for deep learning              |
-| **Week 19 (Fine-tuning)**           | Freezing pretrained layers = constraining parameters = regularisation                                      |
+| **[Week 01](../week01_optimization/theory.md) (Optimisation)**          | GD minimises the penalised objective; ridge adds $\lambda I$ to the Hessian (better conditioning)          |
+| **[Week 02](../week02_advanced_optimizers/theory.md) (Advanced Optimisers)**   | Weight decay in Adam is L2 regularisation; decoupled weight decay (AdamW) is subtly different              |
+| **[Week 03](../week03_linear_models/theory.md) (Linear Models)**         | Ridge/Lasso are direct modifications of linear regression; bias–variance tradeoff motivates regularisation |
+| **[Week 04](../week04_dimensionality_reduction/theory.md) (PCA)**                   | Ridge shrinks SVD components (Section 3.4); PCA truncation is an extreme form of shrinkage                 |
+| **[Week 05](../week05_clustering/theory.md) (Clustering)**            | Regularised GMMs (adding $\epsilon I$ to covariance) prevent singular matrices — same idea as Ridge        |
+| **[Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood)**            | MAP estimation connects regularisation to Bayesian priors                                                  |
+| **[Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty)**           | Full Bayesian inference goes beyond point estimation; regularisation is the MAP approximation              |
+| **[Week 09](../../03_probability/week09_time_series/theory.md) (Time Series)**           | Time-series CV is essential for any sequential prediction task                                             |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NNs)**                   | Weight decay (L2) is the standard regulariser for neural networks                                          |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)**  | Batch normalisation has a regularising effect (mini-batch noise)                                           |
+| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation for DL)** | Dropout, data augmentation, label smoothing — all regularisation techniques for deep learning              |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-tuning)**           | Freezing pretrained layers = constraining parameters = regularisation                                      |
 
 ---
 

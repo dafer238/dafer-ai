@@ -1,0 +1,27 @@
+# Jupyter Book v2 (MyST) configuration
+# Docs: https://mystmd.org/guide/quickstart
+version: 1
+
+project:
+  title: "AI & ML — From Foundations to Deployment"
+  copyright: "2025"
+  toc:
+    - file: intro.md
+    - title: "Part I · Introduction"
+      children:
+        - file: 01_intro/week00_ai_landscape/theory.md
+          title: "Week 0a · The AI Landscape"
+        - file: 01_intro/week00b_math_and_data/theory.md
+          title: "Week 0b · Mathematics & Data"
+    - title: "Part II · Fundamentals"
+      children:
+        - file: 02_fundamentals/week01_optimization/theory.md
+          title: "Week 1 · Optimisation"
+          children:
+            - file: 02_fundamentals/week01_optimization/starter.ipynb
+              title: "Week 1 · Notebook"
+
+site:
+  template: book-theme
+  options:
+    favicon: ""

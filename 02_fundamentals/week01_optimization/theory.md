@@ -51,9 +51,9 @@ The goal is threefold:
 3. **Practical fluency** in implementing optimisers from scratch and diagnosing their behaviour.
 
 **Prerequisites.** This document assumes familiarity with:
-- Partial derivatives, the gradient vector, and the chain rule (Week 00b, Part II).
-- Matrix–vector multiplication and norms (Week 00b, Part I).
-- The training loop concept: forward → loss → backward → update (Week 00a).
+- Partial derivatives, the gradient vector, and the chain rule ([Week 00b](../../01_intro/week00b_math_and_data/theory.md), Part II).
+- Matrix–vector multiplication and norms ([Week 00b](../../01_intro/week00b_math_and_data/theory.md), Part I).
+- The training loop concept: forward → loss → backward → update ([Week 00a](../../01_intro/week00_ai_landscape/theory.md)).
 
 ---
 
@@ -120,7 +120,7 @@ $$\mathcal{L}_{\text{MSE}}(\theta) = \frac{1}{n}\sum_{i=1}^{n}(y_i - f_\theta(\m
 - The MSE is differentiable everywhere, which is essential for gradient descent.
 - Its gradient has a simple closed form (derived below).
 
-**Probabilistic justification.** MSE is the negative log-likelihood under a Gaussian noise model: $y_i = f_\theta(\mathbf{x}_i) + \epsilon_i$, $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$ (proved in Week 07). If the noise is instead Laplace-distributed, the corresponding loss is the **Mean Absolute Error** $\frac{1}{n}\sum |y_i - \hat{y}_i|$, which is more robust to outliers.
+**Probabilistic justification.** MSE is the negative log-likelihood under a Gaussian noise model: $y_i = f_\theta(\mathbf{x}_i) + \epsilon_i$, $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$ (proved in [Week 07](../../03_probability/week07_likelihood/theory.md#72-laplace-noise-mae-l1-loss)). If the noise is instead Laplace-distributed, the corresponding loss is the **Mean Absolute Error** $\frac{1}{n}\sum |y_i - \hat{y}_i|$, which is more robust to outliers.
 
 **Gradient of the MSE.** Let $r_i = y_i - \hat{y}_i$ denote the residual. For a linear model $\hat{y}_i = \mathbf{w}^\top \mathbf{x}_i + b$:
 
@@ -165,7 +165,7 @@ $$\mathcal{L}_{\text{CE}}(\theta) = -\frac{1}{n}\sum_{i=1}^{n}\sum_{k=1}^{K} y_{
 - $\mathcal{L}_{\text{CE}} \geq 0$, and $\mathcal{L}_{\text{CE}} = 0$ only if $\hat{y}_{ik} = y_{ik}$ for all $i, k$.
 - The logarithm heavily penalises confident wrong predictions: $-\ln(0.01) \approx 4.6$ vs $-\ln(0.5) \approx 0.69$.
 - Cross-entropy equals the KL divergence between the true label distribution and the predicted distribution, plus the entropy of the true distribution (a constant).
-- Probabilistically, it is the negative log-likelihood under a Bernoulli (binary) or Categorical (multi-class) model (Week 07).
+- Probabilistically, it is the negative log-likelihood under a Bernoulli (binary) or Categorical (multi-class) model ([Week 07](../../03_probability/week07_likelihood/theory.md#3-likelihood-from-data-to-models)).
 
 > **When to use which loss.** MSE for regression (continuous targets). Cross-entropy for classification (discrete targets). Using MSE for classification is technically possible but leads to pathological gradient behaviour: the gradient vanishes when the model is confidently wrong, precisely when it should be largest. Cross-entropy avoids this by the logarithmic penalty.
 
@@ -314,7 +314,7 @@ where $\kappa = \lambda_{\max}/\lambda_{\min}$ is the condition number. When $\k
 >
 > **Notebook reference.** In `starter.ipynb` Cell 8, the learning rate sweep uses $\eta \in \{0.01, 0.05, 0.1, 0.2, 0.25\}$ and plots the resulting trajectories. Note that $\eta = 0.25$ is the theoretically optimal rate. Exercise 5 asks you to test $\eta \in \{0.3, 0.4, 0.5, 0.6\}$ — since $0.333$ is the divergence threshold, $\eta \geq 0.4$ should diverge.
 >
-> **Suggested experiment.** Change the loss to $\mathcal{L}(x, y) = x^2 + 100y^2$ (condition number $\kappa = 100$). Run the LR sweep and observe that the working range of $\eta$ shrinks to $(0, 2/200) = (0, 0.01)$ and convergence within that range is extremely slow. This demonstrates concretely that **ill-conditioning is the central challenge of gradient descent** — and motivates the adaptive methods of Week 02.
+> **Suggested experiment.** Change the loss to $\mathcal{L}(x, y) = x^2 + 100y^2$ (condition number $\kappa = 100$). Run the LR sweep and observe that the working range of $\eta$ shrinks to $(0, 2/200) = (0, 0.01)$ and convergence within that range is extremely slow. This demonstrates concretely that **ill-conditioning is the central challenge of gradient descent** — and motivates the adaptive methods of [Week 02](../week02_advanced_optimizers/theory.md#5-adagrad-per-parameter-learning-rates).
 
 ---
 
@@ -333,7 +333,7 @@ The learning rate $\eta$ is the single most important hyperparameter in all of M
 
 **The learning rate dilemma.** In a well-conditioned problem ($\kappa \approx 1$), a single learning rate works well for all directions. In an ill-conditioned problem ($\kappa \gg 1$), the learning rate must be small enough for the steep direction, which makes it painfully slow for the shallow direction. This dilemma is resolved by:
 1. **Momentum** (Section 6): accumulates velocity in persistent directions.
-2. **Adaptive methods** (Week 02): maintain per-parameter effective learning rates (Adam, RMSProp).
+2. **Adaptive methods** ([Week 02](../week02_advanced_optimizers/theory.md#7-adam-combining-momentum-and-adaptivity)): maintain per-parameter effective learning rates (Adam, RMSProp).
 3. **Preconditioning** (advanced): transform the parameter space to improve conditioning.
 
 ---
@@ -348,7 +348,7 @@ $$\mathcal{L}(\mathbf{w}) = \frac{1}{n}\|\mathbf{y} - X\mathbf{w}\|^2 = \frac{1}
 
 $$\mathcal{L} = \frac{1}{n}\left(\mathbf{y}^\top \mathbf{y} - 2\mathbf{y}^\top X\mathbf{w} + \mathbf{w}^\top X^\top X \mathbf{w}\right)$$
 
-Using the vector calculus identities from Week 00b (Section 3.7):
+Using the vector calculus identities from [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (Section 3.7):
 - $\nabla_{\mathbf{w}}(\mathbf{y}^\top X\mathbf{w}) = X^\top \mathbf{y}$
 - $\nabla_{\mathbf{w}}(\mathbf{w}^\top X^\top X \mathbf{w}) = 2X^\top X \mathbf{w}$
 
@@ -581,7 +581,7 @@ Geometrically: the line segment connecting any two points on the graph of $f$ li
 
 **Examples of convex losses in ML:**
 - MSE with a linear model: $\mathcal{L}(\mathbf{w}) = \frac{1}{n}\|X\mathbf{w} - \mathbf{y}\|^2$. The Hessian is $\frac{2}{n}X^\top X$, which is PSD. ✓
-- Cross-entropy with a logistic model (convex in $\mathbf{w}$, proven in Week 03).
+- Cross-entropy with a logistic model (convex in $\mathbf{w}$, proven in [Week 03](../week03_linear_models/theory.md#7-logistic-regression)).
 
 **Non-convex losses:**
 - Any neural network with hidden layers. The composition of layers with nonlinear activations destroys convexity.
@@ -600,7 +600,7 @@ A **critical point** is a point where $\nabla \mathcal{L} = \mathbf{0}$. The Hes
 | Negative definite         | $\lambda_i < 0 \; \forall i$ | **Local maximum** |
 | Indefinite                | Mixed signs                  | **Saddle point**  |
 
-> **Definition recap.** The Hessian $H = \nabla^2 \mathcal{L}$ is the $p \times p$ matrix of second derivatives (Week 00b, Section 3.4). Its eigenvalues are the curvatures along the principal directions. A positive eigenvalue means the loss curves upward in that direction (a valley); a negative eigenvalue means it curves downward (a hill).
+> **Definition recap.** The Hessian $H = \nabla^2 \mathcal{L}$ is the $p \times p$ matrix of second derivatives ([Week 00b](../../01_intro/week00b_math_and_data/theory.md), Section 3.4). Its eigenvalues are the curvatures along the principal directions. A positive eigenvalue means the loss curves upward in that direction (a valley); a negative eigenvalue means it curves downward (a hill).
 
 > **Notebook reference.** Exercise 2 in `starter.ipynb` (Cell 11) asks you to define the classic saddle function $f(x, y) = x^2 - y^2$ and observe GD behaviour. The Hessian is $\text{diag}(2, -2)$: one positive eigenvalue (minimum in $x$), one negative (maximum in $y$). At the origin, $\nabla f = \mathbf{0}$ but it is not a minimum — it is a saddle.
 >
@@ -631,7 +631,7 @@ $$H = \begin{bmatrix} 2 & 0 \\ 0 & 200 \end{bmatrix}, \quad \kappa = \frac{200}{
 
 This is ill-conditioned. The contours are extremely elongated, and GD requires $\eta < 2/200 = 0.01$ to converge — while the shallow $x$-direction would benefit from $\eta$ up to $2/2 = 1$.
 
-> **The fundamental tension.** In an ill-conditioned problem, no single learning rate is good for all directions. The steep direction demands a small $\eta$ (to avoid divergence), while the shallow direction wants a large $\eta$ (to make progress). This is the problem that adaptive methods like Adam (Week 02) solve: they maintain a separate effective learning rate for each parameter.
+> **The fundamental tension.** In an ill-conditioned problem, no single learning rate is good for all directions. The steep direction demands a small $\eta$ (to avoid divergence), while the shallow direction wants a large $\eta$ (to make progress). This is the problem that adaptive methods like Adam ([Week 02](../week02_advanced_optimizers/theory.md#7-adam-combining-momentum-and-adaptivity)) solve: they maintain a separate effective learning rate for each parameter.
 
 > **Physical analogy.** An ill-conditioned loss is like a long, narrow bowling lane. The gutter walls are steep (you get penalised heavily for going sideways), but the lane is nearly flat along its length (you need large steps to make progress toward the pins). Gradient descent keeps bouncing off the gutter walls instead of rolling straight.
 
@@ -688,7 +688,7 @@ A fixed learning rate is suboptimal: one wants a large $\eta$ early (to make rap
 | **Step decay**        | $\eta_t = \eta_0 \cdot \gamma^{\lfloor t / s \rfloor}$                          | Discrete drops every $s$ steps by factor $\gamma$          |
 | **Exponential decay** | $\eta_t = \eta_0 \cdot e^{-\alpha t}$                                           | Smooth continuous decay                                    |
 | **Cosine annealing**  | $\eta_t = \eta_{\min} + \frac{1}{2}(\eta_0 - \eta_{\min})(1 + \cos(\pi t / T))$ | Smooth decay from $\eta_0$ to $\eta_{\min}$ over $T$ steps |
-| **Warmup + decay**    | Linear ramp from 0 to $\eta_0$ over $T_w$ steps, then cosine decay              | Standard for transformers (Week 18)                        |
+| **Warmup + decay**    | Linear ramp from 0 to $\eta_0$ over $T_w$ steps, then cosine decay              | Standard for transformers ([Week 18](../../06_sequence_models/week18_transformers/theory.md#91-learning-rate-warm-up))                        |
 | **Cyclical**          | Oscillate between $\eta_{\min}$ and $\eta_{\max}$                               | Escapes local basins (Smith, 2017)                         |
 
 | Symbol        | Meaning                          |
@@ -700,7 +700,7 @@ A fixed learning rate is suboptimal: one wants a large $\eta$ early (to make rap
 | $T$           | Total training steps             |
 | $T_w$         | Warmup duration (steps)          |
 
-> **Why warmup?** At initialisation, the model's parameters are random and the loss surface is poorly approximated by the local gradient. A large initial $\eta$ can cause instability. Warming up the learning rate gradually allows the model to reach a region where the gradient is informative before taking large steps. This is especially important for large models (Week 14, 18).
+> **Why warmup?** At initialisation, the model's parameters are random and the loss surface is poorly approximated by the local gradient. A large initial $\eta$ can cause instability. Warming up the learning rate gradually allows the model to reach a region where the gradient is informative before taking large steps. This is especially important for large models ([Week 14](../../05_deep_learning/week14_training_at_scale/theory.md#46-warmup), 18).
 
 > **Notebook reference.** Exercise 3 in `starter.ipynb` (Cell 12) asks you to implement Leslie Smith's cyclical LR policy and compare it to constant LR on the quadratic loss. Implement the triangular schedule and observe whether the cyclical LR escapes shallow basins that a constant LR gets trapped in (this is more visible on the multimodal loss from Cell 3).
 
@@ -754,7 +754,7 @@ Monitoring the **training loss curve** ($\mathcal{L}$ vs. iteration $t$) is the 
 | Very slow decrease (nearly flat)              | Learning rate too small                                | Increase $\eta$                                           |
 | Wild oscillation (loss swings up and down)    | Learning rate too large                                | Decrease $\eta$ or add momentum                           |
 | Loss increases monotonically                  | Severe divergence                                      | Drastically decrease $\eta$                               |
-| Loss decreases then rises                     | Overfitting (if validation loss rises) or LR too large | Add regularisation (Week 06) or decrease $\eta$           |
+| Loss decreases then rises                     | Overfitting (if validation loss rises) or LR too large | Add regularisation ([Week 06](../week06_regularization/theory.md#2-why-regularisation-the-overfitting-problem-revisited)) or decrease $\eta$           |
 | Loss plateaus at a high value                 | Stuck at saddle / poor initialisation                  | Add noise (SGD), increase capacity, or try different init |
 
 **Additional diagnostics:**

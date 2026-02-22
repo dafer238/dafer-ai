@@ -13,6 +13,7 @@ torchvision
 torchaudio
 transformers
 jupyter
+jupyter-book
 notebook
 tqdm
 pyyaml

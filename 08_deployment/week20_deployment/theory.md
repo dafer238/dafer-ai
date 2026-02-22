@@ -58,7 +58,7 @@ After this week you will be able to:
 4. **Add health checks and latency monitoring** to a serving endpoint.
 5. **Reason about** inference constraints (latency, throughput, memory) and model optimisation for deployment.
 
-**Prerequisites.** All previous weeks — you need a trained, evaluated model. Week 14 (training at scale — checkpointing, mixed precision). Week 19 (fine-tuning — the model you deploy).
+**Prerequisites.** All previous weeks — you need a trained, evaluated model. [Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (training at scale — checkpointing, mixed precision). [Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (fine-tuning — the model you deploy).
 
 ---
 
@@ -76,9 +76,9 @@ After this week you will be able to:
 
 | Stage          | Weeks covered        | Key outputs                                  |
 | -------------- | -------------------- | -------------------------------------------- |
-| Data pipeline  | Weeks 00a–00b, 14    | Clean, versioned datasets; DataLoaders       |
-| Model training | Weeks 01–18          | Trained weights (`.pt`, `.safetensors`)      |
-| Evaluation     | Weeks 03, 06, 08, 16 | Metrics, calibration, uncertainty estimates  |
+| Data pipeline  | [[Weeks 00a](../../01_intro/week00_ai_landscape/theory.md)](../../01_intro/week00_ai_landscape/theory.md)–[00b](../../01_intro/week00b_math_and_data/theory.md), 14    | Clean, versioned datasets; DataLoaders       |
+| Model training | [[Weeks 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[18](../../06_sequence_models/week18_transformers/theory.md)          | Trained weights (`.pt`, `.safetensors`)      |
+| Evaluation     | [Weeks 03](../../02_fundamentals/week03_linear_models/theory.md), 06, 08, 16 | Metrics, calibration, uncertainty estimates  |
 | Deployment     | **This week**        | API, container, serving infrastructure       |
 | Monitoring     | **This week**        | Health checks, latency logs, drift detection |
 
@@ -678,7 +678,7 @@ A model's performance degrades over time as the world changes.
 | Monitor prediction distribution  | Data drift | Plot confidence histograms over time; increasing low-confidence predictions signals OOD inputs |
 | Statistical tests (KS test, PSI) | Data drift | Compare feature distributions between training data and recent production data                 |
 | Labelled evaluation set          | Both       | Periodically collect ground-truth labels and compute metrics                                   |
-| Confidence calibration (Week 08) | Both       | If calibrated probabilities become unreliable, the model is degrading                          |
+| Confidence calibration ([Week 08](../../03_probability/week08_uncertainty/theory.md)) | Both       | If calibrated probabilities become unreliable, the model is degrading                          |
 
 **Response:** retrain on fresh data (closing the lifecycle loop).
 
@@ -742,14 +742,14 @@ class PredictionRequest(BaseModel):
 
 | Week                               | Connection                                                                                                                                          |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Week 01–02 (Optimisation)**      | The model you deploy was optimised with gradient descent; the loss landscape determines the quality of the deployed model                           |
-| **Week 06 (Regularisation)**       | A well-regularised model generalises better in production; overfitting manifests as poor predictions on real-world inputs                           |
-| **Week 08 (Uncertainty)**          | Calibrated confidence scores are essential for production systems; users need to know when to trust predictions                                     |
-| **Week 12 (Training Pathologies)** | A model with training pathologies (vanishing gradients, dead neurons) produces poor predictions; diagnosis happens before deployment                |
-| **Week 14 (Training at Scale)**    | Checkpointing gives you the model file; mixed precision training produces FP16-compatible weights ready for quantised serving                       |
-| **Week 16 (Regularisation DL)**    | Dropout must be disabled at inference (`model.eval()`); ensembles can improve production predictions                                                |
-| **Week 18 (Transformers)**         | The Transformer is likely your deployed model; knowledge of its architecture informs optimisation choices (which layers to quantise, what to prune) |
-| **Week 19 (Fine-Tuning)**          | The fine-tuned model is your deployment candidate; LoRA enables serving multiple tasks from one backbone                                            |
+| **[[Week 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md) (Optimisation)**      | The model you deploy was optimised with gradient descent; the loss landscape determines the quality of the deployed model                           |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**       | A well-regularised model generalises better in production; overfitting manifests as poor predictions on real-world inputs                           |
+| **[Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty)**          | Calibrated confidence scores are essential for production systems; users need to know when to trust predictions                                     |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)** | A model with training pathologies (vanishing gradients, dead neurons) produces poor predictions; diagnosis happens before deployment                |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)**    | Checkpointing gives you the model file; mixed precision training produces FP16-compatible weights ready for quantised serving                       |
+| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation DL)**    | Dropout must be disabled at inference (`model.eval()`); ensembles can improve production predictions                                                |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)**         | The Transformer is likely your deployed model; knowledge of its architecture informs optimisation choices (which layers to quantise, what to prune) |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-Tuning)**          | The fine-tuned model is your deployment candidate; LoRA enables serving multiple tasks from one backbone                                            |
 | **Capstone**                       | This week's deliverables (API, Dockerfile, deploy.md) are the capstone deployment artifacts                                                         |
 
 ---

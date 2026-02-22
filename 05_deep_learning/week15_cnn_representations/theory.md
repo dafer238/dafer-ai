@@ -51,9 +51,9 @@ The week delivers three things:
 
 1. **The convolution operation** — what it computes, why it works for spatial data, and how it differs from a fully connected layer.
 2. **Representation learning** — how filters evolve from edge detectors (layer 1) to object-part detectors (deeper layers), building a hierarchy of increasingly abstract features.
-3. **Transfer learning preview** — extracting features from a pretrained model and reusing them, a pattern formalised in Week 19.
+3. **Transfer learning preview** — extracting features from a pretrained model and reusing them, a pattern formalised in [Week 19](../../07_transfer_learning/week19_finetuning/theory.md).
 
-**Prerequisites.** Week 11 (backpropagation), Week 12 (BatchNorm), Week 13 (PyTorch `nn.Module`, training loop), Week 14 (efficient DataLoader, checkpointing).
+**Prerequisites.** [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (backpropagation), [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (BatchNorm), [Week 13](../week13_pytorch_basics/theory.md) (PyTorch `nn.Module`, training loop), [Week 14](../week14_training_at_scale/theory.md) (efficient DataLoader, checkpointing).
 
 ---
 
@@ -529,7 +529,7 @@ optimizer = optim.Adam([
 
 **Discriminative learning rates.** Early layers (general features) need minimal adaptation → small LR. Later layers (task-specific) need more → larger LR. The final head (random init) needs the most → largest LR.
 
-> Fine-tuning is covered in depth in Week 19.
+> Fine-tuning is covered in depth in [Week 19](../../07_transfer_learning/week19_finetuning/theory.md).
 
 ---
 
@@ -567,7 +567,7 @@ An **ablation study** measures the contribution of individual components by remo
 | **AlexNet**               | 2012 | ReLU, dropout, GPU training; won ImageNet                 | 8        |
 | **VGGNet**                | 2014 | Uniform 3×3 convolutions, very deep                       | 16–19    |
 | **GoogLeNet / Inception** | 2014 | Inception modules (parallel 1×1, 3×3, 5×5 convs)          | 22       |
-| **ResNet**                | 2015 | Residual (skip) connections (Week 12)                     | 50–152   |
+| **ResNet**                | 2015 | Residual (skip) connections ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md))                     | 50–152   |
 | **DenseNet**              | 2016 | Dense connections (each layer connects to all subsequent) | 121–201  |
 | **EfficientNet**          | 2019 | Compound scaling (depth × width × resolution)             | variable |
 
@@ -577,7 +577,7 @@ $$\text{Two 3×3:}\quad 2 \times (C \times C \times 9) = 18C^2 \qquad\text{One 5
 
 This is why modern CNNs almost exclusively use 3×3 kernels.
 
-**The ResNet insight.** Skip connections (Week 12) enable training 100+ layer networks by providing gradient shortcuts through the identity path.
+**The ResNet insight.** Skip connections ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md)) enable training 100+ layer networks by providing gradient shortcuts through the identity path.
 
 ---
 
@@ -585,14 +585,14 @@ This is why modern CNNs almost exclusively use 3×3 kernels.
 
 | Week                               | Connection                                                                                   |
 | ---------------------------------- | -------------------------------------------------------------------------------------------- |
-| **Week 00a (AI Landscape)**        | Inductive bias — CNNs encode locality and translation equivariance                           |
-| **Week 11 (NN from Scratch)**      | Convolution is backpropagated the same way: chain rule through the conv operation            |
-| **Week 12 (Training Pathologies)** | BatchNorm2d, residual connections, He init — all used in CNNs                                |
-| **Week 13 (PyTorch)**              | `nn.Conv2d`, `nn.MaxPool2d` — same `nn.Module` API                                           |
-| **Week 14 (Training at Scale)**    | Multi-worker DataLoader essential for image datasets; mixed precision for conv-heavy models  |
-| **Week 16 (Regularisation DL)**    | Dropout after conv layers; data augmentation in `transforms`; weight decay                   |
-| **Week 17 (Attention)**            | Self-attention can be seen as a data-dependent convolution with a global receptive field     |
-| **Week 19 (Fine-Tuning)**          | Feature extraction and fine-tuning patterns from this week formalised with adapters and LoRA |
+| **[Week 00a](../../01_intro/week00_ai_landscape/theory.md) (AI Landscape)**        | Inductive bias — CNNs encode locality and translation equivariance                           |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NN from Scratch)**      | Convolution is backpropagated the same way: chain rule through the conv operation            |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)** | BatchNorm2d, residual connections, He init — all used in CNNs                                |
+| **[Week 13](../week13_pytorch_basics/theory.md) (PyTorch)**              | `nn.Conv2d`, `nn.MaxPool2d` — same `nn.Module` API                                           |
+| **[Week 14](../week14_training_at_scale/theory.md) (Training at Scale)**    | Multi-worker DataLoader essential for image datasets; mixed precision for conv-heavy models  |
+| **[Week 16](../week16_regularization_dl/theory.md) (Regularisation DL)**    | Dropout after conv layers; data augmentation in `transforms`; weight decay                   |
+| **[Week 17](../../06_sequence_models/week17_attention/theory.md) (Attention)**            | Self-attention can be seen as a data-dependent convolution with a global receptive field     |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-Tuning)**          | Feature extraction and fine-tuning patterns from this week formalised with adapters and LoRA |
 
 ---
 
@@ -601,7 +601,7 @@ This is why modern CNNs almost exclusively use 3×3 kernels.
 | Cell                    | Section               | What it demonstrates                                             | Theory reference   |
 | ----------------------- | --------------------- | ---------------------------------------------------------------- | ------------------ |
 | 1 (SimpleCNN)           | Model building        | 2-conv + 2-pool + 2-FC; parameter count                          | Section 8          |
-| 2 (Training)            | Training loop         | MNIST training (5 epochs, Adam); test accuracy                   | Week 13, Section 8 |
+| 2 (Training)            | Training loop         | MNIST training (5 epochs, Adam); test accuracy                   | [Week 13](../week13_pytorch_basics/theory.md), Section 8 |
 | 3 (Visualisation)       | Filters & activations | `conv1` filters as 3×3 images; activation maps via forward hooks | Section 9          |
 | 4 (Transfer learning)   | Feature extraction    | ResNet18 frozen backbone + new FC head; trainable param count    | Section 10         |
 | Ex. 1 (Deeper CNN)      | Architecture          | 5-layer CNN with BatchNorm and GAP; compare to SimpleCNN         | Sections 5.3, 8.3  |
@@ -639,7 +639,7 @@ This is why modern CNNs almost exclusively use 3×3 kernels.
 | $\text{MaxPool}$                | Max pooling                     | Take maximum in each window                   |
 | $\text{GAP}$                    | Global average pooling          | Average entire spatial extent per channel     |
 | $b$                             | Bias                            | One per output channel in a conv layer        |
-| $\gamma, \beta$                 | BatchNorm2d parameters          | Per-channel scale and shift (Week 12)         |
+| $\gamma, \beta$                 | BatchNorm2d parameters          | Per-channel scale and shift ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md))         |
 | `state_dict`                    | Model state                     | Dictionary of all parameter tensors           |
 | `register_forward_hook`         | Hook API                        | Capture intermediate activations              |
 

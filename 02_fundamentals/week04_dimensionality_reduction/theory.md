@@ -47,9 +47,9 @@ Real-world datasets often have many features — hundreds or thousands of dimens
 - **Variance-maximising:** it finds the directions along which the data varies most.
 - **Unsupervised:** it uses only $X$, not labels $y$.
 
-This week develops PCA from three complementary perspectives: (i) as a variance maximisation problem, (ii) as a reconstruction error minimisation problem, and (iii) as a consequence of the Singular Value Decomposition. Understanding all three builds strong geometric intuition that transfers to autoencoders (Week 11), attention mechanisms (Week 17), and any pipeline that benefits from decorrelation or compression.
+This week develops PCA from three complementary perspectives: (i) as a variance maximisation problem, (ii) as a reconstruction error minimisation problem, and (iii) as a consequence of the Singular Value Decomposition. Understanding all three builds strong geometric intuition that transfers to autoencoders ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)), attention mechanisms ([Week 17](../../06_sequence_models/week17_attention/theory.md)), and any pipeline that benefits from decorrelation or compression.
 
-**Prerequisites.** Week 00b (eigenvectors, eigenvalues, matrix multiplication, dot products), Week 03 (covariance, linear models).
+**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (eigenvectors, eigenvalues, matrix multiplication, dot products), [Week 03](../week03_linear_models/theory.md) (covariance, linear models).
 
 ---
 
@@ -402,7 +402,7 @@ $\blacksquare$
 
 **Why whiten?**
 - Many algorithms assume uncorrelated, unit-variance inputs (e.g., some neural network training schemes, ICA).
-- Whitening removes the effect of feature scaling, making the optimisation landscape more isotropic (Week 01–02: this improves the condition number of the loss surface).
+- Whitening removes the effect of feature scaling, making the optimisation landscape more isotropic ([[Week 01](../week01_optimization/theory.md)](../week01_optimization/theory.md)–[02](../week02_advanced_optimizers/theory.md): this improves the condition number of the loss surface).
 
 > **Notebook reference.** Cell 15 implements `pca_whitening` and verifies that `np.cov(X_white.T)` is close to $I$.
 >
@@ -531,13 +531,13 @@ z_umap = UMAP(n_components=2, n_neighbors=15).fit_transform(X)
 
 | Week                          | Connection                                                                                                               |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| **Week 03 (Linear models)**   | PCA decorrelates features → improves condition number of $X^\top X$ → faster convergence                                 |
-| **Week 05 (Clustering)**      | PCA projections used to visualise cluster structure in 2D                                                                |
-| **Week 06 (Regularisation)**  | Ridge regression shrinks weights along low-eigenvalue principal component directions — a spectral view of regularisation |
-| **Week 07 (Likelihood)**      | Probabilistic PCA (PPCA) gives a generative model for PCA                                                                |
-| **Week 11 (NN from scratch)** | A linear autoencoder (no activation) learns the same subspace as PCA                                                     |
-| **Week 15 (CNNs)**            | Convolutional features can be analysed via PCA to understand what the network learns                                     |
-| **Week 17 (Attention)**       | Query/Key projections in attention are learned linear projections — analogous to PCA but task-specific                   |
+| **[Week 03](../week03_linear_models/theory.md) (Linear models)**   | PCA decorrelates features → improves condition number of $X^\top X$ → faster convergence                                 |
+| **[Week 05](../week05_clustering/theory.md) (Clustering)**      | PCA projections used to visualise cluster structure in 2D                                                                |
+| **[Week 06](../week06_regularization/theory.md) (Regularisation)**  | Ridge regression shrinks weights along low-eigenvalue principal component directions — a spectral view of regularisation |
+| **[Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood)**      | Probabilistic PCA (PPCA) gives a generative model for PCA                                                                |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NN from scratch)** | A linear autoencoder (no activation) learns the same subspace as PCA                                                     |
+| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)**            | Convolutional features can be analysed via PCA to understand what the network learns                                     |
+| **[Week 17](../../06_sequence_models/week17_attention/theory.md) (Attention)**       | Query/Key projections in attention are learned linear projections — analogous to PCA but task-specific                   |
 
 > **The unifying principle.** PCA is the simplest example of **representation learning**: finding a lower-dimensional representation that preserves the essential structure. Every method from autoencoders to transformers can be viewed as a nonlinear, task-specific generalisation of PCA.
 

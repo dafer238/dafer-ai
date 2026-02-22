@@ -46,7 +46,7 @@
 
 ## 1. Scope and Purpose
 
-Weeks 07–09 developed the probabilistic and statistical toolkit — likelihood, uncertainty quantification, time series. This week brings it all together in **Gaussian Process (GP) regression**, the method that simultaneously:
+[[Weeks 07](../week07_likelihood/theory.md)](../week07_likelihood/theory.md)–[09](../week09_time_series/theory.md) developed the probabilistic and statistical toolkit — likelihood, uncertainty quantification, time series. This week brings it all together in **Gaussian Process (GP) regression**, the method that simultaneously:
 
 - Gives a **prediction** at every point (like regression).
 - Gives a **calibrated uncertainty estimate** (like Bayesian inference).
@@ -60,7 +60,7 @@ GPs are the foundation for **surrogate-based optimisation** (also called Bayesia
 3. Explore how the choice of kernel controls the properties of the modelled function.
 4. Implement Bayesian optimisation using the Expected Improvement acquisition function.
 
-**Prerequisites.** Week 07 (likelihood, MLE — used for kernel hyperparameter optimisation), Week 08 (Bayesian linear regression — the GP is its infinite-dimensional extension), Week 03 (linear regression, polynomial features — the weight-space to function-space transition).
+**Prerequisites.** [Week 07](../week07_likelihood/theory.md) (likelihood, MLE — used for kernel hyperparameter optimisation), [Week 08](../week08_uncertainty/theory.md) (Bayesian linear regression — the GP is its infinite-dimensional extension), [Week 03](../../02_fundamentals/week03_linear_models/theory.md) (linear regression, polynomial features — the weight-space to function-space transition).
 
 ---
 
@@ -99,7 +99,7 @@ GPs satisfy all four by design.
 
 ### 3.1 From Bayesian Linear Regression to GPs
 
-Recall BLR (Week 08):
+Recall BLR ([Week 08](../week08_uncertainty/theory.md)):
 
 $$y = \mathbf{w}^\top\boldsymbol{\phi}(\mathbf{x}) + \epsilon, \qquad \mathbf{w} \sim \mathcal{N}(\mathbf{0}, \alpha^{-1}I)$$
 
@@ -352,7 +352,7 @@ $$\boxed{k_{\text{Per}}(\mathbf{x}, \mathbf{x}') = \sigma_f^2\exp\!\left(-\frac{
 | $\ell$         | Smoothness within each period |
 | $\sigma_f^2$   | Amplitude                     |
 
-Useful for modelling **seasonal** or **cyclic** data (connects to Week 09's seasonality). Can be combined with an RBF to allow slowly varying periodicity: $k_{\text{RBF}} \cdot k_{\text{Per}}$.
+Useful for modelling **seasonal** or **cyclic** data (connects to [Week 09](../week09_time_series/theory.md)'s seasonality). Can be combined with an RBF to allow slowly varying periodicity: $k_{\text{RBF}} \cdot k_{\text{Per}}$.
 
 ---
 
@@ -416,7 +416,7 @@ where $K_y = K + \sigma_n^2 I$.
 
 This embodies an **automatic Occam's razor**: the marginal likelihood naturally balances fit and complexity without a separate validation set.
 
-> **Comparison with AIC/BIC (Week 09).** AIC and BIC approximate the marginal likelihood. The GP marginal likelihood is the exact (Gaussian) integral — no approximation needed.
+> **Comparison with AIC/BIC ([Week 09](../week09_time_series/theory.md)).** AIC and BIC approximate the marginal likelihood. The GP marginal likelihood is the exact (Gaussian) integral — no approximation needed.
 
 **In practice:**
 
@@ -441,13 +441,13 @@ Use separate length-scales per input dimension:
 
 $$k_{\text{ARD}}(\mathbf{x}, \mathbf{x}') = \sigma_f^2\exp\!\left(-\frac{1}{2}\sum_{d=1}^{D}\frac{(x_d - x_d')^2}{\ell_d^2}\right)$$
 
-If the marginal likelihood drives $\ell_d \to \infty$ for dimension $d$, then input $d$ is irrelevant (the function doesn't vary along it). This is automatic feature selection — the GP equivalent of Lasso (Week 06).
+If the marginal likelihood drives $\ell_d \to \infty$ for dimension $d$, then input $d$ is irrelevant (the function doesn't vary along it). This is automatic feature selection — the GP equivalent of Lasso ([Week 06](../../02_fundamentals/week06_regularization/theory.md)).
 
 ---
 
 ## 8. Calibration and Coverage
 
-A properly specified GP should produce **well-calibrated** uncertainty estimates (Week 08). Specifically:
+A properly specified GP should produce **well-calibrated** uncertainty estimates ([Week 08](../week08_uncertainty/theory.md)). Specifically:
 
 $$P\!\left(y_* \in [\mu_* - z_{1-\alpha/2}\sigma_*, \, \mu_* + z_{1-\alpha/2}\sigma_*]\right) \approx 1 - \alpha$$
 
@@ -588,15 +588,15 @@ The fundamental tension in sequential decision-making:
 
 | Week                            | Connection                                                                                         |
 | ------------------------------- | -------------------------------------------------------------------------------------------------- |
-| **Week 03 (Linear Models)**     | GP with a linear kernel = Bayesian linear regression                                               |
-| **Week 06 (Regularisation)**    | Marginal likelihood provides automatic Occam's razor (no separate validation set)                  |
-| **Week 07 (Likelihood)**        | GP hypers are optimised by maximising the marginal likelihood = type-II MLE                        |
-| **Week 08 (Uncertainty)**       | GP posterior is the gold standard for calibrated uncertainty; posterior = aleatoric + epistemic    |
-| **Week 09 (Time Series)**       | Periodic/Matérn kernels model temporal correlation; GP-based time-series = prior over trajectories |
-| **Week 11 (Neural Networks)**   | Infinite-width neural networks converge to GPs (Neal, 1996; Neural Tangent Kernel)                 |
-| **Week 14 (Training at Scale)** | BO is used for hyperparameter tuning of deep networks                                              |
-| **Week 17 (Attention)**         | The attention matrix $QK^\top/\sqrt{d}$ is a kernel Gram matrix; attention ≈ kernel smoothing      |
-| **Week 20 (Deployment)**        | BO for hyperparameter optimisation in production ML pipelines                                      |
+| **[Week 03](../../02_fundamentals/week03_linear_models/theory.md) (Linear Models)**     | GP with a linear kernel = Bayesian linear regression                                               |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**    | Marginal likelihood provides automatic Occam's razor (no separate validation set)                  |
+| **[Week 07](../week07_likelihood/theory.md) (Likelihood)**        | GP hypers are optimised by maximising the marginal likelihood = type-II MLE                        |
+| **[Week 08](../week08_uncertainty/theory.md) (Uncertainty)**       | GP posterior is the gold standard for calibrated uncertainty; posterior = aleatoric + epistemic    |
+| **[Week 09](../week09_time_series/theory.md) (Time Series)**       | Periodic/Matérn kernels model temporal correlation; GP-based time-series = prior over trajectories |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (Neural Networks)**   | Infinite-width neural networks converge to GPs (Neal, 1996; Neural Tangent Kernel)                 |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)** | BO is used for hyperparameter tuning of deep networks                                              |
+| **[Week 17](../../06_sequence_models/week17_attention/theory.md) (Attention)**         | The attention matrix $QK^\top/\sqrt{d}$ is a kernel Gram matrix; attention ≈ kernel smoothing      |
+| **[Week 20](../../08_deployment/week20_deployment/theory.md) (Deployment)**        | BO for hyperparameter optimisation in production ML pipelines                                      |
 
 ---
 
@@ -660,7 +660,7 @@ The fundamental tension in sequential decision-making:
 | $\kappa$                                                  | UCB parameter                 | Exploration weight in $\mu \pm \kappa\sigma$                              |
 | $\Phi, \phi$                                              | Standard normal CDF, PDF      | Used in closed-form EI                                                    |
 | $Z$                                                       | Standardised improvement      | $(f^* - \mu - \xi)/\sigma$                                                |
-| $B$                                                       | Backshift operator            | From Week 09; not used here                                               |
+| $B$                                                       | Backshift operator            | From [Week 09](../week09_time_series/theory.md); not used here                                               |
 
 ---
 

@@ -48,7 +48,7 @@
 
 ## 1. Scope and Purpose
 
-This document provides the mathematical foundations required from Week 01 onward. It is not a textbook on linear algebra or probability; it is a targeted, rigorous treatment of exactly the concepts that arise in machine learning. Every definition and theorem included here is used explicitly in subsequent weeks.
+This document provides the mathematical foundations required from [Week 01](../../02_fundamentals/week01_optimization/theory.md) onward. It is not a textbook on linear algebra or probability; it is a targeted, rigorous treatment of exactly the concepts that arise in machine learning. Every definition and theorem included here is used explicitly in subsequent weeks.
 
 The treatment follows a deliberate pattern: **formal definition → geometric or physical intuition → concrete example → code reference → suggested experiment**. Readers are strongly encouraged to implement the examples in the accompanying `starter.ipynb` (Week 00b) or in a scratch notebook.
 
@@ -96,7 +96,7 @@ $$X = \begin{bmatrix} x_{11} & x_{12} & \cdots & x_{1d} \\ x_{21} & x_{22} & \cd
 
 **Convention.** Throughout this course, rows of $X$ are data points and columns are features. The $i$-th row, written $\mathbf{x}_i^\top$, is the feature vector for sample $i$.
 
-**Tensor.** A generalisation to higher dimensions (3D, 4D, ...). A colour image is a 3D tensor of shape (height, width, channels). In PyTorch (Week 13+), a batch of images is a 4D tensor of shape (batch, channels, height, width). For now, scalars, vectors, and matrices suffice.
+**Tensor.** A generalisation to higher dimensions (3D, 4D, ...). A colour image is a 3D tensor of shape (height, width, channels). In PyTorch ([Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#2-tensors)+), a batch of images is a 4D tensor of shape (batch, channels, height, width). For now, scalars, vectors, and matrices suffice.
 
 ```python
 import numpy as np
@@ -163,7 +163,7 @@ The outer product of $\mathbf{a} \in \mathbb{R}^m$ and $\mathbf{b} \in \mathbb{R
 
 $$\mathbf{a} \mathbf{b}^\top = \begin{bmatrix} a_1 b_1 & a_1 b_2 & \cdots & a_1 b_n \\ a_2 b_1 & a_2 b_2 & \cdots & a_2 b_n \\ \vdots & \vdots & \ddots & \vdots \\ a_m b_1 & a_m b_2 & \cdots & a_m b_n \end{bmatrix} \in \mathbb{R}^{m \times n}$$
 
-This yields a **matrix**. It appears in gradient computations for weight matrices in neural networks (Week 11): if the loss gradient with respect to the output is $\boldsymbol{\delta}$ and the layer input is $\mathbf{h}$, the gradient with respect to the weight matrix is $\boldsymbol{\delta} \mathbf{h}^\top$.
+This yields a **matrix**. It appears in gradient computations for weight matrices in neural networks ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation)): if the loss gradient with respect to the output is $\boldsymbol{\delta}$ and the layer input is $\mathbf{h}$, the gradient with respect to the weight matrix is $\boldsymbol{\delta} \mathbf{h}^\top$.
 
 ```python
 a = np.array([1, 2, 3])
@@ -204,7 +204,7 @@ Each entry $y_i$ is the dot product of the $i$-th row of $A$ with $\mathbf{x}$.
 >
 > This is why vectorised code (one matrix multiply) is vastly faster than a Python loop over samples.
 
-**Geometric interpretation.** Multiplying by a matrix is a **linear transformation**: it can rotate, scale, shear, or project vectors. A $2 \times 2$ matrix maps every point in the plane to a new point. Understanding this is key to understanding what each layer of a neural network does (Week 11).
+**Geometric interpretation.** Multiplying by a matrix is a **linear transformation**: it can rotate, scale, shear, or project vectors. A $2 \times 2$ matrix maps every point in the plane to a new point. Understanding this is key to understanding what each layer of a neural network does ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation)).
 
 #### Matrix–Matrix Multiplication
 
@@ -244,7 +244,7 @@ A square matrix $A \in \mathbb{R}^{n \times n}$ is **invertible** if there exist
 
 $$I = \begin{bmatrix} 1 & 0 & \cdots & 0 \\ 0 & 1 & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots & 1 \end{bmatrix}$$
 
-The inverse exists if and only if $\det(A) \neq 0$ (the matrix is **non-singular**). In ML, the inverse appears in closed-form solutions: the normal equation for linear regression (Week 03) is $\mathbf{w}^* = (X^\top X)^{-1} X^\top \mathbf{y}$.
+The inverse exists if and only if $\det(A) \neq 0$ (the matrix is **non-singular**). In ML, the inverse appears in closed-form solutions: the normal equation for linear regression ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#33-the-normal-equations-closed-form-solution)) is $\mathbf{w}^* = (X^\top X)^{-1} X^\top \mathbf{y}$.
 
 > **Practical warning.** Computing $A^{-1}$ explicitly is numerically unstable and slow. In practice, one solves the linear system $A\mathbf{w} = \mathbf{b}$ directly using `np.linalg.solve(A, b)`, which uses LU decomposition internally.
 
@@ -272,7 +272,7 @@ Useful properties:
 - $\text{tr}(A + B) = \text{tr}(A) + \text{tr}(B)$
 - $\text{tr}(A) = \sum_{i} \lambda_i$ where $\lambda_i$ are the eigenvalues of $A$
 
-The trace appears in loss functions involving matrices (e.g., PCA objective in Week 04) and in the Frobenius norm: $\|A\|_F = \sqrt{\text{tr}(A^\top A)}$.
+The trace appears in loss functions involving matrices (e.g., PCA objective in [Week 04](../../02_fundamentals/week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view)) and in the Frobenius norm: $\|A\|_F = \sqrt{\text{tr}(A^\top A)}$.
 
 ---
 
@@ -286,10 +286,10 @@ where $A \in \mathbb{R}^{m \times n}$, $\mathbf{x} \in \mathbb{R}^n$, $\mathbf{b
 
 Three cases arise:
 1. **Unique solution** ($m = n$, $A$ invertible): $\mathbf{x} = A^{-1}\mathbf{b}$.
-2. **No solution** ($m > n$, overdetermined system): common in ML, where $n$ equations cannot be exactly satisfied. The **least-squares solution** minimises $\|A\mathbf{x} - \mathbf{b}\|^2$ — this is exactly linear regression (Week 03).
+2. **No solution** ($m > n$, overdetermined system): common in ML, where $n$ equations cannot be exactly satisfied. The **least-squares solution** minimises $\|A\mathbf{x} - \mathbf{b}\|^2$ — this is exactly linear regression ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#3-linear-regression)).
 3. **Infinitely many solutions** ($m < n$, underdetermined system): arises in overparameterised neural networks (more parameters than data points).
 
-> **Connection.** Linear regression is the problem: given $X$ (data) and $\mathbf{y}$ (targets), find $\mathbf{w}$ that "best" solves $X\mathbf{w} \approx \mathbf{y}$ in the least-squares sense. The solution is the **normal equation**: $\mathbf{w}^* = (X^\top X)^{-1} X^\top \mathbf{y}$. This is derived rigorously in Week 03.
+> **Connection.** Linear regression is the problem: given $X$ (data) and $\mathbf{y}$ (targets), find $\mathbf{w}$ that "best" solves $X\mathbf{w} \approx \mathbf{y}$ in the least-squares sense. The solution is the **normal equation**: $\mathbf{w}^* = (X^\top X)^{-1} X^\top \mathbf{y}$. This is derived rigorously in [Week 03](../../02_fundamentals/week03_linear_models/theory.md#33-the-normal-equations-closed-form-solution).
 
 ---
 
@@ -310,7 +310,7 @@ is $c_1 = c_2 = \cdots = c_k = 0$. In other words, no vector in the set can be w
 - **Full rank**: $\text{rank}(A) = \min(m, n)$. The columns are linearly independent.
 - **Rank deficient**: $\text{rank}(A) < \min(m, n)$. Some columns are redundant.
 
-> **ML relevance.** If the data matrix $X$ is rank-deficient (e.g., two features are perfectly correlated), the normal equation $X^\top X$ is singular and the least-squares solution is not unique. This motivates regularisation (Week 06). PCA (Week 04) explicitly seeks a low-rank approximation of the data.
+> **ML relevance.** If the data matrix $X$ is rank-deficient (e.g., two features are perfectly correlated), the normal equation $X^\top X$ is singular and the least-squares solution is not unique. This motivates regularisation ([Week 06](../../02_fundamentals/week06_regularization/theory.md#2-why-regularisation-the-overfitting-problem-revisited)). PCA ([Week 04](../../02_fundamentals/week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view)) explicitly seeks a low-rank approximation of the data.
 
 ```python
 X = np.array([[1, 2], [2, 4], [3, 6]])   # rank 1: column 2 = 2 * column 1
@@ -331,8 +331,8 @@ The most important norms in ML:
 
 | Norm            | Formula                                          | Notation           | ML Usage                                                   |
 | --------------- | ------------------------------------------------ | ------------------ | ---------------------------------------------------------- |
-| $L_1$ norm      | $\|\mathbf{x}\|_1 = \sum_{j=1}^{d}               | x_j                | $                                                          | Manhattan distance | Lasso regularisation (Week 06): promotes **sparsity** |
-| $L_2$ norm      | $\|\mathbf{x}\|_2 = \sqrt{\sum_{j=1}^{d} x_j^2}$ | Euclidean distance | Ridge regularisation (Week 06): promotes **small** weights |
+| $L_1$ norm      | $\|\mathbf{x}\|_1 = \sum_{j=1}^{d}               | x_j                | $                                                          | Manhattan distance | Lasso regularisation ([Week 06](../../02_fundamentals/week06_regularization/theory.md#4-lasso-regression-l1-regularisation)): promotes **sparsity** |
+| $L_2$ norm      | $\|\mathbf{x}\|_2 = \sqrt{\sum_{j=1}^{d} x_j^2}$ | Euclidean distance | Ridge regularisation ([Week 06](../../02_fundamentals/week06_regularization/theory.md#3-ridge-regression-l2-regularisation)): promotes **small** weights |
 | $L_\infty$ norm | $\|\mathbf{x}\|_\infty = \max_j                  | x_j                | $                                                          | Chebyshev distance | Robustness bounds                                     |
 | Frobenius       | $\|A\|_F = \sqrt{\sum_{i,j} a_{ij}^2}$           | Matrix "size"      | Weight decay for matrix parameters                         |
 
@@ -341,7 +341,7 @@ The most important norms in ML:
 > - $L_1$: a diamond (axis-aligned directions are cheapest).
 > - $L_\infty$: a square (the largest coordinate determines the norm).
 >
-> The $L_1$ diamond has corners on the axes, which is why $L_1$ regularisation pushes weights exactly to zero — the optimum tends to land at a corner. This geometric insight is the key to understanding sparsity in Week 06.
+> The $L_1$ diamond has corners on the axes, which is why $L_1$ regularisation pushes weights exactly to zero — the optimum tends to land at a corner. This geometric insight is the key to understanding sparsity in [Week 06](../../02_fundamentals/week06_regularization/theory.md#42-sparsity-why-lasso-produces-zeros).
 
 ```python
 x = np.array([3, -4])
@@ -380,7 +380,7 @@ where $Q$ is an orthogonal matrix ($Q^\top Q = I$). This is the **spectral theor
 
 > **Geometric interpretation.** A symmetric matrix $A$ acts on any vector by: (1) decomposing it into components along the eigenvectors, (2) scaling each component by the corresponding eigenvalue, and (3) reassembling. The eigenvectors define a natural coordinate system for the transformation.
 
-> **ML relevance.** The covariance matrix $\Sigma$ is real and symmetric. Its eigenvectors are the **principal components** — the directions of maximum variance in the data. Its eigenvalues are the variances along those directions. PCA (Week 04) computes this decomposition and discards the directions with small eigenvalues.
+> **ML relevance.** The covariance matrix $\Sigma$ is real and symmetric. Its eigenvectors are the **principal components** — the directions of maximum variance in the data. Its eigenvalues are the variances along those directions. PCA ([Week 04](../../02_fundamentals/week04_dimensionality_reduction/theory.md#3-covariance-and-correlation)) computes this decomposition and discards the directions with small eigenvalues.
 
 ```python
 A = np.array([[2, 1],
@@ -411,7 +411,7 @@ Properties:
 - The number of non-zero singular values equals $\text{rank}(A)$.
 - The eigenvalues of $A^\top A$ are $\sigma_i^2$, and the columns of $V$ are the eigenvectors of $A^\top A$.
 
-> **ML relevance.** The **truncated SVD** retains only the top $k$ singular values and their associated vectors, yielding the best rank-$k$ approximation of $A$ (in the Frobenius norm sense — the Eckart–Young theorem). This is the mathematical foundation of PCA (Week 04) and low-rank matrix factorisation.
+> **ML relevance.** The **truncated SVD** retains only the top $k$ singular values and their associated vectors, yielding the best rank-$k$ approximation of $A$ (in the Frobenius norm sense — the Eckart–Young theorem). This is the mathematical foundation of PCA ([Week 04](../../02_fundamentals/week04_dimensionality_reduction/theory.md#5-pca-via-the-singular-value-decomposition)) and low-rank matrix factorisation.
 
 > **Intuition.** Every matrix transformation can be decomposed into three steps: (1) rotate/reflect the input ($V^\top$), (2) scale along each axis ($\Sigma$), (3) rotate/reflect the output ($U$). The singular values tell you how much each axis is stretched. If some singular values are near zero, the corresponding dimensions carry little information and can be discarded.
 
@@ -441,7 +441,7 @@ A symmetric matrix $A \in \mathbb{R}^{n \times n}$ is:
 
 > **Why this matters.** The Hessian matrix of a function (Section 3.4) is PD at a point if and only if that point is a **strict local minimum**. The matrix $X^\top X$ in linear regression is always PSD, and it is PD if and only if $X$ has full column rank — which guarantees a unique least-squares solution. Covariance matrices are always PSD.
 
-> **Intuition.** A positive definite matrix defines a "bowl-shaped" quadratic function $f(\mathbf{x}) = \mathbf{x}^\top A \mathbf{x}$. The contours of this function are ellipses (in 2D), with the axes aligned to the eigenvectors of $A$ and the widths proportional to $1/\sqrt{\lambda_i}$. Gradient descent on such a bowl converges to the unique minimum at the origin. If $A$ has very different eigenvalues ($\lambda_{\max} \gg \lambda_{\min}$), the ellipses are highly elongated and gradient descent zigzags — the **condition number** $\kappa(A) = \lambda_{\max}/\lambda_{\min}$ quantifies this difficulty (Week 01–02).
+> **Intuition.** A positive definite matrix defines a "bowl-shaped" quadratic function $f(\mathbf{x}) = \mathbf{x}^\top A \mathbf{x}$. The contours of this function are ellipses (in 2D), with the axes aligned to the eigenvectors of $A$ and the widths proportional to $1/\sqrt{\lambda_i}$. Gradient descent on such a bowl converges to the unique minimum at the origin. If $A$ has very different eigenvalues ($\lambda_{\max} \gg \lambda_{\min}$), the ellipses are highly elongated and gradient descent zigzags — the **condition number** $\kappa(A) = \lambda_{\max}/\lambda_{\min}$ quantifies this difficulty ([Week 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–02).
 
 ```python
 # X^T X is always PSD
@@ -486,7 +486,7 @@ At $x = 3$: $f'(3) = 6$. A small increase of $0.01$ in $x$ causes $f$ to increas
 
 ### 3.2 Differentiation Rules
 
-These rules must be second nature before Week 01. Each is presented with its ML context.
+These rules must be second nature before [Week 01](../../02_fundamentals/week01_optimization/theory.md). Each is presented with its ML context.
 
 | Rule        | Formula                                        | Example                                  |
 | ----------- | ---------------------------------------------- | ---------------------------------------- |
@@ -502,9 +502,9 @@ These rules must be second nature before Week 01. Each is presented with its ML 
 
 | Function | $f(x)$                                         | $f'(x)$                                            | Where it appears                 |
 | -------- | ---------------------------------------------- | -------------------------------------------------- | -------------------------------- |
-| Sigmoid  | $\sigma(x) = \frac{1}{1 + e^{-x}}$             | $\sigma(x)(1 - \sigma(x))$                         | Logistic regression (Week 03)    |
-| Tanh     | $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$ | $1 - \tanh^2(x)$                                   | RNN activations (Week 17)        |
-| ReLU     | $\max(0, x)$                                   | $\begin{cases} 1 & x > 0 \\ 0 & x < 0 \end{cases}$ | Default NN activation (Week 11+) |
+| Sigmoid  | $\sigma(x) = \frac{1}{1 + e^{-x}}$             | $\sigma(x)(1 - \sigma(x))$                         | Logistic regression ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#7-logistic-regression))    |
+| Tanh     | $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$ | $1 - \tanh^2(x)$                                   | RNN activations ([Week 17](../../06_sequence_models/week17_attention/theory.md#3-attention-as-soft-lookup))        |
+| ReLU     | $\max(0, x)$                                   | $\begin{cases} 1 & x > 0 \\ 0 & x < 0 \end{cases}$ | Default NN activation ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#32-activation-functions)+) |
 
 > **Note on ReLU.** The derivative is undefined at $x = 0$. In practice, this is irrelevant: the probability of landing exactly at $x = 0$ during floating-point computation is negligible. By convention, $f'(0) = 0$.
 
@@ -561,7 +561,7 @@ For a vector-valued function $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$, the *
 
 $$J = \frac{\partial \mathbf{f}}{\partial \mathbf{x}} = \begin{bmatrix} \frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\ \vdots & \ddots & \vdots \\ \frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n} \end{bmatrix} \in \mathbb{R}^{m \times n}$$
 
-Row $i$ is the gradient of $f_i$. The Jacobian generalises the gradient (a gradient is a Jacobian for $m = 1$) and is the fundamental object in the backpropagation algorithm (Week 11).
+Row $i$ is the gradient of $f_i$. The Jacobian generalises the gradient (a gradient is a Jacobian for $m = 1$) and is the fundamental object in the backpropagation algorithm ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation)).
 
 #### The Hessian
 
@@ -580,13 +580,13 @@ The Hessian is symmetric (by Schwarz's theorem: $\frac{\partial^2 f}{\partial w_
 
 > **ML relevance.** The loss surface of a neural network has many saddle points (more than local minima, in high dimensions). The Hessian's eigenvalues at a critical point reveal whether gradient descent is stuck at a minimum or a saddle. Second-order optimisers (Newton's method) use the Hessian to take better-informed steps, but computing the full Hessian for a neural network with millions of parameters is prohibitive.
 
-> **Condition number revisited.** The condition number of the Hessian at the optimum, $\kappa(H) = \lambda_{\max} / \lambda_{\min}$, determines how "elongated" the loss valley is. Gradient descent converges slowly when $\kappa$ is large (ill-conditioned problems). Adaptive optimisers like Adam (Week 02) implicitly approximate the Hessian's diagonal to handle this.
+> **Condition number revisited.** The condition number of the Hessian at the optimum, $\kappa(H) = \lambda_{\max} / \lambda_{\min}$, determines how "elongated" the loss valley is. Gradient descent converges slowly when $\kappa$ is large (ill-conditioned problems). Adaptive optimisers like Adam ([Week 02](../../02_fundamentals/week02_advanced_optimizers/theory.md#7-adam-combining-momentum-and-adaptivity)) implicitly approximate the Hessian's diagonal to handle this.
 
 **Example.** For $f(w_1, w_2) = w_1^2 + 10 w_2^2$ (a stretched quadratic):
 
 $$H = \begin{bmatrix} 2 & 0 \\ 0 & 20 \end{bmatrix}$$
 
-The eigenvalues are $2$ and $20$, so $\kappa = 10$. Gradient descent will oscillate along $w_2$ (steep) and converge slowly along $w_1$ (shallow). This is explored in Week 01's notebook.
+The eigenvalues are $2$ and $20$, so $\kappa = 10$. Gradient descent will oscillate along $w_2$ (steep) and converge slowly along $w_1$ (shallow). This is explored in [Week 01](../../02_fundamentals/week01_optimization/theory.md#11-notebook-reference-guide)'s notebook.
 
 ---
 
@@ -633,7 +633,7 @@ $$\nabla_{\mathbf{x}} f = J_{\mathbf{h}}^\top \nabla_{\mathbf{h}} g$$
 
 where $J_{\mathbf{h}}$ is the Jacobian of $\mathbf{h}$ with respect to $\mathbf{x}$.
 
-> **Connection to neural networks.** A neural network is a composition of $L$ layers: $f = g_L \circ g_{L-1} \circ \cdots \circ g_1$. By the chain rule, the gradient of the loss with respect to the parameters of layer $\ell$ involves the product of Jacobians from all subsequent layers. This product is computed efficiently by **backpropagation**, which caches intermediate results and propagates gradients backward through the network. This is the subject of Week 11.
+> **Connection to neural networks.** A neural network is a composition of $L$ layers: $f = g_L \circ g_{L-1} \circ \cdots \circ g_1$. By the chain rule, the gradient of the loss with respect to the parameters of layer $\ell$ involves the product of Jacobians from all subsequent layers. This product is computed efficiently by **backpropagation**, which caches intermediate results and propagates gradients backward through the network. This is the subject of [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation).
 
 **Worked example.** Consider a single-neuron model: $\hat{y} = \sigma(\mathbf{w}^\top \mathbf{x} + b)$, where $\sigma$ is the sigmoid function, and the loss is binary cross-entropy $\mathcal{L} = -[y \ln \hat{y} + (1 - y) \ln(1 - \hat{y})]$.
 
@@ -661,7 +661,7 @@ $$\frac{\partial \mathcal{L}}{\partial \mathbf{w}} = \frac{\partial \mathcal{L}}
 
 $$\frac{\partial \mathcal{L}}{\partial b} = \hat{y} - y$$
 
-> **Elegant result.** The gradient of the cross-entropy loss for logistic regression is simply $(\hat{y} - y)\mathbf{x}$ — the prediction error scaled by the input. This is identical in form to the gradient of MSE for linear regression (up to a constant), which is not a coincidence — both arise from the same exponential family structure (Week 07).
+> **Elegant result.** The gradient of the cross-entropy loss for logistic regression is simply $(\hat{y} - y)\mathbf{x}$ — the prediction error scaled by the input. This is identical in form to the gradient of MSE for linear regression (up to a constant), which is not a coincidence — both arise from the same exponential family structure ([Week 07](../../03_probability/week07_likelihood/theory.md#51-gaussian-noise-mse)).
 
 ---
 
@@ -690,7 +690,7 @@ For symmetric $A$ ($A = A^\top$): $= 2(A\mathbf{x})_k$.
 
 Hence $\nabla_{\mathbf{x}}(\mathbf{x}^\top A \mathbf{x}) = 2A\mathbf{x}$.
 
-> **This identity is used in Week 03** to derive the normal equation for linear regression. The MSE loss in matrix form is $\mathcal{L}(\mathbf{w}) = \frac{1}{n}(\mathbf{y} - X\mathbf{w})^\top(\mathbf{y} - X\mathbf{w})$. Expanding and differentiating using the identities above yields $\nabla \mathcal{L} = -\frac{2}{n}X^\top(\mathbf{y} - X\mathbf{w})$. Setting this to zero gives the normal equation.
+> **This identity is used in [Week 03](../../02_fundamentals/week03_linear_models/theory.md#33-the-normal-equations-closed-form-solution)** to derive the normal equation for linear regression. The MSE loss in matrix form is $\mathcal{L}(\mathbf{w}) = \frac{1}{n}(\mathbf{y} - X\mathbf{w})^\top(\mathbf{y} - X\mathbf{w})$. Expanding and differentiating using the identities above yields $\nabla \mathcal{L} = -\frac{2}{n}X^\top(\mathbf{y} - X\mathbf{w})$. Setting this to zero gives the normal equation.
 
 ---
 
@@ -733,18 +733,18 @@ print("Numeric: ", numeric_grad)
 print("Match:", np.allclose(analytic_grad, numeric_grad))   # True
 ```
 
-> **Suggested experiment.** Implement this gradient checker and use it throughout Weeks 01–04 to verify your analytical gradient derivations. It is the single most effective debugging tool in ML. Every time you derive a gradient by hand and code it, check it against the numerical gradient. If they disagree, the bug is in your derivation or implementation.
+> **Suggested experiment.** Implement this gradient checker and use it throughout [Weeks 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–04 to verify your analytical gradient derivations. It is the single most effective debugging tool in ML. Every time you derive a gradient by hand and code it, check it against the numerical gradient. If they disagree, the bug is in your derivation or implementation.
 
-> **How it connects to autograd.** PyTorch's automatic differentiation (Week 13) computes exact analytical gradients using the chain rule, applied algorithmically. The numerical gradient check remains useful as an independent verification even when using autograd.
+> **How it connects to autograd.** PyTorch's automatic differentiation ([Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#3-automatic-differentiation-autograd)) computes exact analytical gradients using the chain rule, applied algorithmically. The numerical gradient check remains useful as an independent verification even when using autograd.
 
 ---
 
 ## 4. Part III — Probability and Statistics
 
 Probability theory is the mathematical framework for reasoning about uncertainty. In ML, it provides:
-1. The **justification for loss functions** — every standard loss is a negative log-likelihood under some probabilistic model (Week 07).
+1. The **justification for loss functions** — every standard loss is a negative log-likelihood under some probabilistic model ([Week 07](../../03_probability/week07_likelihood/theory.md#5-the-mleloss-function-connection)).
 2. The **language for generalisation** — overfitting is a probabilistic phenomenon (the model fits noise drawn from a distribution).
-3. The **tools for uncertainty quantification** — predicting not just $\hat{y}$ but a distribution over possible $y$ values (Week 08).
+3. The **tools for uncertainty quantification** — predicting not just $\hat{y}$ but a distribution over possible $y$ values ([Week 08](../../03_probability/week08_uncertainty/theory.md#3-two-kinds-of-uncertainty)).
 
 ### 4.1 Probability Axioms
 
@@ -758,7 +758,7 @@ A **probability space** consists of:
 
 From these axioms, one can derive: $P(\bar{A}) = 1 - P(A)$, $P(\emptyset) = 0$, and $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
 
-> **In ML terms.** The sample space might be "all possible datasets from the true data-generating process." The probability measure encodes our belief about what datasets are likely. These concepts remain mostly in the background, but they provide the rigorous foundation for everything in Weeks 07–10.
+> **In ML terms.** The sample space might be "all possible datasets from the true data-generating process." The probability measure encodes our belief about what datasets are likely. These concepts remain mostly in the background, but they provide the rigorous foundation for everything in [Weeks 07](../../03_probability/week07_likelihood/theory.md#3-likelihood-from-data-to-models)–10.
 
 ---
 
@@ -785,12 +785,12 @@ $$P(A \mid B) = \frac{P(B \mid A) \, P(A)}{P(B)}$$
 >
 > $$P(\theta \mid \mathcal{D}) = \frac{P(\mathcal{D} \mid \theta) \, P(\theta)}{P(\mathcal{D})}$$
 >
-> This is the foundation of **Bayesian inference** (Week 08):
+> This is the foundation of **Bayesian inference** ([Week 08](../../03_probability/week08_uncertainty/theory.md#7-bayesian-inference)):
 > - $P(\mathcal{D} \mid \theta)$: the **likelihood** — how well the parameters explain the data.
 > - $P(\theta)$: the **prior** — our initial belief about good parameter values (e.g., small weights → L2 regularisation is a Gaussian prior).
 > - $P(\theta \mid \mathcal{D})$: the **posterior** — the updated belief after seeing data.
 >
-> **Maximum Likelihood Estimation (MLE)** ignores the prior and maximises $P(\mathcal{D} \mid \theta)$ alone. **Maximum A Posteriori (MAP)** estimation includes the prior and maximises $P(\theta \mid \mathcal{D})$. MAP with a Gaussian prior is equivalent to L2-regularised MLE (proved in Week 07).
+> **Maximum Likelihood Estimation (MLE)** ignores the prior and maximises $P(\mathcal{D} \mid \theta)$ alone. **Maximum A Posteriori (MAP)** estimation includes the prior and maximises $P(\theta \mid \mathcal{D})$. MAP with a Gaussian prior is equivalent to L2-regularised MLE (proved in [Week 07](../../03_probability/week07_likelihood/theory.md#9-from-mle-to-map-the-bridge-to-regularisation)).
 
 **Example.** A medical test for a disease is 99% accurate (sensitivity = specificity = 0.99). The disease prevalence is 0.1%. You test positive. What is the probability you actually have the disease?
 
@@ -887,7 +887,7 @@ where $\boldsymbol{\mu} = \mathbb{E}[\mathbf{X}]$. The entry $\Sigma_{jk} = \tex
 Properties:
 - $\Sigma$ is **symmetric**: $\Sigma = \Sigma^\top$.
 - $\Sigma$ is **positive semi-definite**: $\mathbf{v}^\top \Sigma \mathbf{v} \geq 0$ for all $\mathbf{v}$.
-- The eigenvectors of $\Sigma$ are the principal components (PCA, Week 04).
+- The eigenvectors of $\Sigma$ are the principal components (PCA, [Week 04](../../02_fundamentals/week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view)).
 
 ```python
 # Compute sample covariance matrix
@@ -939,7 +939,7 @@ Notation: $X \sim \mathcal{N}(\mu, \sigma^2)$.
 - The **68-95-99.7 rule**: approximately 68%, 95%, and 99.7% of values fall within 1, 2, and 3 standard deviations of the mean.
 - The **standard normal** has $\mu = 0$, $\sigma^2 = 1$.
 
-> **ML significance.** Assuming Gaussian noise ($y = f_\theta(\mathbf{x}) + \epsilon$, $\epsilon \sim \mathcal{N}(0, \sigma^2)$) and maximising the likelihood leads directly to the MSE loss. This is proved in Week 07.
+> **ML significance.** Assuming Gaussian noise ($y = f_\theta(\mathbf{x}) + \epsilon$, $\epsilon \sim \mathcal{N}(0, \sigma^2)$) and maximising the likelihood leads directly to the MSE loss. This is proved in [Week 07](../../03_probability/week07_likelihood/theory.md#51-gaussian-noise-mse).
 
 #### Multivariate Gaussian
 
@@ -957,10 +957,10 @@ $$p(\mathbf{x}) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2}(\
 The contours of constant probability density are **ellipsoids**, with axes aligned to the eigenvectors of $\Sigma$ and radii proportional to $\sqrt{\lambda_i}$.
 
 > **ML relevance.** The multivariate Gaussian appears in:
-> - **PCA** (Week 04): modelling data as drawn from a Gaussian → the eigenvectors of $\Sigma$ are the principal components.
-> - **Gaussian Mixture Models** (Week 05): clustering via mixtures of multivariate Gaussians.
-> - **Bayesian inference** (Week 08): Gaussian priors on parameters.
-> - **Gaussian Processes** (Week 10): defining distributions over functions.
+> - **PCA** ([Week 04](../../02_fundamentals/week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view)): modelling data as drawn from a Gaussian → the eigenvectors of $\Sigma$ are the principal components.
+> - **Gaussian Mixture Models** ([Week 05](../../02_fundamentals/week05_clustering/theory.md#6-gaussian-mixture-models-soft-clustering)): clustering via mixtures of multivariate Gaussians.
+> - **Bayesian inference** ([Week 08](../../03_probability/week08_uncertainty/theory.md#72-prior-likelihood-posterior)): Gaussian priors on parameters.
+> - **Gaussian Processes** ([Week 10](../../03_probability/week10_surrogate_models/theory.md#3-gaussian-processes-intuition)): defining distributions over functions.
 
 ```python
 from scipy.stats import multivariate_normal, norm
@@ -1032,7 +1032,7 @@ plt.show()
 
 ### 4.7 Maximum Likelihood Estimation — Preview
 
-This section previews the key idea of Week 07, because it provides the probabilistic motivation for loss functions used from Week 01 onward.
+This section previews the key idea of [Week 07](../../03_probability/week07_likelihood/theory.md#5-the-mleloss-function-connection), because it provides the probabilistic motivation for loss functions used from [Week 01](../../02_fundamentals/week01_optimization/theory.md#3-loss-functions) onward.
 
 **Setup.** Assume data $\{y_i\}$ are generated by a model with parameters $\theta$, corrupted by noise:
 
@@ -1059,7 +1059,7 @@ This is the **mean squared error loss** (up to constant factors).
 > - **Bernoulli model** (binary classification) → minimise the Binary Cross-Entropy.
 > - **Categorical model** (multi-class) → minimise the Categorical Cross-Entropy.
 >
-> Every standard loss function in ML is a negative log-likelihood under some probabilistic model. This unifying perspective is the subject of Week 07.
+> Every standard loss function in ML is a negative log-likelihood under some probabilistic model. This unifying perspective is the subject of [Week 07](../../03_probability/week07_likelihood/theory.md#5-the-mleloss-function-connection).
 
 ---
 
@@ -1097,7 +1097,7 @@ $$D_{\text{KL}}(P \| Q) = H(P, Q) - H(P) = \sum_{k} p_k \log \frac{p_k}{q_k} \ge
 
 The KL divergence measures how much $Q$ differs from $P$. It is zero if and only if $P = Q$. Minimising cross-entropy $H(P, Q)$ is equivalent to minimising $D_{\text{KL}}(P \| Q)$ since $H(P)$ is a constant with respect to the model.
 
-> **ML usage.** Minimising the cross-entropy loss in classification is equivalent to minimising the KL divergence between the true label distribution and the model's predicted distribution. This connection is formalised in Week 07.
+> **ML usage.** Minimising the cross-entropy loss in classification is equivalent to minimising the KL divergence between the true label distribution and the model's predicted distribution. This connection is formalised in [Week 07](../../03_probability/week07_likelihood/theory.md#52-bernoulli-noise-binary-cross-entropy).
 
 ---
 
@@ -1107,7 +1107,7 @@ The KL divergence measures how much $Q$ differs from $P$. It is zero if and only
 
 A tabular dataset with $n$ samples and $d$ features is represented as a matrix $X \in \mathbb{R}^{n \times d}$:
 
-$$X = \begin{bmatrix} — \mathbf{x}_1^\top — \\ — \mathbf{x}_2^\top — \\ \vdots \\ — \mathbf{x}_n^\top — \end{bmatrix}, \qquad \mathbf{y} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}$$
+$$X = \begin{bmatrix} \text{---} \; \mathbf{x}_1^\top \; \text{---} \\ \text{---} \; \mathbf{x}_2^\top \; \text{---} \\ \vdots \\ \text{---} \; \mathbf{x}_n^\top \; \text{---} \end{bmatrix}, \qquad \mathbf{y} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}$$
 
 Each row $\mathbf{x}_i^\top$ is a sample (data point). Each column $X_{:,j}$ is a feature (variable, attribute).
 
@@ -1136,7 +1136,7 @@ Not all data is numeric. Understanding feature types determines preprocessing.
 | **Discrete (ordinal)** | Education level (low/med/high) | Integer encoding ($0, 1, 2$) — preserves order    |
 | **Discrete (nominal)** | Colour (red/blue/green)        | One-hot encoding: $[1,0,0]$, $[0,1,0]$, $[0,0,1]$ |
 | **Binary**             | Yes/No, Male/Female            | $0$ or $1$                                        |
-| **Text**               | Product reviews                | Tokenisation → embeddings (Week 17–18)            |
+| **Text**               | Product reviews                | Tokenisation → embeddings ([Week 17](../../06_sequence_models/week17_attention/theory.md#3-attention-as-soft-lookup)–18)            |
 
 **Standardisation (Z-score normalisation).**
 
@@ -1151,7 +1151,7 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)   # mean 0, std 1 per feature
 ```
 
-> **Suggested experiment.** In Week 01's notebook, run gradient descent on raw features and on standardised features. Compare convergence speed (number of iterations to reach a given loss threshold). Standardisation typically reduces iterations by 5–50×.
+> **Suggested experiment.** In [Week 01](../../02_fundamentals/week01_optimization/theory.md#11-notebook-reference-guide)'s notebook, run gradient descent on raw features and on standardised features. Compare convergence speed (number of iterations to reach a given loss threshold). Standardisation typically reduces iterations by 5–50×.
 
 ---
 
@@ -1208,7 +1208,7 @@ df.set_index('date')['target'].plot()
 plt.show()
 ```
 
-Look for trends, seasonality, regime changes, and gaps. If temporal structure exists, **random train/test splitting is invalid** — use temporal splits (Week 09).
+Look for trends, seasonality, regime changes, and gaps. If temporal structure exists, **random train/test splitting is invalid** — use temporal splits ([Week 09](../../03_probability/week09_time_series/theory.md#22-seasonality)).
 
 ---
 
@@ -1337,7 +1337,7 @@ Computing $\log\left(\sum_k e^{z_k}\right)$ directly overflows when $z_k$ is lar
 
 $$\log\sum_k e^{z_k} = c + \log\sum_k e^{z_k - c}, \qquad c = \max_k z_k$$
 
-This arises in the softmax function (Week 03, classification) and in log-likelihood computation.
+This arises in the softmax function ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#77-multi-class-extension-softmax-regression), classification) and in log-likelihood computation.
 
 ```python
 z = np.array([1000, 1001, 1002])   # direct exp will overflow
@@ -1381,7 +1381,7 @@ A_bad = np.array([[1, 1], [1, 1.0001]])
 print(np.linalg.cond(A_bad))    # ~40000
 ```
 
-When $X^\top X$ is ill-conditioned, the normal equation solution is numerically unreliable. This is another reason to use regularisation (Week 06) or iterative solvers (gradient descent).
+When $X^\top X$ is ill-conditioned, the normal equation solution is numerically unreliable. This is another reason to use regularisation ([Week 06](../../02_fundamentals/week06_regularization/theory.md#2-why-regularisation-the-overfitting-problem-revisited)) or iterative solvers (gradient descent).
 
 ---
 

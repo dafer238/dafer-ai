@@ -43,18 +43,18 @@
 
 ## 1. Scope and Purpose
 
-Week 11 built a neural network from scratch. This week asks: **what goes wrong when we make it deeper?**
+[Week 11](../week11_nn_from_scratch/theory.md) built a neural network from scratch. This week asks: **what goes wrong when we make it deeper?**
 
 A 2-layer network on `make_moons` trains easily. A 10-layer network on the same task often fails completely — the loss barely moves, or it diverges. The problem is not the architecture's expressive power (universal approximation guarantees that) but the **dynamics of gradient flow** through many layers.
 
 This week provides:
 1. **Diagnostic skills** — how to detect vanishing/exploding gradients and dead neurons.
-2. **A toolbox of fixes** — initialisation (review from Week 11), batch normalisation, layer normalisation, gradient clipping, residual connections.
+2. **A toolbox of fixes** — initialisation (review from [Week 11](../week11_nn_from_scratch/theory.md)), batch normalisation, layer normalisation, gradient clipping, residual connections.
 3. **The intuition** for why each fix works, grounded in the mathematics of gradient flow.
 
 These diagnostic techniques apply to every deep-learning week that follows.
 
-**Prerequisites.** Week 11 (backpropagation, chain rule through layers, initialisation).
+**Prerequisites.** [Week 11](../week11_nn_from_scratch/theory.md) (backpropagation, chain rule through layers, initialisation).
 
 ---
 
@@ -84,7 +84,7 @@ $$\|\mathbf{a}^{[L]}\| \approx s^L\|\mathbf{x}\|$$
 
 ### 2.2 Backward Pass: Gradient Magnitudes
 
-The gradient of the loss with respect to the weights at layer $l$ involves the chain of Jacobians from layer $L$ back to layer $l$ (Week 11):
+The gradient of the loss with respect to the weights at layer $l$ involves the chain of Jacobians from layer $L$ back to layer $l$ ([Week 11](../week11_nn_from_scratch/theory.md)):
 
 $$\frac{\partial\mathcal{L}}{\partial W^{[l]}} = \frac{\partial\mathcal{L}}{\partial Z^{[L]}}\cdot\prod_{k=l+1}^{L}\left(\text{diag}(\sigma'(Z^{[k-1]}))\cdot W^{[k]}\right)\cdot (A^{[l-1]})^\top$$
 
@@ -239,7 +239,7 @@ If a neuron's pre-activation $z$ is negative for all training samples, then:
 
 ## 6. Fix 1: Proper Initialisation
 
-Covered in detail in Week 11, Section 7. The key results:
+Covered in detail in [Week 11](../week11_nn_from_scratch/theory.md), Section 7. The key results:
 
 $$\text{Xavier:}\quad \text{Var}(W) = \frac{2}{n_{\text{in}} + n_{\text{out}}} \qquad \text{(sigmoid/tanh)}$$
 
@@ -350,7 +350,7 @@ $$\hat{z}_i = \frac{z_i - \mu_i}{\sqrt{\sigma_i^2 + \epsilon}}, \qquad \mu_i = \
 | **Depends on batch?**       | Yes (different batches → different normalisation) | No (each sample normalised independently) |
 | **Works for batch size 1?** | No (undefined)                                    | Yes                                       |
 | **Running stats needed?**   | Yes (for inference)                               | No                                        |
-| **Where used**              | CNNs, feedforward networks                        | Transformers (Week 18), RNNs              |
+| **Where used**              | CNNs, feedforward networks                        | Transformers ([Week 18](../../06_sequence_models/week18_transformers/theory.md)), RNNs              |
 
 ```python
 # PyTorch
@@ -478,14 +478,14 @@ With these defaults, most training pathologies are avoided from the start.
 
 | Week                            | Connection                                                                                                                 |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| **Week 01–02 (Optimisation)**   | Adam and momentum help in non-convex landscapes; learning rate schedules interact with BatchNorm                           |
-| **Week 06 (Regularisation)**    | BatchNorm has implicit regularising effect; weight decay interacts with the $\gamma$ parameter                             |
-| **Week 11 (NN from Scratch)**   | Xavier/He init derived from variance analysis; backprop equations give the gradient product                                |
-| **Week 13 (PyTorch)**           | All fixes from this week have one-line PyTorch equivalents: `nn.BatchNorm1d`, `nn.init.kaiming_normal_`, `clip_grad_norm_` |
-| **Week 14 (Training at Scale)** | Learning rate warm-up prevents early-training instability; mixed precision interacts with gradient scaling                 |
-| **Week 15 (CNNs)**              | `BatchNorm2d` applied after convolutional layers; residual blocks are the building blocks of ResNet                        |
-| **Week 16 (Regularisation DL)** | Dropout + BatchNorm interaction; whether to use both simultaneously                                                        |
-| **Week 18 (Transformers)**      | LayerNorm is standard in Transformers; residual connections around every attention and FFN block                           |
+| **[[Week 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md) (Optimisation)**   | Adam and momentum help in non-convex landscapes; learning rate schedules interact with BatchNorm                           |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**    | BatchNorm has implicit regularising effect; weight decay interacts with the $\gamma$ parameter                             |
+| **[Week 11](../week11_nn_from_scratch/theory.md) (NN from Scratch)**   | Xavier/He init derived from variance analysis; backprop equations give the gradient product                                |
+| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md) (PyTorch)**           | All fixes from this week have one-line PyTorch equivalents: `nn.BatchNorm1d`, `nn.init.kaiming_normal_`, `clip_grad_norm_` |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)** | Learning rate warm-up prevents early-training instability; mixed precision interacts with gradient scaling                 |
+| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)**              | `BatchNorm2d` applied after convolutional layers; residual blocks are the building blocks of ResNet                        |
+| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation DL)** | Dropout + BatchNorm interaction; whether to use both simultaneously                                                        |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)**      | LayerNorm is standard in Transformers; residual connections around every attention and FFN block                           |
 
 ---
 

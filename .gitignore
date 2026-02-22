@@ -12,3 +12,4 @@ build/
 *.onnx
 data/
 *cache*/
+*build/

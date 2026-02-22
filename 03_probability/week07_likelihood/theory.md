@@ -57,7 +57,7 @@
 
 ## 1. Scope and Purpose
 
-Weeks 01–06 took a **loss-function-first** approach: we defined MSE, minimised it, and observed that it works. This week answers the question _why_ it works — and when it does not.
+[[Weeks 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[06](../../02_fundamentals/week06_regularization/theory.md) took a **loss-function-first** approach: we defined MSE, minimised it, and observed that it works. This week answers the question _why_ it works — and when it does not.
 
 The central insight is:
 
@@ -66,12 +66,12 @@ The central insight is:
 MSE corresponds to Gaussian noise. Binary cross-entropy corresponds to Bernoulli outcomes. Understanding this connection lets you:
 1. **Choose** the right loss function by reasoning about the data-generating process.
 2. **Design** new loss functions for non-standard problems (count data, heavy-tailed noise, heteroscedastic noise).
-3. **Quantify uncertainty** in predictions (Week 08).
-4. **Justify regularisation** as Bayesian prior information (connecting back to Week 06).
+3. **Quantify uncertainty** in predictions ([Week 08](../week08_uncertainty/theory.md)).
+4. **Justify regularisation** as Bayesian prior information (connecting back to [Week 06](../../02_fundamentals/week06_regularization/theory.md)).
 
 This Week is the conceptual pivot of the entire course: everything before was optimisation of a given objective; everything after uses probability to _derive_ the objective.
 
-**Prerequisites.** Week 00b (Gaussian distribution, preview of MLE), Week 03 (linear regression, MSE, normal equations), Week 06 (Ridge as Bayesian MAP — the connection is completed here).
+**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (Gaussian distribution, preview of MLE), [Week 03](../../02_fundamentals/week03_linear_models/theory.md) (linear regression, MSE, normal equations), [Week 06](../../02_fundamentals/week06_regularization/theory.md) (Ridge as Bayesian MAP — the connection is completed here).
 
 ---
 
@@ -132,7 +132,7 @@ $$\boxed{p(\theta \mid \mathcal{D}) = \frac{p(\mathcal{D} \mid \theta)\,p(\theta
 | $p(\theta)$                  | **Prior**                          | Belief about $\theta$ before seeing data                                  |
 | $p(\mathcal{D})$             | **Evidence (marginal likelihood)** | Normalising constant; $\int p(\mathcal{D} \mid \theta)p(\theta)\,d\theta$ |
 
-Bayes' theorem is the foundation of Bayesian inference (Week 08). For now, we focus on the **likelihood** $p(\mathcal{D} \mid \theta)$.
+Bayes' theorem is the foundation of Bayesian inference ([Week 08](../week08_uncertainty/theory.md)). For now, we focus on the **likelihood** $p(\mathcal{D} \mid \theta)$.
 
 ---
 
@@ -152,7 +152,7 @@ $$\text{Lap}(y \mid \mu, b) = \frac{1}{2b}\exp\!\left(-\frac{|y - \mu|}{b}\right
 
 - **Mean:** $\mu$.
 - **Variance:** $2b^2$.
-- **Sharper peak** at $\mu$ and **heavier tails** than Gaussian. The kink at $y = \mu$ (absolute value) connects to L1 loss (MAE) and Lasso (Week 06).
+- **Sharper peak** at $\mu$ and **heavier tails** than Gaussian. The kink at $y = \mu$ (absolute value) connects to L1 loss (MAE) and Lasso ([Week 06](../../02_fundamentals/week06_regularization/theory.md)).
 
 #### Student-_t_
 
@@ -168,7 +168,7 @@ $$t_\nu(y \mid \mu, \sigma) = \frac{\Gamma\!\left(\frac{\nu+1}{2}\right)}{\Gamma
 $$\text{Ber}(y \mid p) = p^y(1-p)^{1-y}, \quad y \in \{0, 1\}$$
 
 - **Mean:** $p$. **Variance:** $p(1-p)$.
-- Used for binary classification (logistic regression, Week 03).
+- Used for binary classification (logistic regression, [Week 03](../../02_fundamentals/week03_linear_models/theory.md)).
 
 #### Poisson
 
@@ -219,7 +219,7 @@ Properties:
 | **Integrates to 1?** | Yes ($\int p(y \mid \theta)\,dy = 1$) | **No** ($\int \mathcal{L}(\theta)\,d\theta \neq 1$ in general) |
 | **Interpretation**   | "How probable is $y$?"                | "How well does $\theta$ explain the data?"                     |
 
-The likelihood is **not** a probability distribution over $\theta$ (that would be the posterior $p(\theta \mid \mathcal{D})$, which requires Bayes' theorem and a prior — Week 08).
+The likelihood is **not** a probability distribution over $\theta$ (that would be the posterior $p(\theta \mid \mathcal{D})$, which requires Bayes' theorem and a prior — [Week 08](../week08_uncertainty/theory.md)).
 
 ---
 
@@ -313,7 +313,7 @@ $$-\ell(\theta) = -\sum_{i=1}^{n}\left[y_i\log\hat{p}_i + (1 - y_i)\log(1 - \hat
 
 $$\boxed{-\frac{1}{n}\ell = \text{BCE} = -\frac{1}{n}\sum_{i=1}^{n}\left[y_i\log\hat{p}_i + (1 - y_i)\log(1 - \hat{p}_i)\right]}$$
 
-**Binary cross-entropy is the MLE loss for logistic regression** (Week 03, Section 5.2).
+**Binary cross-entropy is the MLE loss for logistic regression** ([Week 03](../../02_fundamentals/week03_linear_models/theory.md), Section 5.2).
 
 ---
 
@@ -388,7 +388,7 @@ The only term that depends on $\mathbf{w}$ is $-\frac{1}{2\sigma^2}\mathbf{r}^\t
 
 $$\hat{\mathbf{w}}_{\text{MLE}} = \arg\max_\mathbf{w}\ell = \arg\min_\mathbf{w}\mathbf{r}^\top\mathbf{r} = \arg\min_\mathbf{w}\|\mathbf{y} - X\mathbf{w}\|^2$$
 
-This is exactly the OLS objective. Taking the gradient and setting to zero (same as Week 03):
+This is exactly the OLS objective. Taking the gradient and setting to zero (same as [Week 03](../../02_fundamentals/week03_linear_models/theory.md)):
 
 $$\nabla_\mathbf{w}(\mathbf{r}^\top\mathbf{r}) = -2X^\top(\mathbf{y} - X\mathbf{w}) = \mathbf{0}$$
 
@@ -458,7 +458,7 @@ $$\hat{\mathbf{w}}_{\text{Laplace}} = \arg\min_\mathbf{w}\sum_{i=1}^{n}|y_i - \m
 
 **Why this is robust:** the absolute value $|r_i|$ grows **linearly** with the residual (vs. quadratically for MSE). An outlier at $10\sigma$ contributes $10b$ instead of $100\sigma^2$ — a much smaller relative influence.
 
-> **Connection to Week 06.** The Laplace _prior_ on weights gives Lasso (L1 regularisation). The Laplace _noise model_ gives MAE loss. Both involve L1 norms, but applied to different quantities (weights vs. residuals).
+> **Connection to [Week 06](../../02_fundamentals/week06_regularization/theory.md).** The Laplace _prior_ on weights gives Lasso (L1 regularisation). The Laplace _noise model_ gives MAE loss. Both involve L1 norms, but applied to different quantities (weights vs. residuals).
 
 ---
 
@@ -535,7 +535,7 @@ The Hessian is $\nabla^2(-\ell) = \frac{1}{\sigma^2}X^\top X$, which is positive
 
 - The NLL is **convex** in $\mathbf{w}$ — every local minimum is global.
 - The NLL is **strictly convex** when $X^\top X$ is positive definite ($X$ has full column rank).
-- Gradient descent is guaranteed to converge to the global minimum (Week 01).
+- Gradient descent is guaranteed to converge to the global minimum ([Week 01](../../02_fundamentals/week01_optimization/theory.md)).
 
 Joint optimisation over $(\mathbf{w}, \sigma^2)$ is also convex (the NLL is convex in $\sigma^2$ given $\mathbf{w}$, and vice versa; and the joint function is convex).
 
@@ -554,7 +554,7 @@ For more complex models, the NLL can be **non-convex** with multiple local minim
 
 > **Notebook reference.** Cell 11 plots the NLL surface for Gaussian linear regression as both contour and 3D. The surface is a smooth, convex bowl with a single minimum at the MLE. For non-linear or mixture models, the surface would have multiple basins.
 
-> **Forward pointer.** Non-convex optimisation landscapes are the central challenge of deep learning. Weeks 11–14 address this with techniques like learning rate schedules, momentum, batch normalisation, and careful initialisation.
+> **Forward pointer.** Non-convex optimisation landscapes are the central challenge of deep learning. [[Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)](../../04_neural_networks/week11_nn_from_scratch/theory.md)–[14](../../05_deep_learning/week14_training_at_scale/theory.md) address this with techniques like learning rate schedules, momentum, batch normalisation, and careful initialisation.
 
 ---
 
@@ -602,7 +602,7 @@ $$\hat{\theta}_{\text{MAP}} = \arg\min_\theta\left[-\log p(\mathcal{D} \mid \the
 
 $$\boxed{\text{MLE} + \text{Prior} = \text{MAP} = \text{Regularised MLE}}$$
 
-> **This closes the circle with Week 06.** Ridge regression is not ad-hoc — it is the MAP estimate under Gaussian noise and a Gaussian prior on the weights. The regularisation strength $\lambda$ encodes the prior precision relative to the noise variance.
+> **This closes the circle with [Week 06](../../02_fundamentals/week06_regularization/theory.md).** Ridge regression is not ad-hoc — it is the MAP estimate under Gaussian noise and a Gaussian prior on the weights. The regularisation strength $\lambda$ encodes the prior precision relative to the noise variance.
 
 > **Notebook reference.** Exercise 2 (Cell 14) asks you to add an L2 prior to the Gaussian NLL and verify that MAP matches Ridge.
 >
@@ -639,7 +639,7 @@ $$\text{BIC} = -2\ell(\hat{\theta}) + p\log n$$
 - BIC is **consistent**: as $n \to \infty$, it selects the true model (if it's in the candidate set).
 - AIC is **efficient**: it selects the model with the best predictive performance (even if the true model is not in the set).
 
-> **Connection to Week 05.** BIC was used for GMM model selection (choosing the number of Gaussian components). The same criterion applies here for choosing between noise models or polynomial degrees.
+> **Connection to [Week 05](../../02_fundamentals/week05_clustering/theory.md).** BIC was used for GMM model selection (choosing the number of Gaussian components). The same criterion applies here for choosing between noise models or polynomial degrees.
 
 ---
 
@@ -647,15 +647,15 @@ $$\text{BIC} = -2\ell(\hat{\theta}) + p\log n$$
 
 | Week                            | Connection                                                                                     |
 | ------------------------------- | ---------------------------------------------------------------------------------------------- |
-| **Week 00b (Math)**             | Gaussian distribution and the MLE preview are formalised here                                  |
-| **Week 03 (Linear Models)**     | MSE = NLL under Gaussian noise; OLS = MLE. BCE = NLL under Bernoulli.                          |
-| **Week 06 (Regularisation)**    | Ridge = MAP with Gaussian prior; Lasso = MAP with Laplace prior                                |
-| **Week 08 (Uncertainty)**       | Full Bayesian inference goes beyond MAP to the full posterior $p(\mathbf{w} \mid \mathcal{D})$ |
-| **Week 09 (Time Series)**       | Autoregressive likelihoods; MLE for AR/ARIMA models                                            |
-| **Week 10 (Surrogate Models)**  | Gaussian processes maximise marginal likelihood                                                |
-| **Week 11 (NNs)**               | Neural network training = MLE (or MAP with weight decay). Cross-entropy loss = Bernoulli NLL.  |
-| **Week 14 (Training at Scale)** | Mixed-precision training affects NLL numerics; log-sum-exp tricks                              |
-| **Week 18 (Transformers)**      | Autoregressive language models maximise $\sum_t \log p(x_t \mid x_{<t})$ — sequential NLL      |
+| **[Week 00b](../../01_intro/week00b_math_and_data/theory.md) (Math)**             | Gaussian distribution and the MLE preview are formalised here                                  |
+| **[Week 03](../../02_fundamentals/week03_linear_models/theory.md) (Linear Models)**     | MSE = NLL under Gaussian noise; OLS = MLE. BCE = NLL under Bernoulli.                          |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**    | Ridge = MAP with Gaussian prior; Lasso = MAP with Laplace prior                                |
+| **[Week 08](../week08_uncertainty/theory.md) (Uncertainty)**       | Full Bayesian inference goes beyond MAP to the full posterior $p(\mathbf{w} \mid \mathcal{D})$ |
+| **[Week 09](../week09_time_series/theory.md) (Time Series)**       | Autoregressive likelihoods; MLE for AR/ARIMA models                                            |
+| **[Week 10](../week10_surrogate_models/theory.md) (Surrogate Models)**  | Gaussian processes maximise marginal likelihood                                                |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NNs)**               | Neural network training = MLE (or MAP with weight decay). Cross-entropy loss = Bernoulli NLL.  |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)** | Mixed-precision training affects NLL numerics; log-sum-exp tricks                              |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)**      | Autoregressive language models maximise $\sum_t \log p(x_t \mid x_{<t})$ — sequential NLL      |
 
 > **The unifying principle.** Every model in this course is defined by a probabilistic assumption (noise model) and an optimisation procedure (minimise NLL or regularised NLL). The choice of noise model determines the loss function; the choice of prior determines the regulariser; the choice of optimiser determines how fast you converge.
 

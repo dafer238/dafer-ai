@@ -54,7 +54,7 @@ After this week you will be able to:
 3. **Implement and compare** LoRA, adapters, and frozen-backbone approaches.
 4. **Avoid catastrophic forgetting** and select appropriate learning rates, schedules, and regularisation.
 
-**Prerequisites.** Week 18 (Transformer architecture — you must know what is inside the model you are adapting). Week 15 (CNNs for vision transfer). Week 06/16 (regularisation — freezing layers is a form of parameter regularisation).
+**Prerequisites.** [Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformer architecture — you must know what is inside the model you are adapting). [Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs for vision transfer). [[Week 06](../../02_fundamentals/week06_regularization/theory.md)](../../02_fundamentals/week06_regularization/theory.md)/[16](../../05_deep_learning/week16_regularization_dl/theory.md) (regularisation — freezing layers is a form of parameter regularisation).
 
 ---
 
@@ -560,9 +560,9 @@ trainer.train()
 
 Key parameters:
 - `learning_rate=2e-5`: standard for fine-tuning.
-- `weight_decay=0.01`: AdamW decoupled weight decay (Week 16 regularisation).
+- `weight_decay=0.01`: AdamW decoupled weight decay ([Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) regularisation).
 - `warmup_ratio=0.06`: linear warm-up for 6% of total training steps.
-- `fp16=True`: mixed precision for faster training and lower memory (Week 14).
+- `fp16=True`: mixed precision for faster training and lower memory ([Week 14](../../05_deep_learning/week14_training_at_scale/theory.md)).
 - `load_best_model_at_end=True`: early stopping via best checkpoint.
 
 ---
@@ -593,7 +593,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
 
 2. **Resolution.** Most pretrained CNNs expect $224 \times 224$. Fine-tuning at higher resolution can help (features are more detailed) but requires more memory.
 
-3. **Data augmentation.** Critical for small datasets — random crops, flips, colour jitter, RandAugment. Connections to Week 16 (augmentation as regularisation).
+3. **Data augmentation.** Critical for small datasets — random crops, flips, colour jitter, RandAugment. Connections to [Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (augmentation as regularisation).
 
 4. **Layer freezing pattern.** CNNs have a natural hierarchy:
    - Early layers: edges, textures → very generic, rarely need updating.
@@ -677,14 +677,14 @@ For imbalanced or nuanced tasks, accuracy alone is insufficient:
 
 | Week | Connection |
 |---|---|
-| **Week 06 (Regularisation)** | Freezing layers is a form of parameter regularisation; weight decay prevents fine-tuning from straying too far from pretrained weights |
-| **Week 12 (Training Pathologies)** | Catastrophic forgetting is a training pathology; residual connections in the backbone enable effective gradient flow during fine-tuning |
-| **Week 14 (Training at Scale)** | Mixed precision (`fp16`) and gradient accumulation are essential for fine-tuning large models on limited hardware |
-| **Week 15 (CNNs)** | Vision transfer learning uses the same CNN architectures; feature extraction from intermediate layers |
-| **Week 16 (Regularisation DL)** | Dropout, weight decay, augmentation — all regularisation tools apply during fine-tuning, especially with small data |
-| **Week 17 (Attention)** | LoRA modifies attention weight matrices ($W^Q$, $W^V$); understanding the Q/K/V projections lets you choose *which* matrices to adapt |
-| **Week 18 (Transformers)** | The Transformer is the model being fine-tuned; knowing the architecture (embedding, LayerNorm, FFN, multi-head attention) lets you make informed decisions about *what* to freeze and *what* to update |
-| **Week 20 (Deployment)** | The fine-tuned model is your deployment candidate; PEFT methods like LoRA enable serving multiple task-specific models from a single backbone |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)** | Freezing layers is a form of parameter regularisation; weight decay prevents fine-tuning from straying too far from pretrained weights |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)** | Catastrophic forgetting is a training pathology; residual connections in the backbone enable effective gradient flow during fine-tuning |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)** | Mixed precision (`fp16`) and gradient accumulation are essential for fine-tuning large models on limited hardware |
+| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)** | Vision transfer learning uses the same CNN architectures; feature extraction from intermediate layers |
+| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation DL)** | Dropout, weight decay, augmentation — all regularisation tools apply during fine-tuning, especially with small data |
+| **[Week 17](../../06_sequence_models/week17_attention/theory.md) (Attention)** | LoRA modifies attention weight matrices ($W^Q$, $W^V$); understanding the Q/K/V projections lets you choose *which* matrices to adapt |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)** | The Transformer is the model being fine-tuned; knowing the architecture (embedding, LayerNorm, FFN, multi-head attention) lets you make informed decisions about *what* to freeze and *what* to update |
+| **[Week 20](../../08_deployment/week20_deployment/theory.md) (Deployment)** | The fine-tuned model is your deployment candidate; PEFT methods like LoRA enable serving multiple task-specific models from a single backbone |
 
 ---
 

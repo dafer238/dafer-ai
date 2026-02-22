@@ -34,7 +34,7 @@
 
 ## 1. Scope and Purpose
 
-Week 01 introduced vanilla gradient descent and its fundamental limitations: sensitivity to the learning rate, slow convergence on ill-conditioned problems, and inability to adapt to the geometry of the loss surface. This week develops the family of **adaptive optimisers** that address these limitations, culminating in **Adam** — the default optimiser in modern deep learning.
+[Week 01](../week01_optimization/theory.md) introduced vanilla gradient descent and its fundamental limitations: sensitivity to the learning rate, slow convergence on ill-conditioned problems, and inability to adapt to the geometry of the loss surface. This week develops the family of **adaptive optimisers** that address these limitations, culminating in **Adam** — the default optimiser in modern deep learning.
 
 The treatment follows the historical and conceptual progression:
 
@@ -42,13 +42,13 @@ $$\text{SGD} \;\to\; \text{Momentum} \;\to\; \text{AdaGrad} \;\to\; \text{RMSPro
 
 Each algorithm fixes a specific shortcoming of its predecessor. Understanding this progression — not just memorising update rules — is the goal.
 
-**Prerequisites.** Week 01: gradient descent, learning rate, convergence analysis for quadratic losses, the condition number $\kappa$, and the momentum update rule.
+**Prerequisites.** [Week 01](../week01_optimization/theory.md): gradient descent, learning rate, convergence analysis for quadratic losses, the condition number $\kappa$, and the momentum update rule.
 
 ---
 
 ## 2. The Problem with Vanilla Gradient Descent
 
-Recall the gradient descent update from Week 01:
+Recall the gradient descent update from [Week 01](../week01_optimization/theory.md):
 
 $$\theta_{t+1} = \theta_t - \eta \, \nabla_\theta \mathcal{L}(\theta_t)$$
 
@@ -68,11 +68,11 @@ The maximum stable learning rate is $\eta < 2/\lambda_{\max} = 2/10 = 0.2$. At t
 
 ### Pathology 2: Gradient Noise (SGD)
 
-When using mini-batches, the gradient is noisy. The noise variance is $\sigma_g^2 / B$ (Week 01, Section 5.3). This noise causes the optimiser to jitter around the minimum rather than converging exactly.
+When using mini-batches, the gradient is noisy. The noise variance is $\sigma_g^2 / B$ ([Week 01](../week01_optimization/theory.md), Section 5.3). This noise causes the optimiser to jitter around the minimum rather than converging exactly.
 
 ### Pathology 3: Saddle Points and Plateaus
 
-At saddle points, the gradient magnitude vanishes. Vanilla GD stalls because it has no memory of past gradients — each step is computed independently. Momentum (Week 01) partially addresses this, but does not adapt to the local curvature.
+At saddle points, the gradient magnitude vanishes. Vanilla GD stalls because it has no memory of past gradients — each step is computed independently. Momentum ([Week 01](../week01_optimization/theory.md)) partially addresses this, but does not adapt to the local curvature.
 
 > **Summary of remedies:**
 >
@@ -142,7 +142,7 @@ ema_corrected = ema / (1 - beta ** np.arange(1, 101))
 
 ## 4. Momentum (Revisited and Formalised)
 
-Momentum was introduced in Week 01 as a physical analogy. Here, it is presented as a specific instance of the EMA framework.
+Momentum was introduced in [Week 01](../week01_optimization/theory.md) as a physical analogy. Here, it is presented as a specific instance of the EMA framework.
 
 ### The Update Rule
 
@@ -156,7 +156,7 @@ $$\theta_t = \theta_{t-1} - \eta \, \mathbf{v}_t$$
 | $\beta$        | Momentum coefficient (decay factor)                | $0.9$                       |
 | $\eta$         | Learning rate                                      | Problem-dependent           |
 
-> **Note on conventions.** The formulation above follows the "gradient accumulation" convention (used in the notebook). The alternative "velocity" convention from Week 01 writes $\mathbf{v}_t = \beta \mathbf{v}_{t-1} - \eta \nabla \mathcal{L}$ and updates $\theta_t = \theta_{t-1} + \mathbf{v}_t$. Both are mathematically equivalent up to how $\eta$ is factored.
+> **Note on conventions.** The formulation above follows the "gradient accumulation" convention (used in the notebook). The alternative "velocity" convention from [Week 01](../week01_optimization/theory.md) writes $\mathbf{v}_t = \beta \mathbf{v}_{t-1} - \eta \nabla \mathcal{L}$ and updates $\theta_t = \theta_{t-1} + \mathbf{v}_t$. Both are mathematically equivalent up to how $\eta$ is factored.
 
 **Unrolling** shows that $\mathbf{v}_t$ is an EMA of past gradients (without the $(1 - \beta)$ normalisation factor):
 
@@ -411,7 +411,7 @@ The weight decay term $\lambda \theta_{t-1}$ is applied directly to the paramete
 
 > **Practical impact.** AdamW is the default optimiser in PyTorch (`torch.optim.AdamW`) and in the Hugging Face Transformers library. For most modern deep learning experiments, use AdamW rather than Adam with L2 regularisation.
 
-> **When you reach Week 06 (Regularisation):** the distinction between L2 regularisation and weight decay becomes precise. For now, the key takeaway is that **AdamW is preferred over Adam when using weight decay**, and this is what PyTorch's default implementations assume.
+> **When you reach [Week 06](../week06_regularization/theory.md) (Regularisation):** the distinction between L2 regularisation and weight decay becomes precise. For now, the key takeaway is that **AdamW is preferred over Adam when using weight decay**, and this is what PyTorch's default implementations assume.
 
 ---
 
@@ -523,11 +523,11 @@ The "standard" modern schedule combines linear warmup with cosine decay:
 
 $$\eta_t = \begin{cases} \eta_0 \cdot \frac{t}{T_w} & t \leq T_w \qquad \text{(warmup phase)} \\ \eta_{\min} + \frac{1}{2}(\eta_0 - \eta_{\min})\left(1 + \cos\left(\frac{\pi(t - T_w)}{T - T_w}\right)\right) & t > T_w \qquad \text{(cosine phase)} \end{cases}$$
 
-This schedule is used by default in most transformer training recipes (Week 18) and large-scale deep learning.
+This schedule is used by default in most transformer training recipes ([Week 18](../../06_sequence_models/week18_transformers/theory.md)) and large-scale deep learning.
 
 > **Notebook reference.** The `warmup_cosine` function in Cell 9 implements this composite schedule. The plot shows the characteristic ramp followed by a smooth decay.
 >
-> **Suggested experiment.** Run Adam with (a) constant LR, (b) cosine only, and (c) warmup + cosine on the same problem. Compare the final loss after 100 steps. Particularly for a non-convex loss (e.g., the multimodal function from Week 01), the warmup + cosine variant should reach a lower final loss because it explores more broadly early and settles more precisely late.
+> **Suggested experiment.** Run Adam with (a) constant LR, (b) cosine only, and (c) warmup + cosine on the same problem. Compare the final loss after 100 steps. Particularly for a non-convex loss (e.g., the multimodal function from [Week 01](../week01_optimization/theory.md)), the warmup + cosine variant should reach a lower final loss because it explores more broadly early and settles more precisely late.
 
 ---
 
@@ -623,7 +623,7 @@ These are worst-case rates. In practice, the structure of deep learning loss sur
 
 1. **Non-convergence (Reddi et al., 2018).** In specific adversarial constructions, Adam can oscillate indefinitely. AMSGrad (Section 8.2) fixes this.
 2. **Worse generalisation than SGD on some vision tasks** (Wilson et al., 2017). Mitigated by AdamW and careful scheduling.
-3. **Sensitivity to $\epsilon$ in half-precision training.** When using FP16, $\epsilon = 10^{-8}$ can be below the precision floor. Use $\epsilon = 10^{-4}$ or higher. This becomes relevant in Week 14 (Training at Scale).
+3. **Sensitivity to $\epsilon$ in half-precision training.** When using FP16, $\epsilon = 10^{-8}$ can be below the precision floor. Use $\epsilon = 10^{-4}$ or higher. This becomes relevant in [Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale).
 
 ---
 
