@@ -42,7 +42,7 @@
 
 ## 1. Scope and Purpose
 
-This week assembles components from [Week 17](../week17_attention/theory.md) (attention) and earlier weeks (residual connections, layer normalisation, dropout) into the **Transformer** — the architecture behind BERT, GPT, T5, Vision Transformers, and virtually every modern foundation model.
+This week assembles components from [Week 17](../week17_attention/theory.md#31-the-query-key-value-framework) (attention) and earlier weeks (residual connections, layer normalisation, dropout) into the **Transformer** — the architecture behind BERT, GPT, T5, Vision Transformers, and virtually every modern foundation model.
 
 After this week you will be able to:
 
@@ -51,7 +51,7 @@ After this week you will be able to:
 3. **Train a Transformer classifier** on a sequence task.
 4. **Profile** the computational cost as a function of depth, width, and sequence length.
 
-**Prerequisites.** [Week 17](../week17_attention/theory.md) (scaled dot-product attention, multi-head attention, masking). [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (residual connections, LayerNorm, BatchNorm). [[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md)](../../05_deep_learning/week13_pytorch_basics/theory.md)–[14](../../05_deep_learning/week14_training_at_scale/theory.md) (PyTorch `nn.Module`, training loops).
+**Prerequisites.** [Week 17](../week17_attention/theory.md#4-scaled-dot-product-attention) (scaled dot-product attention, multi-head attention, masking). [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#10-fix-5-residual-skip-connections) (residual connections, LayerNorm, BatchNorm). [Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#4-building-models-with-nnmodule)–[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md#4-learning-rate-schedules) (PyTorch `nn.Module`, training loops).
 
 ---
 
@@ -186,7 +186,7 @@ x = self.pos_encoding(x)
 
 ### 4.1 Sub-layer 1 — Multi-Head Self-Attention
 
-Exactly the multi-head attention from [Week 17](../week17_attention/theory.md), applied as **self-attention** ($Q = K = V = x$):
+Exactly the multi-head attention from [Week 17](../week17_attention/theory.md#6-multi-head-attention), applied as **self-attention** ($Q = K = V = x$):
 
 $$\text{MultiHead}(x, x, x) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O$$
 
@@ -229,7 +229,7 @@ Each sub-layer is wrapped in a residual (skip) connection:
 
 $$\text{output} = \text{SubLayer}(x) + x$$
 
-This is identical to the residual connections from [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (ResNets). Benefits:
+This is identical to the residual connections from [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#10-fix-5-residual-skip-connections) (ResNets). Benefits:
 
 1. **Gradient highway.** Gradients flow directly through the identity path, preventing vanishing gradients in deep stacks.
 2. **Easy to learn identity.** If a layer is unhelpful, the network can learn $\text{SubLayer}(x) \approx 0$, effectively skipping it.
@@ -249,7 +249,7 @@ $$\mu = \frac{1}{d_\text{model}}\sum_{i=1}^{d_\text{model}}x_i, \qquad \sigma^2 
 
 $\gamma, \beta \in \mathbb{R}^{d_\text{model}}$ are learnable scale and shift parameters.
 
-**LayerNorm vs. BatchNorm** (from [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md)):
+**LayerNorm vs. BatchNorm** (from [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#8-fix-3-layer-normalisation)):
 
 | | LayerNorm | BatchNorm |
 |---|---|---|
@@ -624,14 +624,14 @@ General rule of thumb: for sequence tasks, **depth matters more** than width. A 
 
 | Week | Connection |
 |---|---|
-| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NN from Scratch)** | Backpropagation through the computational graph still applies — the chain rule handles attention→softmax→matmul |
-| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)** | Residual connections and LayerNorm are essential Transformer components; originated from "vanishing gradient" solutions |
-| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md) (PyTorch)** | `nn.Module` pattern, `state_dict`, training loop — all reused for Transformer training |
-| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)** | Warm-up schedules, mixed precision (FP16 attention scores), gradient accumulation for large batch sizes |
-| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)** | FFN is like a 1×1 convolution; Transformers in vision (ViT) replace convolutions entirely |
-| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation)** | Dropout at five locations; weight decay with AdamW; data augmentation for Transformer pre-training (masking, span corruption) |
-| **[Week 17](../week17_attention/theory.md) (Attention)** | Scaled dot-product attention, multi-head attention, masking — all building blocks assembled here |
-| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-Tuning)** | Pretrained Transformer weights from HuggingFace — knowing the architecture lets you fine-tune intelligently |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#5-backpropagation) (NN from Scratch)** | Backpropagation through the computational graph still applies — the chain rule handles attention→softmax→matmul |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#10-fix-5-residual-skip-connections) (Training Pathologies)** | Residual connections and LayerNorm are essential Transformer components; originated from "vanishing gradient" solutions |
+| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#4-building-models-with-nnmodule) (PyTorch)** | `nn.Module` pattern, `state_dict`, training loop — all reused for Transformer training |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md#4-learning-rate-schedules) (Training at Scale)** | Warm-up schedules, mixed precision (FP16 attention scores), gradient accumulation for large batch sizes |
+| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md#12-classic-cnn-architectures) (CNNs)** | FFN is like a 1×1 convolution; Transformers in vision (ViT) replace convolutions entirely |
+| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md#3-dropout) (Regularisation)** | Dropout at five locations; weight decay with AdamW; data augmentation for Transformer pre-training (masking, span corruption) |
+| **[Week 17](../week17_attention/theory.md#31-the-query-key-value-framework) (Attention)** | Scaled dot-product attention, multi-head attention, masking — all building blocks assembled here |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md#3-adaptation-strategies) (Fine-Tuning)** | Pretrained Transformer weights from HuggingFace — knowing the architecture lets you fine-tune intelligently |
 
 ---
 
@@ -654,7 +654,7 @@ General rule of thumb: for sequence tasks, **depth matters more** than width. A 
 | Modification | What it reveals |
 |---|---|
 | Remove positional encoding entirely and train the classifier | Accuracy drops — the model cannot distinguish word order; verifies that attention is permutation-equivariant |
-| Remove residual connections from all layers | Training collapses for $N > 2$; gradients vanish just as they did in deep MLPs ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md)) |
+| Remove residual connections from all layers | Training collapses for $N > 2$; gradients vanish just as they did in deep MLPs ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#3-vanishing-gradients)) |
 | Remove LayerNorm | Training becomes unstable; loss spikes; note how norm stabilises the residual stream |
 | Increase $d_\text{ff}$ from $4d$ to $8d$ and compare | More parameters in FFN; marginal accuracy gain, higher memory; the FFN is often the parameter bottleneck |
 | Replace ReLU with GELU in the FFN | GELU is the BERT/GPT default; slightly smoother gradients; usually small accuracy gain |

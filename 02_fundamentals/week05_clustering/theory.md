@@ -43,7 +43,7 @@
 
 ## 1. Scope and Purpose
 
-All models in [[Weeks 01](../week01_optimization/theory.md)](../week01_optimization/theory.md)–[04](../week04_dimensionality_reduction/theory.md) were **supervised**: they learned from labelled data $\{(\mathbf{x}_i, y_i)\}$. This week introduces **unsupervised learning**: discovering structure in unlabelled data $\{\mathbf{x}_i\}$.
+All models in [Weeks 01](../week01_optimization/theory.md#4-gradient-descent)–[04](../week04_dimensionality_reduction/theory.md) were **supervised**: they learned from labelled data $\{(\mathbf{x}_i, y_i)\}$. This week introduces **unsupervised learning**: discovering structure in unlabelled data $\{\mathbf{x}_i\}$.
 
 **Clustering** is the task of partitioning a dataset into groups (_clusters_) such that points within a cluster are "similar" and points in different clusters are "dissimilar." There is no single correct answer — different algorithms, distance metrics, and assumptions can yield different valid clusterings of the same data.
 
@@ -52,11 +52,11 @@ Clustering is ubiquitous:
 - **Customer segmentation** — grouping users by behaviour.
 - **Image quantisation** — reducing colour palettes.
 - **Anomaly detection** — points that belong to no cluster are outliers.
-- **Latent-space analysis** — understanding what deep models learn ([Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md), 15).
+- **Latent-space analysis** — understanding what deep models learn ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#4-fully-connected-networks-mlps), [Week 15](../../05_deep_learning/week15_cnn_representations/theory.md#9-visualising-filters-and-activations)).
 
 This week covers the four main algorithmic families: centroid-based (K-means), linkage-based (hierarchical), density-based (DBSCAN), and model-based (Gaussian Mixture Models), along with the evaluation machinery needed to assess results without ground-truth labels.
 
-**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (distance metrics, linear algebra), [Week 04](../week04_dimensionality_reduction/theory.md) (PCA for visualisation of clusters in 2D).
+**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md#26-norms) (distance metrics, linear algebra), [Week 04](../week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view) (PCA for visualisation of clusters in 2D).
 
 ---
 
@@ -98,7 +98,7 @@ $$d(\mathbf{x}, \mathbf{y}) = \|\mathbf{x} - \mathbf{y}\|_2 = \sqrt{\sum_{j=1}^{
 > from sklearn.preprocessing import StandardScaler
 > X_scaled = StandardScaler().fit_transform(X)
 > ```
-> This is the same issue as PCA ([Week 04](../week04_dimensionality_reduction/theory.md), Section 8.1).
+> This is the same issue as PCA ([Week 04](../week04_dimensionality_reduction/theory.md#81-centering-and-scaling), Section 8.1).
 
 ---
 
@@ -173,7 +173,7 @@ centroids = np.vstack([X[labels == k].mean(axis=0) for k in range(K)])
 
 *Proof sketch.* Each step (assign or update) either decreases $J$ or leaves it unchanged:
 - **Assign step:** reassigning a point to a closer centroid strictly decreases the point's contribution to $J$.
-- **Update step:** setting $\boldsymbol{\mu}_k$ to the mean of $C_k$ minimises $\sum_{\mathbf{x}_i \in C_k}\|\mathbf{x}_i - \boldsymbol{\mu}_k\|^2$ (the mean is the least-squares optimal centre — this is the same argument as the normal equations in [Week 03](../week03_linear_models/theory.md), but for a single cluster).
+- **Update step:** setting $\boldsymbol{\mu}_k$ to the mean of $C_k$ minimises $\sum_{\mathbf{x}_i \in C_k}\|\mathbf{x}_i - \boldsymbol{\mu}_k\|^2$ (the mean is the least-squares optimal centre — this is the same argument as the normal equations in [Week 03](../week03_linear_models/theory.md#33-the-normal-equations-closed-form-solution), but for a single cluster).
 
 Since $J$ is bounded below by 0 and strictly decreases, and there are finitely many possible partitions of $n$ points into $K$ clusters, the algorithm must terminate.
 
@@ -426,7 +426,7 @@ plt.title('k-distance plot'); plt.show()
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | No need to specify $K$              | Sensitive to $\varepsilon$ and MinPts                                                                         |
 | Discovers arbitrary-shaped clusters | Struggles with varying-density clusters (a single $\varepsilon$ cannot capture both dense and sparse regions) |
-| Identifies noise/outliers           | Degrades in high dimensions (distances concentrate, Section 2 of [Week 04](../week04_dimensionality_reduction/theory.md))                                     |
+| Identifies noise/outliers           | Degrades in high dimensions (distances concentrate, Section 2 of [Week 04](../week04_dimensionality_reduction/theory.md#2-the-curse-of-dimensionality))                                     |
 | Deterministic (given parameters)    | Border points may be assigned to different clusters depending on visit order                                  |
 
 **HDBSCAN** (Campello et al., 2013) addresses the varying-density limitation by running DBSCAN across all $\varepsilon$ values simultaneously and extracting stable clusters from the resulting hierarchy. It requires only MinPts and is generally the recommended density-based method for production use.
@@ -492,7 +492,7 @@ $$\pi_k^{\text{new}} = \frac{N_k}{n}$$
 
 > **K-means is a special case of EM for GMMs.** If all $\boldsymbol{\Sigma}_k = \sigma^2 I$ (spherical, equal variance) and $\sigma^2 \to 0$, the soft assignments $\gamma_{ik}$ collapse to hard assignments (0 or 1), and EM reduces to Lloyd's algorithm.
 
-> **Forward pointer.** The EM algorithm is the topic of [Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood) and [Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty), where it is derived rigorously from the perspective of maximum likelihood estimation with latent variables.
+> **Forward pointer.** The EM algorithm is the topic of [Week 07](../../03_probability/week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle) (Likelihood) and [Week 08](../../03_probability/week08_uncertainty/theory.md#7-bayesian-inference) (Uncertainty), where it is derived rigorously from the perspective of maximum likelihood estimation with latent variables.
 
 ---
 
@@ -629,7 +629,7 @@ Higher is better. Like an "F-statistic" for clustering.
 | Need to detect outliers                       | **DBSCAN / HDBSCAN**                         | Noise labelling built in                |
 | Don't know $K$                                | **HDBSCAN** or **GMM + BIC**                 | Automatic $K$ selection                 |
 | Need probabilistic assignments                | **GMM**                                      | Soft clustering with responsibilities   |
-| High-dimensional data                         | **PCA + K-means** or **spectral clustering** | Reduce dimesionality first ([Week 04](../week04_dimensionality_reduction/theory.md))    |
+| High-dimensional data                         | **PCA + K-means** or **spectral clustering** | Reduce dimesionality first ([Week 04](../week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view))    |
 
 > **Default recommendation.** Start with **K-means** (fast, interpretable baseline). If clusters are non-convex → try **DBSCAN**. If you need uncertainty estimates → use **GMM**. Always visualise with PCA or t-SNE before choosing.
 
@@ -639,13 +639,13 @@ Higher is better. Like an "F-statistic" for clustering.
 
 | Week                         | Connection                                                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| **[Week 04](../week04_dimensionality_reduction/theory.md) (PCA)**            | PCA projections used to visualise clusters in 2D; PCA whitening improves K-means (Section 7 of [Week 04](../week04_dimensionality_reduction/theory.md))                  |
-| **[Week 06](../week06_regularization/theory.md) (Regularisation)** | Regularised GMMs (adding a small diagonal to $\Sigma_k$) prevent singular covariance — same idea as Ridge regularisation |
-| **[Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood)**     | GMM fitting is MLE with latent variables — the EM algorithm is derived formally                                          |
-| **[Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty)**    | Bayesian GMMs with Dirichlet priors; variational inference as generalised EM                                             |
-| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NNs)**            | Neural network latent representations can be clustered to understand what the network has learned                        |
-| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)**           | Feature map activations clustered to discover semantic concepts                                                          |
-| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)**   | Attention heads exhibit cluster-like specialisation across sequence positions                                            |
+| **[Week 04](../week04_dimensionality_reduction/theory.md#4-principal-component-analysis-the-optimisation-view) (PCA)**            | PCA projections used to visualise clusters in 2D; PCA whitening improves K-means (Section 7 of [Week 04](../week04_dimensionality_reduction/theory.md#7-pca-whitening))                  |
+| **[Week 06](../week06_regularization/theory.md#3-ridge-regression-l2-regularisation) (Regularisation)** | Regularised GMMs (adding a small diagonal to $\Sigma_k$) prevent singular covariance — same idea as Ridge regularisation |
+| **[Week 07](../../03_probability/week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle) (Likelihood)**     | GMM fitting is MLE with latent variables — the EM algorithm is derived formally                                          |
+| **[Week 08](../../03_probability/week08_uncertainty/theory.md#7-bayesian-inference) (Uncertainty)**    | Bayesian GMMs with Dirichlet priors; variational inference as generalised EM                                             |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#4-fully-connected-networks-mlps) (NNs)**            | Neural network latent representations can be clustered to understand what the network has learned                        |
+| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md#9-visualising-filters-and-activations) (CNNs)**           | Feature map activations clustered to discover semantic concepts                                                          |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md#11-attention-patterns-across-layers) (Transformers)**   | Attention heads exhibit cluster-like specialisation across sequence positions                                            |
 
 > **The unifying principle.** Clustering is the simplest form of **latent variable discovery** — finding hidden structure that explains the observed data. Every generative model in the course (VAEs, GMMs, latent diffusion) is a more sophisticated version of this idea.
 

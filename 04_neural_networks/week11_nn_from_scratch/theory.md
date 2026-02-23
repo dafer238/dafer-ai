@@ -40,7 +40,7 @@
 
 ## 1. Scope and Purpose
 
-[[Weeks 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[10](../../03_probability/week10_surrogate_models/theory.md) built models from the probabilistic toolkit: linear regression, regularisation, MLE, Bayesian inference, GPs. All of these are powerful but fundamentally limited in the functions they can represent (linear in features, or requiring hand-crafted kernels).
+[Weeks 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–[10](../../03_probability/week10_surrogate_models/theory.md#5-gp-posterior-regression) built models from the probabilistic toolkit: linear regression, regularisation, MLE, Bayesian inference, GPs. All of these are powerful but fundamentally limited in the functions they can represent (linear in features, or requiring hand-crafted kernels).
 
 This week crosses the threshold into **neural networks** — models that learn their own features. We implement every component from scratch in NumPy:
 
@@ -49,9 +49,9 @@ This week crosses the threshold into **neural networks** — models that learn t
 3. **Backward pass (backpropagation)** — compute the gradient of the loss with respect to every parameter.
 4. **Parameter update** — gradient descent step.
 
-After this week, when you use `loss.backward()` in PyTorch ([Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md)), you will know exactly what it computes.
+After this week, when you use `loss.backward()` in PyTorch ([Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#3-automatic-differentiation-autograd)), you will know exactly what it computes.
 
-**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (chain rule), [[Weeks 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md) (gradient descent, optimisers), [Week 03](../../02_fundamentals/week03_linear_models/theory.md) (linear regression as a single neuron).
+**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md#36-the-chain-rule-in-depth) (chain rule), [Weeks 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md#81-adamw-decoupled-weight-decay) (gradient descent, optimisers), [Week 03](../../02_fundamentals/week03_linear_models/theory.md#3-linear-regression) (linear regression as a single neuron).
 
 ---
 
@@ -103,7 +103,7 @@ where:
 - $\sigma(\cdot)$ — activation function (nonlinearity).
 - $a$ — activation (output of the neuron).
 
-This is exactly logistic regression ([Week 03](../../02_fundamentals/week03_linear_models/theory.md)) when $\sigma = \text{sigmoid}$ and the loss is binary cross-entropy — so a **logistic regression unit is a single neuron**.
+This is exactly logistic regression ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#7-logistic-regression)) when $\sigma = \text{sigmoid}$ and the loss is binary cross-entropy — so a **logistic regression unit is a single neuron**.
 
 ---
 
@@ -207,7 +207,7 @@ Each operation is a matrix multiply followed by a pointwise nonlinearity. The en
 
 where $c_i$ is the true class index for sample $i$ and $\hat{y}_{i, c_i}$ is the predicted probability for the correct class.
 
-**Connection to likelihood ([Week 07](../../03_probability/week07_likelihood/theory.md)):** cross-entropy loss = negative log-likelihood of the Bernoulli (BCE) or Categorical (CE) distribution. Minimising CE = maximising likelihood.
+**Connection to likelihood ([Week 07](../../03_probability/week07_likelihood/theory.md#5-the-mleloss-function-connection)):** cross-entropy loss = negative log-likelihood of the Bernoulli (BCE) or Categorical (CE) distribution. Minimising CE = maximising likelihood.
 
 ---
 
@@ -260,7 +260,7 @@ The combined gradient of softmax + cross-entropy has a remarkably clean form:
 
 $$\frac{\partial\mathcal{L}}{\partial Z^{[2]}} = A^{[2]} - Y$$
 
-where $Y$ is the one-hot encoded label matrix. This is the same as the logistic regression gradient ([Week 03](../../02_fundamentals/week03_linear_models/theory.md)) — no coincidence; the derivation is identical.
+where $Y$ is the one-hot encoded label matrix. This is the same as the logistic regression gradient ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#7-logistic-regression)) — no coincidence; the derivation is identical.
 
 **Derivation.** For sample $i$ with true class $c_i$:
 
@@ -331,7 +331,7 @@ X ──► [@ W1+b1] ──► Z1 ──► [ReLU] ──► A1 ──► [@ W2
           W1,b1                                    W2,b2                                     Y
 ```
 
-The backward pass traverses this graph in **reverse topological order**, applying the chain rule at each node. This is exactly what PyTorch's `autograd` does automatically ([Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md)).
+The backward pass traverses this graph in **reverse topological order**, applying the chain rule at each node. This is exactly what PyTorch's `autograd` does automatically ([Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#3-automatic-differentiation-autograd)).
 
 > **Why cache the forward pass?** Each backward step needs values from the forward pass (e.g., $A^{[1]}$ is needed to compute $dW^{[2]}$, $Z^{[1]}$ is needed for $\text{ReLU}'$). Storing these avoids recomputation at the cost of memory.
 
@@ -455,7 +455,7 @@ def train_step(self, X, y, lr=0.01):
     return loss
 ```
 
-For the `make_moons` dataset ($m = 210$ training samples), this is fine. For larger datasets, use **mini-batch SGD** ([[Weeks 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md)):
+For the `make_moons` dataset ($m = 210$ training samples), this is fine. For larger datasets, use **mini-batch SGD** ([Weeks 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md#81-adamw-decoupled-weight-decay)):
 
 1. Shuffle the training data.
 2. Split into batches of size $B$ (32, 64, 128, or 256).
@@ -463,7 +463,7 @@ For the `make_moons` dataset ($m = 210$ training samples), this is fine. For lar
 4. One pass through all batches = one **epoch**.
 
 Mini-batch SGD adds noise to the gradient, which:
-- Acts as implicit regularisation ([Week 06](../../02_fundamentals/week06_regularization/theory.md)).
+- Acts as implicit regularisation ([Week 06](../../02_fundamentals/week06_regularization/theory.md#6-cross-validation)).
 - Helps escape sharp local minima.
 - Enables training on datasets that don't fit in memory.
 
@@ -496,13 +496,13 @@ The gradient modification is:
 
 $$\frac{\partial\mathcal{L}_{\text{reg}}}{\partial W^{[l]}} = \frac{\partial\mathcal{L}}{\partial W^{[l]}} + 2\lambda W^{[l]}$$
 
-**Connection to Bayesian inference ([Week 08](../../03_probability/week08_uncertainty/theory.md)):** L2 regularisation = Gaussian prior on weights with precision $\alpha = 2\lambda/\sigma_n^2$. The regularised loss = negative log-posterior (MAP estimate).
+**Connection to Bayesian inference ([Week 08](../../03_probability/week08_uncertainty/theory.md#8-bayesian-linear-regression)):** L2 regularisation = Gaussian prior on weights with precision $\alpha = 2\lambda/\sigma_n^2$. The regularised loss = negative log-posterior (MAP estimate).
 
 **Other forms** (covered in later weeks):
-- **Dropout** ([Week 16](../../05_deep_learning/week16_regularization_dl/theory.md)) — randomly zero out neurons during training.
-- **Early stopping** ([Week 06](../../02_fundamentals/week06_regularization/theory.md)) — stop training when validation loss increases.
-- **Batch normalisation** ([Week 12](../week12_training_pathologies/theory.md)) — normalises activations; has implicit regularising effect.
-- **Data augmentation** ([Week 15](../../05_deep_learning/week15_cnn_representations/theory.md)) — artificially increase training set.
+- **Dropout** ([Week 16](../../05_deep_learning/week16_regularization_dl/theory.md#3-dropout)) — randomly zero out neurons during training.
+- **Early stopping** ([Week 06](../../02_fundamentals/week06_regularization/theory.md#6-cross-validation)) — stop training when validation loss increases.
+- **Batch normalisation** ([Week 12](../week12_training_pathologies/theory.md#7-fix-2-batch-normalisation)) — normalises activations; has implicit regularising effect.
+- **Data augmentation** ([Week 16](../../05_deep_learning/week16_regularization_dl/theory.md#5-data-augmentation)) — artificially increase training set.
 
 > **Notebook reference.** Exercise 4 asks you to add L2 regularisation and sweep $\lambda \in \{0, 0.001, 0.01, 0.1\}$.
 
@@ -512,16 +512,16 @@ $$\frac{\partial\mathcal{L}_{\text{reg}}}{\partial W^{[l]}} = \frac{\partial\mat
 
 | Week                               | Connection                                                                                                         |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **[[Week 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md) (Optimisation)**      | Gradient descent and advanced optimisers (Adam, momentum) are used unchanged; only the gradient computation is new |
-| **[Week 03](../../02_fundamentals/week03_linear_models/theory.md) (Linear Models)**        | A single neuron with sigmoid = logistic regression; a single neuron with identity = linear regression              |
-| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**       | L2 regularisation = weight decay; early stopping applies directly                                                  |
-| **[Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood)**           | Cross-entropy loss = NLL; MSE loss = Gaussian NLL                                                                  |
-| **[Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty)**          | Weight decay = Gaussian prior (MAP); Bayesian NNs place a full posterior on $W$                                    |
-| **[Week 10](../../03_probability/week10_surrogate_models/theory.md) (GPs)**                  | Infinite-width single-hidden-layer network → GP (Neal, 1996)                                                       |
-| **[Week 12](../week12_training_pathologies/theory.md) (Training Pathologies)** | Vanishing/exploding gradients; batch norm; residual connections                                                    |
-| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md) (PyTorch)**              | PyTorch autograd computes exactly what `backward()` computes here, but automatically                               |
-| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)**    | Mini-batch SGD, learning rate schedules, distributed training                                                      |
-| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)**                 | Convolutions are a specialised layer type; backprop extends naturally                                              |
+| **[Week 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md#81-adamw-decoupled-weight-decay) (Optimisation)**      | Gradient descent and advanced optimisers (Adam, momentum) are used unchanged; only the gradient computation is new |
+| **[Week 03](../../02_fundamentals/week03_linear_models/theory.md#7-logistic-regression) (Linear Models)**        | A single neuron with sigmoid = logistic regression; a single neuron with identity = linear regression              |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md#3-ridge-regression-l2-regularisation) (Regularisation)**       | L2 regularisation = weight decay; early stopping applies directly                                                  |
+| **[Week 07](../../03_probability/week07_likelihood/theory.md#5-the-mleloss-function-connection) (Likelihood)**           | Cross-entropy loss = NLL; MSE loss = Gaussian NLL                                                                  |
+| **[Week 08](../../03_probability/week08_uncertainty/theory.md#8-bayesian-linear-regression) (Uncertainty)**          | Weight decay = Gaussian prior (MAP); Bayesian NNs place a full posterior on $W$                                    |
+| **[Week 10](../../03_probability/week10_surrogate_models/theory.md#5-gp-posterior-regression) (GPs)**                  | Infinite-width single-hidden-layer network → GP (Neal, 1996)                                                       |
+| **[Week 12](../week12_training_pathologies/theory.md#7-fix-2-batch-normalisation) (Training Pathologies)** | Vanishing/exploding gradients; batch norm; residual connections                                                    |
+| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#3-automatic-differentiation-autograd) (PyTorch)**              | PyTorch autograd computes exactly what `backward()` computes here, but automatically                               |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md#4-learning-rate-schedules) (Training at Scale)**    | Mini-batch SGD, learning rate schedules, distributed training                                                      |
+| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md#10-transfer-learning-and-pretrained-features) (CNNs)**                 | Convolutions are a specialised layer type; backprop extends naturally                                              |
 
 ---
 

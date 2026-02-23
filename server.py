@@ -7,7 +7,9 @@ defined in a single place (shared with a local Jupyter Book build).
 
 from __future__ import annotations
 
+import bisect
 import re
+import unicodedata
 from pathlib import Path
 from typing import Optional
 
@@ -309,9 +311,11 @@ def _render_nb(nb_path: Path, current_url: str) -> str:
 
 # ── Full-text search index ────────────────────────────────────────────────────
 
-_SEARCH_INDEX: list[dict] = []  # [{"file": str, "url": str, "title": str, "text": str}]
+_SEARCH_INDEX: list[dict] = []
+# Each entry: {"file", "url", "title", "raw", "raw_lower",
+#              "text", "head_offsets": list[int], "head_slugs": list[str]}
 
-# strip markdown formatting for plain-text index
+# strip markdown for snippet display (not for searching — we search raw)
 _MD_STRIP_RE = re.compile(
     r"(?:"
     r"\[([^\]]*)\]\([^)]*\)"  # [text](url) → text
@@ -323,25 +327,50 @@ _MD_STRIP_RE = re.compile(
     r")"
 )
 
+_HEADING_RE = re.compile(r"^#{1,6}[ \t]+(.+)$", re.MULTILINE)
+
+
+def _slugify(value: str) -> str:
+    """Reproduce python-markdown toc slugification."""
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
+    value = re.sub(r"[^\w\s-]", "", value).strip().lower()
+    return re.sub(r"[-\s]+", "-", value)
+
 
 def _build_search_index() -> None:
-    """Walk all theory.md files and build a plain-text search index."""
+    """Walk all theory.md files and build an anchor-aware search index."""
     _SEARCH_INDEX.clear()
     for md_path in sorted(BASE_DIR.rglob("theory.md")):
         rel = md_path.relative_to(BASE_DIR).as_posix()
-        # skip anything in hidden/build dirs
         parts = rel.split("/")
         if any(p.startswith(".") or p.startswith("_") or p in SKIP_NAMES for p in parts):
             continue
-        url = "/" + rel[:-3]  # strip .md
+        url = "/" + rel[:-3]
         raw = md_path.read_text(encoding="utf-8")
-        # Extract title from first H1
+        # Heading positions: char offset of the '#' in raw text → slug
+        head_offsets: list[int] = []
+        head_slugs: list[str] = []
+        for m in _HEADING_RE.finditer(raw):
+            head_offsets.append(m.start())
+            head_slugs.append(_slugify(m.group(1).strip()))
+        # Title from first H1
         title_m = re.search(r"^#\s+(.+)$", raw, re.MULTILINE)
         title = title_m.group(1).strip() if title_m else rel
-        # Strip markdown to plain text for searching
+        # Strip markdown to plain text for human-readable snippets
         text = _MD_STRIP_RE.sub(lambda m: m.group(1) or " ", raw)
         text = re.sub(r"\s+", " ", text).strip()
-        _SEARCH_INDEX.append({"file": rel, "url": url, "title": title, "text": text})
+        _SEARCH_INDEX.append(
+            {
+                "file": rel,
+                "url": url,
+                "title": title,
+                "raw": raw,
+                "raw_lower": raw.lower(),
+                "text": text,
+                "head_offsets": head_offsets,
+                "head_slugs": head_slugs,
+            }
+        )
 
 
 _build_search_index()
@@ -352,38 +381,76 @@ _build_search_index()
 
 @app.get("/api/search", response_class=JSONResponse)
 def api_search(q: str = Query("", min_length=0)):
-    """Full-text search across all theory.md files. Returns JSON results with
-    matching snippets (context around each hit)."""
+    """Full-text search across all theory.md files.
+    Returns results with snippets and URLs anchored to the matching section."""
     query = q.strip().lower()
     if len(query) < 2:
         return []
+
     results: list[dict] = []
     for doc in _SEARCH_INDEX:
-        text_lower = doc["text"].lower()
-        idx = text_lower.find(query)
+        raw_lower = doc["raw_lower"]
+        idx = raw_lower.find(query)
         if idx == -1:
             continue
-        # Count occurrences
-        count = text_lower.count(query)
-        # Build snippet: ±80 chars around first occurrence
-        start = max(0, idx - 80)
-        end = min(len(doc["text"]), idx + len(query) + 80)
-        snippet = doc["text"][start:end]
+
+        count = raw_lower.count(query)
+
+        # ── Find the best heading anchor for this match ─────────────────────
+        # Walk occurrences: skip any that land inside the Table of Contents
+        # (heading slug == "table-of-contents") and use the next real-content hit.
+        ho = doc["head_offsets"]
+        hs = doc["head_slugs"]
+        anchor: str = ""
+        search_start = 0
+        while True:
+            idx = raw_lower.find(query, search_start)
+            if idx == -1:
+                break
+            pos = bisect.bisect_right(ho, idx)
+            slug = hs[pos - 1] if pos > 0 else ""
+            if slug in {"table-of-contents", "tableofcontents", "toc"}:
+                # skip — this occurrence is just the ToC listing
+                search_start = idx + 1
+                continue
+            anchor = slug
+            break
+        url = doc["url"] + ("#" + anchor if anchor else "")
+
+        # ── Build snippet from stripped text (easier to read) ─────────────
+        # Search `text` (markdown-stripped) directly so the term is always
+        # inside the window and `highlightSnippet` can wrap it in <mark>.
+        text = doc["text"]
+        text_lower = text.lower()
+        snip_idx = -1
+        snip_start = 0
+        while True:
+            i = text_lower.find(query, snip_start)
+            if i == -1:
+                break
+            # Skip occurrences that are very early in the text — the
+            # Table-of-Contents listing is always at the top of the page.
+            toc_boundary = min(len(text) // 5, 800)
+            if i < toc_boundary and snip_start == 0:
+                snip_start = i + 1
+                continue
+            snip_idx = i
+            break
+        if snip_idx == -1:
+            # Fallback: first occurrence anywhere in text
+            snip_idx = max(0, text_lower.find(query))
+        start = max(0, snip_idx - 80)
+        end = min(len(text), snip_idx + len(query) + 80)
+        snippet = text[start:end]
         if start > 0:
-            snippet = "…" + snippet
-        if end < len(doc["text"]):
-            snippet = snippet + "…"
-        results.append(
-            {
-                "url": doc["url"],
-                "title": doc["title"],
-                "snippet": snippet,
-                "count": count,
-            }
-        )
-    # Sort by number of occurrences (most relevant first)
+            snippet = "\u2026" + snippet
+        if end < len(text):
+            snippet = snippet + "\u2026"
+
+        results.append({"url": url, "title": doc["title"], "snippet": snippet, "count": count})
+
     results.sort(key=lambda r: r["count"], reverse=True)
-    return results[:20]  # cap at 20 results
+    return results[:20]
 
 
 @app.get("/", response_class=HTMLResponse)

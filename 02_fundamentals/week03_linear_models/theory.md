@@ -45,20 +45,20 @@
 
 ## 1. Scope and Purpose
 
-[[Weeks 01](../week01_optimization/theory.md)](../week01_optimization/theory.md)–[02](../week02_advanced_optimizers/theory.md) developed the **optimisation machinery** — gradient descent, momentum, Adam — as general-purpose tools for minimising any differentiable function. This week we apply those tools (and a powerful alternative: the closed-form normal equations) to the two most fundamental supervised learning models:
+[Weeks 01](../week01_optimization/theory.md#4-gradient-descent)–[02](../week02_advanced_optimizers/theory.md) developed the **optimisation machinery** — gradient descent, momentum, Adam — as general-purpose tools for minimising any differentiable function. This week we apply those tools (and a powerful alternative: the closed-form normal equations) to the two most fundamental supervised learning models:
 
 - **Linear regression** (continuous outputs): the foundation of all regression methods.
 - **Logistic regression** (discrete outputs): the foundation of all classification methods.
 
 These are not "toy" models. A neural network is a composition of linear transformations and nonlinearities; understanding the linear case deeply is prerequisite to understanding the nonlinear case. Furthermore, the **bias–variance tradeoff** introduced here is the central conceptual tool for diagnosing any model's performance.
 
-**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (linear algebra, calculus, probability basics), [[Weeks 01](../week01_optimization/theory.md)](../week01_optimization/theory.md)–[02](../week02_advanced_optimizers/theory.md) (gradient descent, optimisers, learning rate schedules).
+**Prerequisites.** [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (linear algebra, calculus, probability basics), [Weeks 01](../week01_optimization/theory.md#4-gradient-descent)–[02](../week02_advanced_optimizers/theory.md) (gradient descent, optimisers, learning rate schedules).
 
 ---
 
 ## 2. The Supervised Learning Setup
 
-Recall from [Week 00a](../../01_intro/week00_ai_landscape/theory.md):
+Recall from [Week 00a](../../01_intro/week00_ai_landscape/theory.md#4-the-supervised-learning-framework):
 
 | Symbol                                            | Name                 | Meaning                                                |
 | ------------------------------------------------- | -------------------- | ------------------------------------------------------ |
@@ -128,7 +128,7 @@ Some formulations use $\frac{1}{2n}$ instead of $\frac{1}{n}$ (to simplify the g
 
 ### 3.3 The Normal Equations (Closed-Form Solution)
 
-Unlike the general optimisation problems in [[Weeks 01](../week01_optimization/theory.md)](../week01_optimization/theory.md)–[02](../week02_advanced_optimizers/theory.md), linear regression has a **closed-form solution**: we can compute $\mathbf{w}^*$ directly, without iterating.
+Unlike the general optimisation problems in [Weeks 01](../week01_optimization/theory.md#4-gradient-descent)–[02](../week02_advanced_optimizers/theory.md), linear regression has a **closed-form solution**: we can compute $\mathbf{w}^*$ directly, without iterating.
 
 **Derivation.** Write the MSE in matrix form (dropping the $\frac{1}{n}$ factor, which does not affect the argmin):
 
@@ -138,7 +138,7 @@ Expand:
 
 $$\mathcal{L}(\mathbf{w}) = \mathbf{y}^\top\mathbf{y} - 2\mathbf{y}^\top X\mathbf{w} + \mathbf{w}^\top X^\top X \mathbf{w}$$
 
-Take the gradient with respect to $\mathbf{w}$ and set it to zero. Recall the matrix calculus identities from [Week 00b](../../01_intro/week00b_math_and_data/theory.md):
+Take the gradient with respect to $\mathbf{w}$ and set it to zero. Recall the matrix calculus identities from [Week 00b](../../01_intro/week00b_math_and_data/theory.md#37-vector-calculus-identities-for-ml):
 
 $$\frac{\partial}{\partial \mathbf{w}}\left(\mathbf{a}^\top \mathbf{w}\right) = \mathbf{a}, \qquad \frac{\partial}{\partial \mathbf{w}}\left(\mathbf{w}^\top A \mathbf{w}\right) = 2A\mathbf{w} \quad (\text{if } A \text{ is symmetric})$$
 
@@ -173,7 +173,7 @@ $$\boxed{\mathbf{w}^* = (X^\top X)^{-1} X^\top \mathbf{y}}$$
 > ```
 > Cell 7 verifies that this matches `sklearn.linear_model.LinearRegression`.
 
-**When $X^\top X$ is singular.** If $n < d + 1$ (more parameters than data points) or if features are collinear, $X^\top X$ is singular and the normal equations have infinitely many solutions. This is where **regularisation** ([Week 04](../week04_dimensionality_reduction/theory.md)) becomes essential: Ridge regression adds $\lambda I$ to $X^\top X$, guaranteeing invertibility.
+**When $X^\top X$ is singular.** If $n < d + 1$ (more parameters than data points) or if features are collinear, $X^\top X$ is singular and the normal equations have infinitely many solutions. This is where **regularisation** ([Week 06](../week06_regularization/theory.md#3-ridge-regression-l2-regularisation)) becomes essential: Ridge regression adds $\lambda I$ to $X^\top X$, guaranteeing invertibility.
 
 ### The Pseudoinverse
 
@@ -229,7 +229,7 @@ $$\nabla_{\mathbf{w}} \mathcal{L} = \frac{2}{n} X^\top(X\mathbf{w} - \mathbf{y})
 
 $$\mathbf{w}_{t+1} = \mathbf{w}_t - \eta \cdot \frac{2}{n} X^\top(X\mathbf{w}_t - \mathbf{y})$$
 
-**Convergence.** Since the MSE loss for linear regression is a convex quadratic, the convergence analysis from [Week 01](../week01_optimization/theory.md) applies directly. The Hessian is:
+**Convergence.** Since the MSE loss for linear regression is a convex quadratic, the convergence analysis from [Week 01](../week01_optimization/theory.md#43-convergence-analysis-for-quadratic-losses) applies directly. The Hessian is:
 
 $$H = \frac{2}{n} X^\top X$$
 
@@ -241,7 +241,7 @@ The maximum stable learning rate is:
 
 $$\eta < \frac{n}{\lambda_{\max}(X^\top X)}$$
 
-And the convergence rate per step is $\rho = \frac{\kappa - 1}{\kappa + 1}$ (from [Week 01](../week01_optimization/theory.md), Section 4.3).
+And the convergence rate per step is $\rho = \frac{\kappa - 1}{\kappa + 1}$ (from [Week 01](../week01_optimization/theory.md#43-convergence-analysis-for-quadratic-losses), Section 4.3).
 
 > **Notebook reference.** Exercise 2 (Cell 14) asks you to implement gradient descent for linear regression and verify it converges to the same solution as the normal equations.
 >
@@ -310,7 +310,7 @@ $$\sum_{i=1}^{n}(y_i - \mathbf{w}^\top\mathbf{x}_i)^2$$
 
 which is the **sum of squared errors** — exactly the objective of OLS regression.
 
-> **Key insight.** Minimising MSE is equivalent to maximum likelihood estimation under the assumption of Gaussian noise. The $\sigma^2$ term disappears from the optimisation because it does not depend on $\mathbf{w}$. This connection will be deepened in [Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood).
+> **Key insight.** Minimising MSE is equivalent to maximum likelihood estimation under the assumption of Gaussian noise. The $\sigma^2$ term disappears from the optimisation because it does not depend on $\mathbf{w}$. This connection will be deepened in [Week 07](../../03_probability/week07_likelihood/theory.md#51-gaussian-noise-mse) (Likelihood).
 
 **Estimating the noise variance.** After finding $\mathbf{w}^*$, the MLE of $\sigma^2$ is:
 
@@ -338,7 +338,7 @@ The uncertainty in the estimated weights is proportional to the noise variance $
 
 **3. Gauss-Markov Theorem.** Among all **linear unbiased estimators** of $\mathbf{w}$, the OLS estimator has the **smallest variance** (in the matrix sense: any other linear unbiased estimator has $\text{Cov}(\tilde{\mathbf{w}}) - \text{Cov}(\hat{\mathbf{w}}) \succeq 0$).
 
-> **What this means.** If you restrict yourself to (i) linear functions of $\mathbf{y}$ that (ii) are unbiased, OLS is the best you can do. This is a strong result, but note the caveats: biased estimators (like Ridge regression, [Week 04](../week04_dimensionality_reduction/theory.md)) can have **lower MSE** by trading bias for a large reduction in variance.
+> **What this means.** If you restrict yourself to (i) linear functions of $\mathbf{y}$ that (ii) are unbiased, OLS is the best you can do. This is a strong result, but note the caveats: biased estimators (like Ridge regression, [Week 06](../week06_regularization/theory.md#3-ridge-regression-l2-regularisation)) can have **lower MSE** by trading bias for a large reduction in variance.
 
 **4. Normality.** If $\varepsilon \sim \mathcal{N}(0, \sigma^2 I)$, then $\hat{\mathbf{w}} \sim \mathcal{N}(\mathbf{w}_{\text{true}}, \sigma^2(X^\top X)^{-1})$. This enables confidence intervals and hypothesis tests on individual weights.
 
@@ -641,7 +641,7 @@ $$\mathcal{L} = -\frac{1}{n}\sum_{i=1}^{n}\log p(y_i \mid \mathbf{x}_i)$$
 
 > **Notebook reference.** Exercise 3 (Cell 15) asks you to fit `LogisticRegression` on the Iris dataset (3 classes). Scikit-learn handles the multi-class extension automatically.
 >
-> **Forward pointer.** Softmax regression is the output layer of every classification neural network ([[Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)](../../04_neural_networks/week11_nn_from_scratch/theory.md)–[12](../../04_neural_networks/week12_training_pathologies/theory.md)). Understanding it here means you already understand how neural network classifiers make predictions.
+> **Forward pointer.** Softmax regression is the output layer of every classification neural network ([Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#43-output-layer-and-loss-functions)–[12](../../04_neural_networks/week12_training_pathologies/theory.md)). Understanding it here means you already understand how neural network classifiers make predictions.
 
 ---
 
@@ -697,7 +697,7 @@ $$\begin{bmatrix} \text{TN} & \text{FP} \\ \text{FN} & \text{TP} \end{bmatrix}$$
 
 The bias–variance analysis reveals that complex models overfit. **Regularisation** constrains the model to reduce variance at the cost of a small increase in bias.
 
-The main approaches (detailed in [[Week 04](../week04_dimensionality_reduction/theory.md)](../week04_dimensionality_reduction/theory.md)/[06](../week06_regularization/theory.md)):
+The main approaches (detailed in [Week 04](../week04_dimensionality_reduction/theory.md#5-pca-via-the-singular-value-decomposition)/[Week 06](../week06_regularization/theory.md#3-ridge-regression-l2-regularisation)):
 
 **Ridge regression (L2 regularisation):** Add a penalty on the weight magnitudes:
 
@@ -730,12 +730,12 @@ Linear and logistic regression are not just foundations — they reappear throug
 
 | Week                          | Connection                                                                                                                        |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| **[Week 04](../week04_dimensionality_reduction/theory.md) (Regularisation)**  | Ridge and Lasso add L2/L1 penalties to the models built here                                                                      |
-| **[Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood)**      | The MLE derivation of Section 4.2 is generalised to arbitrary distributions                                                       |
-| **[Week 08](../../03_probability/week08_uncertainty/theory.md) (Uncertainty)**     | Bayesian linear regression puts a prior on $\mathbf{w}$ — Ridge regression is the MAP estimate with a Gaussian prior              |
-| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NN from scratch)** | A single-layer neural network without activation is exactly linear regression; with sigmoid activation, it is logistic regression |
-| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md) (PyTorch)**         | `nn.Linear(d, 1)` implements $\mathbf{w}^\top\mathbf{x} + b$                                                                      |
-| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)**    | The attention mechanism outputs a weighted sum — a *learned* linear regression                                                    |
+| **[Week 06](../week06_regularization/theory.md#3-ridge-regression-l2-regularisation) (Regularisation)**  | Ridge and Lasso add L2/L1 penalties to the models built here                                                                      |
+| **[Week 07](../../03_probability/week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle) (Likelihood)**      | The MLE derivation of Section 4.2 is generalised to arbitrary distributions                                                       |
+| **[Week 08](../../03_probability/week08_uncertainty/theory.md#8-bayesian-linear-regression) (Uncertainty)**     | Bayesian linear regression puts a prior on $\mathbf{w}$ — Ridge regression is the MAP estimate with a Gaussian prior              |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#2-from-linear-models-to-neural-networks) (NN from scratch)** | A single-layer neural network without activation is exactly linear regression; with sigmoid activation, it is logistic regression |
+| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#43-common-layer-types) (PyTorch)**         | `nn.Linear(d, 1)` implements $\mathbf{w}^\top\mathbf{x} + b$                                                                      |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md#41-sub-layer-1-multi-head-self-attention) (Transformers)**    | The attention mechanism outputs a weighted sum — a *learned* linear regression                                                    |
 
 > **The unifying principle.** Linear models are the **atoms** of machine learning. Complex models are molecules built from linear models + nonlinearities + composition. Breaking any complex model down into its linear components is a powerful debugging strategy.
 

@@ -314,7 +314,7 @@ where $\sigma$ is a nonlinear activation function (e.g., ReLU: $\sigma(z) = \max
 
 > **Key insight.** A neural network is stacked linear models with nonlinearities in between. Understanding linear models deeply ([Week 03](../../02_fundamentals/week03_linear_models/theory.md#3-linear-regression)) is therefore a prerequisite for understanding deep networks.
 
-> **Why nonlinearities matter.** Without $\sigma$, composing affine transformations yields another affine transformation: $W_2(W_1 \mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 = (W_2 W_1)\mathbf{x} + (W_2 \mathbf{b}_1 + \mathbf{b}_2) = W'\mathbf{x} + \mathbf{b}'$. The entire network collapses to a single linear layer — depth adds no representational power. The activation function $\sigma$ breaks this linearity, and each layer can carve the input space into increasingly complex regions. This is proven in [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation) from scratch.
+> **Why nonlinearities matter.** Without $\sigma$, composing affine transformations yields another affine transformation: $W_2(W_1 \mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 = (W_2 W_1)\mathbf{x} + (W_2 \mathbf{b}_1 + \mathbf{b}_2) = W'\mathbf{x} + \mathbf{b}'$. The entire network collapses to a single linear layer — depth adds no representational power. The activation function $\sigma$ breaks this linearity, and each layer can carve the input space into increasingly complex regions. This is proven in [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#21-the-limitation-of-linearity) from scratch.
 
 ---
 

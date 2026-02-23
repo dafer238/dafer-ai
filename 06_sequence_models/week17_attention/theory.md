@@ -37,7 +37,7 @@
 
 ## 1. Scope and Purpose
 
-This week introduces **attention mechanisms** — the core operation that replaced recurrence in modern sequence models and enabled Transformers. Implementing attention from scratch this week means that [Week 18](../week18_transformers/theory.md) (Transformers) is assembling known components, not absorbing an alien architecture.
+This week introduces **attention mechanisms** — the core operation that replaced recurrence in modern sequence models and enabled Transformers. Implementing attention from scratch this week means that [Week 18](../week18_transformers/theory.md#1-scope-and-purpose) (Transformers) is assembling known components, not absorbing an alien architecture.
 
 The week delivers:
 
@@ -46,7 +46,7 @@ The week delivers:
 3. **Self-attention vs. cross-attention** — same mechanism, different sources of Q, K, V.
 4. **A working seq2seq model with attention** — trained on a toy task, with attention weights you can visualise.
 
-**Prerequisites.** [Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md) (PyTorch `nn.Module`, training loop). The concept of "sequential data" from [Week 00a](../../01_intro/week00_ai_landscape/theory.md).
+**Prerequisites.** [Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#4-building-models-with-nnmodule) (PyTorch `nn.Module`, training loop). The concept of "sequential data" from [Week 00a](../../01_intro/week00_ai_landscape/theory.md).
 
 ---
 
@@ -72,7 +72,7 @@ The hidden state $h_t$ is a fixed-size vector that summarises all information fr
 | **LSTM**        | Gates (forget, input, output) control information flow | Handles longer dependencies                  |
 | **GRU**         | Simplified gating (reset, update)                      | Lighter than LSTM, often similar performance |
 
-**Critical limitation.** RNNs are sequential by construction — $h_t$ depends on $h_{t-1}$. This prevents parallelisation and, despite gating, gradients still degrade over long sequences (connections to [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md): vanishing gradients).
+**Critical limitation.** RNNs are sequential by construction — $h_t$ depends on $h_{t-1}$. This prevents parallelisation and, despite gating, gradients still degrade over long sequences (connections to [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#3-vanishing-gradients): vanishing gradients).
 
 ---
 
@@ -150,7 +150,7 @@ The dot product $q^\top k$ has expected value 0 and variance $d_k$ when $q$ and 
 
 $$\text{Var}(q^\top k) = \text{Var}\!\left(\sum_{i=1}^{d_k}q_i k_i\right) = \sum_{i=1}^{d_k}\text{Var}(q_i)\text{Var}(k_i) = d_k$$
 
-For large $d_k$, the scores have large magnitudes, pushing softmax into saturation (outputting near-zero or near-one). In saturation, gradients vanish (same problem as sigmoid, [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md)).
+For large $d_k$, the scores have large magnitudes, pushing softmax into saturation (outputting near-zero or near-one). In saturation, gradients vanish (same problem as sigmoid, [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#51-sigmoid-and-tanh-saturation)).
 
 Dividing by $\sqrt{d_k}$ normalises the variance to 1:
 
@@ -419,7 +419,7 @@ For typical NLP ($T \leq 512$, $d = 512$): $T^2 d = 512^2 \times 512 \approx 10^
 
 ## 11. From Attention to Transformers (Preview)
 
-A Transformer ([Week 18](../week18_transformers/theory.md)) stacks attention with two more components:
+A Transformer ([Week 18](../week18_transformers/theory.md#2-the-transformer-at-a-glance)) stacks attention with two more components:
 
 $$\text{Transformer Layer} = \text{LayerNorm}(\text{Self-Attention}(x) + x) \xrightarrow{\text{residual}} \text{LayerNorm}(\text{FFN}(\cdot) + \cdot)$$
 
@@ -429,12 +429,12 @@ Components from this week:
 - **Masking** (Section 4.4) — causal mask for decoder, padding mask for variable-length batches.
 
 Components from earlier weeks:
-- **Residual connections** ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md)) — $x + \text{Attention}(x)$.
-- **Layer normalisation** ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md)) — normalise across features, not batch.
+- **Residual connections** ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#10-fix-5-residual-skip-connections)) — $x + \text{Attention}(x)$.
+- **Layer normalisation** ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#8-fix-3-layer-normalisation)) — normalise across features, not batch.
 - **Feedforward network** — two-layer MLP applied position-wise.
 - **Positional encoding** — since attention has no inherent notion of order.
 
-[Week 18](../week18_transformers/theory.md) assembles these into the full architecture.
+[Week 18](../week18_transformers/theory.md#2-the-transformer-at-a-glance) assembles these into the full architecture.
 
 ---
 
@@ -442,13 +442,13 @@ Components from earlier weeks:
 
 | Week                               | Connection                                                                                                                                      |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)** | Residual connections and LayerNorm are essential in Transformers; vanishing gradients in RNNs motivate the move to attention                    |
-| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md) (PyTorch)**              | Attention implemented as `nn.Module`; same training loop, `state_dict`, checkpointing                                                           |
-| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)**    | Long sequences → large memory; mixed precision essential; gradient clipping common                                                              |
-| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md) (CNNs)**                 | Self-attention can be seen as a data-dependent convolution with a global receptive field — each "filter" is determined by content, not position |
-| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation)**       | Dropout applied after attention weights and after FFN; weight decay with AdamW standard for attention models                                    |
-| **[Week 18](../week18_transformers/theory.md) (Transformers)**         | Assembles multi-head attention into a full encoder–decoder architecture with positional encoding                                                |
-| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-Tuning)**          | Attention weights in pretrained models encode learned relationships; fine-tuning adapts them to new tasks                                       |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#3-vanishing-gradients) (Training Pathologies)** | Residual connections and LayerNorm are essential in Transformers; vanishing gradients in RNNs motivate the move to attention                    |
+| **[Week 13](../../05_deep_learning/week13_pytorch_basics/theory.md#4-building-models-with-nnmodule) (PyTorch)**              | Attention implemented as `nn.Module`; same training loop, `state_dict`, checkpointing                                                           |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md#6-mixed-precision-training) (Training at Scale)**    | Long sequences → large memory; mixed precision essential; gradient clipping common                                                              |
+| **[Week 15](../../05_deep_learning/week15_cnn_representations/theory.md#12-classic-cnn-architectures) (CNNs)**                 | Self-attention can be seen as a data-dependent convolution with a global receptive field — each "filter" is determined by content, not position |
+| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md#3-dropout) (Regularisation)**       | Dropout applied after attention weights and after FFN; weight decay with AdamW standard for attention models                                    |
+| **[Week 18](../week18_transformers/theory.md#2-the-transformer-at-a-glance) (Transformers)**         | Assembles multi-head attention into a full encoder–decoder architecture with positional encoding                                                |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md#3-adaptation-strategies) (Fine-Tuning)**          | Attention weights in pretrained models encode learned relationships; fine-tuning adapts them to new tasks                                       |
 
 ---
 
@@ -476,7 +476,7 @@ Components from earlier weeks:
 | Add a causal mask to the self-attention and train a simple next-token predictor         | Autoregressive generation; foundation for GPT-style models                                  |
 | Compare 1, 4, 8, 16 heads at fixed $d_\text{model} = 64$                                | Diminishing returns after ~8 heads; 1 head is significantly worse                           |
 | Plot attention entropy $H = -\sum_i \alpha_i \log \alpha_i$ per head                    | Low entropy = focused attention; high entropy = diffuse; useful diagnostic                  |
-| Measure wall-clock time for self-attention with $T \in \{64, 128, 256, 512, 1024\}$     | Quadratic scaling empirically visible; motivates efficient attention in [Week 18](../week18_transformers/theory.md)+            |
+| Measure wall-clock time for self-attention with $T \in \{64, 128, 256, 512, 1024\}$     | Quadratic scaling empirically visible; motivates efficient attention in [Week 18](../week18_transformers/theory.md#82-flops-and-memory)+            |
 
 ---
 

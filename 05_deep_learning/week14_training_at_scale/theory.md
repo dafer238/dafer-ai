@@ -45,11 +45,11 @@
 
 ## 1. Scope and Purpose
 
-[Week 13](../week13_pytorch_basics/theory.md) built a working PyTorch training loop. This week wraps that loop in **production tooling**: efficient data loading, learning rate schedules, checkpointing, and an introduction to mixed precision and distributed training.
+[Week 13](../week13_pytorch_basics/theory.md#8-the-training-loop) built a working PyTorch training loop. This week wraps that loop in **production tooling**: efficient data loading, learning rate schedules, checkpointing, and an introduction to mixed precision and distributed training.
 
 The difference between a research prototype and a reproducible experiment is almost entirely in this engineering layer. None of it changes the model's mathematics — it changes whether training finishes at all, finishes in reasonable time, and whether you can resume when it fails.
 
-**Prerequisites.** [Week 13](../week13_pytorch_basics/theory.md) (PyTorch: `nn.Module`, DataLoader, optimisers, `state_dict`). [[Weeks 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md) (learning rate intuition, SGD, Adam).
+**Prerequisites.** [Week 13](../week13_pytorch_basics/theory.md#7-data-loading-dataset-and-dataloader) (PyTorch: `nn.Module`, DataLoader, optimisers, `state_dict`). [Weeks 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md#81-adamw-decoupled-weight-decay) (learning rate intuition, SGD, Adam).
 
 ---
 
@@ -57,7 +57,7 @@ The difference between a research prototype and a reproducible experiment is alm
 
 ### 2.1 Dataset and DataLoader Recap
 
-From [Week 13](../week13_pytorch_basics/theory.md):
+From [Week 13](../week13_pytorch_basics/theory.md#7-data-loading-dataset-and-dataloader):
 
 ```python
 dataset = TensorDataset(X, y)
@@ -161,7 +161,7 @@ throughput = 50 / elapsed  # batches/sec
 
 ### 3.1 Batch Size and Generalisation
 
-From [Week 01](../../02_fundamentals/week01_optimization/theory.md), the mini-batch gradient is a noisy estimate of the full-batch gradient:
+From [Week 01](../../02_fundamentals/week01_optimization/theory.md#53-variance-and-the-noisespeed-trade-off), the mini-batch gradient is a noisy estimate of the full-batch gradient:
 
 $$g_B = \frac{1}{|B|}\sum_{i \in B}\nabla_\theta\mathcal{L}_i \qquad\text{where}\qquad \mathbb{E}[g_B] = \nabla_\theta\mathcal{L}$$
 
@@ -592,7 +592,7 @@ dist.init_process_group("nccl")
 model = DDP(model.to(local_rank), device_ids=[local_rank])
 ```
 
-Full distributed training is beyond this week's scope but the concepts appear again in [Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (fine-tuning) and [Week 20](../../08_deployment/week20_deployment/theory.md) (deployment).
+Full distributed training is beyond this week's scope but the concepts appear again in [Week 19](../../07_transfer_learning/week19_finetuning/theory.md#3-adaptation-strategies) (fine-tuning) and [Week 20](../../08_deployment/week20_deployment/theory.md) (deployment).
 
 ---
 
@@ -666,13 +666,13 @@ for epoch in range(start_epoch, 100):
 
 | Week                               | Connection                                                                                                                               |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **[[Week 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md) (Optimisation)**      | LR intuition; SGD variance analysis; Adam's adaptive rates — the theory behind schedulers                                                |
-| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)** | Gradient clipping integrates with `scaler.step()` in mixed precision; BatchNorm running stats need warmup                                |
-| **[Week 13](../week13_pytorch_basics/theory.md) (PyTorch Basics)**       | DataLoader, `state_dict`, training loop — this week extends them to production quality                                                   |
-| **[Week 15](../week15_cnn_representations/theory.md) (CNNs)**                 | Convolutional models are expensive; multi-worker loading and mixed precision are essential                                               |
-| **[Week 16](../week16_regularization_dl/theory.md) (Regularisation DL)**    | Data augmentation happens in the DataLoader pipeline (transforms); dropout interacts with checkpointing (`model.train()`/`model.eval()`) |
-| **[Week 18](../../06_sequence_models/week18_transformers/theory.md) (Transformers)**         | Transformers require warmup + cosine schedule; mixed precision is standard for large models                                              |
-| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-Tuning)**          | Loading pre-trained checkpoints; freezing layers; discriminative LR schedules build on this week's scheduler patterns                    |
+| **[Week 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md#81-adamw-decoupled-weight-decay) (Optimisation)**      | LR intuition; SGD variance analysis; Adam's adaptive rates — the theory behind schedulers                                                |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#7-fix-2-batch-normalisation) (Training Pathologies)** | Gradient clipping integrates with `scaler.step()` in mixed precision; BatchNorm running stats need warmup                                |
+| **[Week 13](../week13_pytorch_basics/theory.md#8-the-training-loop) (PyTorch Basics)**       | DataLoader, `state_dict`, training loop — this week extends them to production quality                                                   |
+| **[Week 15](../week15_cnn_representations/theory.md#8-building-a-cnn-in-pytorch) (CNNs)**                 | Convolutional models are expensive; multi-worker loading and mixed precision are essential                                               |
+| **[Week 16](../week16_regularization_dl/theory.md#5-data-augmentation) (Regularisation DL)**    | Data augmentation happens in the DataLoader pipeline (transforms); dropout interacts with checkpointing (`model.train()`/`model.eval()`) |
+| **[Week 18](../../06_sequence_models/week18_transformers/theory.md#9-training-considerations) (Transformers)**         | Transformers require warmup + cosine schedule; mixed precision is standard for large models                                              |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md#3-adaptation-strategies) (Fine-Tuning)**          | Loading pre-trained checkpoints; freezing layers; discriminative LR schedules build on this week's scheduler patterns                    |
 | **[Week 20](../../08_deployment/week20_deployment/theory.md) (Deployment)**           | Model serialisation, ONNX export, TorchScript — extensions of `torch.save` and `state_dict`                                              |
 
 ---
@@ -720,7 +720,7 @@ for epoch in range(start_epoch, 100):
 | $g_B$                    | Mini-batch gradient        | $\frac{1}{                                           | B          | }\sum_{i \in B}\nabla\mathcal{L}_i$ |
 | $\sigma^2$               | Gradient variance          | Per-sample gradient variance                         |
 | $\lambda_{\max}(H)$      | Largest Hessian eigenvalue | Determines optimal step size                         |
-| $m_t, v_t$               | Adam moments               | First/second moment estimates ([Week 02](../../02_fundamentals/week02_advanced_optimizers/theory.md))              |
+| $m_t, v_t$               | Adam moments               | First/second moment estimates ([Week 02](../../02_fundamentals/week02_advanced_optimizers/theory.md#81-adamw-decoupled-weight-decay))              |
 | `state_dict`             | Model/optimiser state      | Serialised dictionary of parameters                  |
 | `pin_memory`             | Pinned CPU memory          | Page-locked for fast GPU transfer                    |
 | `non_blocking`           | Async transfer             | Overlap CPU→GPU copy with computation                |

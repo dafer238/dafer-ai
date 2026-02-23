@@ -2,42 +2,46 @@
 
 ## Table of Contents
 
-1. [Scope and Purpose](#1-scope-and-purpose)
-2. [The Optimisation Problem](#2-the-optimisation-problem)
-3. [Loss Functions](#3-loss-functions)
-    - 3.1 [What Is a Loss Function?](#31-what-is-a-loss-function)
-    - 3.2 [Mean Squared Error](#32-mean-squared-error)
-    - 3.3 [Cross-Entropy Loss](#33-cross-entropy-loss)
-    - 3.4 [Loss Landscapes](#34-loss-landscapes)
-4. [Gradient Descent](#4-gradient-descent)
-    - 4.1 [The Gradient](#41-the-gradient)
-    - 4.2 [The Update Rule](#42-the-update-rule)
-    - 4.3 [Convergence Analysis for Quadratic Losses](#43-convergence-analysis-for-quadratic-losses)
-    - 4.4 [The Learning Rate](#44-the-learning-rate)
-    - 4.5 [Full-Batch Gradient Descent in Matrix Form](#45-full-batch-gradient-descent-in-matrix-form)
-5. [Stochastic Gradient Descent (SGD)](#5-stochastic-gradient-descent-sgd)
-    - 5.1 [Motivation](#51-motivation)
-    - 5.2 [Mini-Batch SGD](#52-mini-batch-sgd)
-    - 5.3 [Variance and the Noise–Speed Trade-off](#53-variance-and-the-noisespeed-trade-off)
-6. [Momentum](#6-momentum)
-    - 6.1 [The Physics Analogy](#61-the-physics-analogy)
-    - 6.2 [The Momentum Update Rule](#62-the-momentum-update-rule)
-    - 6.3 [Why Momentum Helps](#63-why-momentum-helps)
-    - 6.4 [Nesterov Accelerated Gradient](#64-nesterov-accelerated-gradient)
-7. [The Geometry of Loss Landscapes](#7-the-geometry-of-loss-landscapes)
-    - 7.1 [Convex Functions](#71-convex-functions)
-    - 7.2 [Non-Convex Landscapes, Local Minima, and Saddle Points](#72-non-convex-landscapes-local-minima-and-saddle-points)
-    - 7.3 [Conditioning and the Hessian](#73-conditioning-and-the-hessian)
-    - 7.4 [Saddle Points in High Dimensions](#74-saddle-points-in-high-dimensions)
-8. [Learning Rate Selection](#8-learning-rate-selection)
-    - 8.1 [The Divergence Threshold](#81-the-divergence-threshold)
-    - 8.2 [Learning Rate Schedules](#82-learning-rate-schedules)
-    - 8.3 [Leslie Smith's LR Range Test](#83-leslie-smiths-lr-range-test)
-9. [Convergence Diagnostics](#9-convergence-diagnostics)
-10. [The Physical Analogy: Loss as Energy](#10-the-physical-analogy-loss-as-energy)
-11. [Notebook Reference Guide](#11-notebook-reference-guide)
-12. [Symbol Reference](#12-symbol-reference)
-13. [References](#13-references)
+- [Optimisation Intuition: Loss as Energy](#optimisation-intuition-loss-as-energy)
+  - [Table of Contents](#table-of-contents)
+  - [1. Scope and Purpose](#1-scope-and-purpose)
+  - [2. The Optimisation Problem](#2-the-optimisation-problem)
+  - [3. Loss Functions](#3-loss-functions)
+    - [3.1 What Is a Loss Function?](#31-what-is-a-loss-function)
+    - [3.2 Mean Squared Error](#32-mean-squared-error)
+    - [3.3 Cross-Entropy Loss](#33-cross-entropy-loss)
+    - [3.4 Loss Landscapes](#34-loss-landscapes)
+  - [4. Gradient Descent](#4-gradient-descent)
+    - [4.1 The Gradient](#41-the-gradient)
+    - [4.2 The Update Rule](#42-the-update-rule)
+    - [4.3 Convergence Analysis for Quadratic Losses](#43-convergence-analysis-for-quadratic-losses)
+    - [4.4 The Learning Rate](#44-the-learning-rate)
+    - [4.5 Full-Batch Gradient Descent in Matrix Form](#45-full-batch-gradient-descent-in-matrix-form)
+  - [5. Stochastic Gradient Descent (SGD)](#5-stochastic-gradient-descent-sgd)
+    - [5.1 Motivation](#51-motivation)
+    - [5.2 Mini-Batch SGD](#52-mini-batch-sgd)
+    - [5.3 Variance and the Noise–Speed Trade-off](#53-variance-and-the-noisespeed-trade-off)
+  - [6. Momentum](#6-momentum)
+    - [6.1 The Physics Analogy](#61-the-physics-analogy)
+    - [6.2 The Momentum Update Rule](#62-the-momentum-update-rule)
+    - [6.3 Why Momentum Helps](#63-why-momentum-helps)
+    - [6.4 Nesterov Accelerated Gradient](#64-nesterov-accelerated-gradient)
+  - [7. The Geometry of Loss Landscapes](#7-the-geometry-of-loss-landscapes)
+    - [7.1 Convex Functions](#71-convex-functions)
+    - [7.2 Non-Convex Landscapes, Local Minima, and Saddle Points](#72-non-convex-landscapes-local-minima-and-saddle-points)
+    - [7.3 Conditioning and the Hessian](#73-conditioning-and-the-hessian)
+    - [7.4 Saddle Points in High Dimensions](#74-saddle-points-in-high-dimensions)
+  - [8. Learning Rate Selection](#8-learning-rate-selection)
+    - [8.1 The Divergence Threshold](#81-the-divergence-threshold)
+    - [8.2 Learning Rate Schedules](#82-learning-rate-schedules)
+    - [8.3 Leslie Smith's LR Range Test](#83-leslie-smiths-lr-range-test)
+  - [9. Convergence Diagnostics](#9-convergence-diagnostics)
+  - [10. The Physical Analogy: Loss as Energy](#10-the-physical-analogy-loss-as-energy)
+    - [The Gradient Descent Analogy](#the-gradient-descent-analogy)
+    - [Simulated Annealing Connection](#simulated-annealing-connection)
+  - [11. Notebook Reference Guide](#11-notebook-reference-guide)
+  - [12. Symbol Reference](#12-symbol-reference)
+  - [13. References](#13-references)
 
 ---
 
@@ -51,9 +55,9 @@ The goal is threefold:
 3. **Practical fluency** in implementing optimisers from scratch and diagnosing their behaviour.
 
 **Prerequisites.** This document assumes familiarity with:
-- Partial derivatives, the gradient vector, and the chain rule ([Week 00b](../../01_intro/week00b_math_and_data/theory.md), Part II).
-- Matrix–vector multiplication and norms ([Week 00b](../../01_intro/week00b_math_and_data/theory.md), Part I).
-- The training loop concept: forward → loss → backward → update ([Week 00a](../../01_intro/week00_ai_landscape/theory.md)).
+- Partial derivatives, the gradient vector, and the chain rule ([Week 00b](../../01_intro/week00b_math_and_data/theory.md#3-part-ii-calculus-and-optimisation), Part II).
+- Matrix–vector multiplication and norms ([Week 00b](../../01_intro/week00b_math_and_data/theory.md#2-part-i-linear-algebra), Part I).
+- The training loop concept: forward → loss → backward → update ([Week 00a](../../01_intro/week00_ai_landscape/theory.md#7-the-training-loop)).
 
 ---
 
@@ -120,7 +124,7 @@ $$\mathcal{L}_{\text{MSE}}(\theta) = \frac{1}{n}\sum_{i=1}^{n}(y_i - f_\theta(\m
 - The MSE is differentiable everywhere, which is essential for gradient descent.
 - Its gradient has a simple closed form (derived below).
 
-**Probabilistic justification.** MSE is the negative log-likelihood under a Gaussian noise model: $y_i = f_\theta(\mathbf{x}_i) + \epsilon_i$, $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$ (proved in [Week 07](../../03_probability/week07_likelihood/theory.md#72-laplace-noise-mae-l1-loss)). If the noise is instead Laplace-distributed, the corresponding loss is the **Mean Absolute Error** $\frac{1}{n}\sum |y_i - \hat{y}_i|$, which is more robust to outliers.
+**Probabilistic justification.** MSE is the negative log-likelihood under a Gaussian noise model: $y_i = f_\theta(\mathbf{x}_i) + \epsilon_i$, $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$ (proved in [Week 07](../../03_probability/week07_likelihood/theory.md#51-gaussian-noise-mse)). If the noise is instead Laplace-distributed, the corresponding loss is the **Mean Absolute Error** $\frac{1}{n}\sum |y_i - \hat{y}_i|$, which is more robust to outliers.
 
 **Gradient of the MSE.** Let $r_i = y_i - \hat{y}_i$ denote the residual. For a linear model $\hat{y}_i = \mathbf{w}^\top \mathbf{x}_i + b$:
 
@@ -165,7 +169,7 @@ $$\mathcal{L}_{\text{CE}}(\theta) = -\frac{1}{n}\sum_{i=1}^{n}\sum_{k=1}^{K} y_{
 - $\mathcal{L}_{\text{CE}} \geq 0$, and $\mathcal{L}_{\text{CE}} = 0$ only if $\hat{y}_{ik} = y_{ik}$ for all $i, k$.
 - The logarithm heavily penalises confident wrong predictions: $-\ln(0.01) \approx 4.6$ vs $-\ln(0.5) \approx 0.69$.
 - Cross-entropy equals the KL divergence between the true label distribution and the predicted distribution, plus the entropy of the true distribution (a constant).
-- Probabilistically, it is the negative log-likelihood under a Bernoulli (binary) or Categorical (multi-class) model ([Week 07](../../03_probability/week07_likelihood/theory.md#3-likelihood-from-data-to-models)).
+- Probabilistically, it is the negative log-likelihood under a Bernoulli (binary) or Categorical (multi-class) model ([Week 07](../../03_probability/week07_likelihood/theory.md#52-bernoulli-noise-binary-cross-entropy)).
 
 > **When to use which loss.** MSE for regression (continuous targets). Cross-entropy for classification (discrete targets). Using MSE for classification is technically possible but leads to pathological gradient behaviour: the gradient vanishes when the model is confidently wrong, precisely when it should be largest. Cross-entropy avoids this by the logarithmic penalty.
 
@@ -348,7 +352,7 @@ $$\mathcal{L}(\mathbf{w}) = \frac{1}{n}\|\mathbf{y} - X\mathbf{w}\|^2 = \frac{1}
 
 $$\mathcal{L} = \frac{1}{n}\left(\mathbf{y}^\top \mathbf{y} - 2\mathbf{y}^\top X\mathbf{w} + \mathbf{w}^\top X^\top X \mathbf{w}\right)$$
 
-Using the vector calculus identities from [Week 00b](../../01_intro/week00b_math_and_data/theory.md) (Section 3.7):
+Using the vector calculus identities from [Week 00b](../../01_intro/week00b_math_and_data/theory.md#37-vector-calculus-identities-for-ml) (Section 3.7):
 - $\nabla_{\mathbf{w}}(\mathbf{y}^\top X\mathbf{w}) = X^\top \mathbf{y}$
 - $\nabla_{\mathbf{w}}(\mathbf{w}^\top X^\top X \mathbf{w}) = 2X^\top X \mathbf{w}$
 
@@ -600,7 +604,7 @@ A **critical point** is a point where $\nabla \mathcal{L} = \mathbf{0}$. The Hes
 | Negative definite         | $\lambda_i < 0 \; \forall i$ | **Local maximum** |
 | Indefinite                | Mixed signs                  | **Saddle point**  |
 
-> **Definition recap.** The Hessian $H = \nabla^2 \mathcal{L}$ is the $p \times p$ matrix of second derivatives ([Week 00b](../../01_intro/week00b_math_and_data/theory.md), Section 3.4). Its eigenvalues are the curvatures along the principal directions. A positive eigenvalue means the loss curves upward in that direction (a valley); a negative eigenvalue means it curves downward (a hill).
+> **Definition recap.** The Hessian $H = \nabla^2 \mathcal{L}$ is the $p \times p$ matrix of second derivatives ([Week 00b](../../01_intro/week00b_math_and_data/theory.md#34-the-jacobian-and-the-hessian), Section 3.4). Its eigenvalues are the curvatures along the principal directions. A positive eigenvalue means the loss curves upward in that direction (a valley); a negative eigenvalue means it curves downward (a hill).
 
 > **Notebook reference.** Exercise 2 in `starter.ipynb` (Cell 11) asks you to define the classic saddle function $f(x, y) = x^2 - y^2$ and observe GD behaviour. The Hessian is $\text{diag}(2, -2)$: one positive eigenvalue (minimum in $x$), one negative (maximum in $y$). At the origin, $\nabla f = \mathbf{0}$ but it is not a minimum — it is a saddle.
 >

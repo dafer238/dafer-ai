@@ -50,7 +50,7 @@
 
 ## 1. Scope and Purpose
 
-[Week 07](../week07_likelihood/theory.md) answered "what are the best parameter estimates?" using maximum likelihood. This week asks the follow-up question: **how confident should we be in those estimates, and in the predictions they produce?**
+[Week 07](../week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle) answered "what are the best parameter estimates?" using maximum likelihood. This week asks the follow-up question: **how confident should we be in those estimates, and in the predictions they produce?**
 
 A model that says "tomorrow's temperature will be 22 °C" is less useful than one that says "22 °C ± 3 °C with 95% confidence." Quantifying uncertainty is essential for:
 - **Decision-making under risk** — engineering, medicine, finance.
@@ -65,7 +65,7 @@ This week covers three complementary approaches to uncertainty:
 
 And one cross-cutting diagnostic: **calibration** — checking that the stated uncertainties are honest.
 
-**Prerequisites.** [Week 07](../week07_likelihood/theory.md) (likelihood, MLE, Bayes' theorem), [Week 06](../../02_fundamentals/week06_regularization/theory.md) (Ridge as MAP = Bayesian connection), [Week 03](../../02_fundamentals/week03_linear_models/theory.md) (linear regression).
+**Prerequisites.** [Week 07](../week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle) (likelihood, MLE, Bayes' theorem), [Week 06](../../02_fundamentals/week06_regularization/theory.md#35-bayesian-interpretation) (Ridge as MAP = Bayesian connection), [Week 03](../../02_fundamentals/week03_linear_models/theory.md#3-linear-regression) (linear regression).
 
 ---
 
@@ -329,7 +329,7 @@ $$\boxed{p(\theta \mid \mathcal{D}) = \frac{p(\mathcal{D} \mid \theta)\,p(\theta
 | Update       | **Posterior** $p(\theta \mid \mathcal{D})$         | Updated belief after seeing data             |
 | Predict      | **Posterior predictive** $p(y_* \mid \mathcal{D})$ | Integrate out $\theta$ to predict new data   |
 
-**Comparison with MLE ([Week 07](../week07_likelihood/theory.md)):**
+**Comparison with MLE ([Week 07](../week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle)):**
 
 |                        | MLE                                                          | Bayesian                                       |
 | ---------------------- | ------------------------------------------------------------ | ---------------------------------------------- |
@@ -353,7 +353,7 @@ $$\boxed{p(\theta \mid \mathcal{D}) = \frac{p(\mathcal{D} \mid \theta)\,p(\theta
 
 > **Sensitivity to the prior.** With enough data, the posterior is dominated by the likelihood and the prior becomes irrelevant (the data "washes out" the prior). With little data, the prior has a strong effect. This is both the strength (regularisation) and the criticism (subjectivity) of Bayesian methods.
 
-**Likelihood** $p(\mathcal{D} \mid \theta)$: same as in [Week 07](../week07_likelihood/theory.md). The product of $n$ i.i.d. density evaluations.
+**Likelihood** $p(\mathcal{D} \mid \theta)$: same as in [Week 07](../week07_likelihood/theory.md#3-likelihood-from-data-to-models). The product of $n$ i.i.d. density evaluations.
 
 **Posterior** $p(\theta \mid \mathcal{D})$: the complete solution to the inference problem. Every summary (point estimate, interval, prediction) is derived from it.
 
@@ -401,7 +401,7 @@ Bayesian linear regression (Section 8) uses the Gaussian-Gaussian conjugacy, whi
 
 ### 8.1 The Model
 
-**Likelihood** (same as [Week 07](../week07_likelihood/theory.md)):
+**Likelihood** (same as [Week 07](../week07_likelihood/theory.md#6-mle-for-linear-regression-full-derivation)):
 
 $$y_i \mid \mathbf{x}_i, \mathbf{w} \sim \mathcal{N}(\mathbf{x}_i^\top\mathbf{w}, \sigma^2) \implies p(\mathbf{y} \mid X, \mathbf{w}) = \mathcal{N}(\mathbf{y} \mid X\mathbf{w}, \sigma^2 I)$$
 
@@ -496,7 +496,7 @@ The posterior mean of BLR is:
 
 $$\boldsymbol{\mu}_{\text{post}} = (\alpha I + \beta X^\top X)^{-1}\beta X^\top\mathbf{y}$$
 
-Compare with the Ridge solution ([Week 06](../../02_fundamentals/week06_regularization/theory.md)):
+Compare with the Ridge solution ([Week 06](../../02_fundamentals/week06_regularization/theory.md#32-closed-form-solution)):
 
 $$\hat{\mathbf{w}}_{\text{Ridge}} = (X^\top X + \lambda I)^{-1}X^\top\mathbf{y}$$
 
@@ -508,7 +508,7 @@ where $\tau^2 = 1/\alpha$ is the prior variance.
 
 **Ridge gives the point estimate; BLR gives point estimate + uncertainty.** The posterior covariance $\Sigma_{\text{post}}$ is the "bonus" of the Bayesian approach — it tells you how confident to be in each coefficient.
 
-> **The circle is complete.** [Week 03](../../02_fundamentals/week03_linear_models/theory.md) introduced MSE. [Week 06](../../02_fundamentals/week06_regularization/theory.md) added L2 penalty (Ridge). [Week 07](../week07_likelihood/theory.md) showed MSE = Gaussian NLL and Ridge = Gaussian MAP. Now Week 08 goes beyond MAP to the full posterior, providing uncertainty estimates that MAP alone cannot.
+> **The circle is complete.** [Week 03](../../02_fundamentals/week03_linear_models/theory.md#4-statistical-interpretation-of-linear-regression) introduced MSE. [Week 06](../../02_fundamentals/week06_regularization/theory.md#3-ridge-regression-l2-regularisation) added L2 penalty (Ridge). [Week 07](../week07_likelihood/theory.md#9-from-mle-to-map-the-bridge-to-regularisation) showed MSE = Gaussian NLL and Ridge = Gaussian MAP. Now Week 08 goes beyond MAP to the full posterior, providing uncertainty estimates that MAP alone cannot.
 
 ---
 
@@ -579,7 +579,7 @@ If the model is well-specified and well-calibrated:
 | $\text{std}(z) < 1$     | Model is **underconfident** (intervals too wide)              |
 | $\text{std}(z) > 1$     | Model is **overconfident** (intervals too narrow)             |
 | $\bar{z} \neq 0$        | Systematic bias in predictions                                |
-| Heavy tails in Q-Q plot | Noise is not Gaussian (outliers) → use robust model ([Week 07](../week07_likelihood/theory.md)) |
+| Heavy tails in Q-Q plot | Noise is not Gaussian (outliers) → use robust model ([Week 07](../week07_likelihood/theory.md#7-robust-regression-alternative-noise-models)) |
 | Curvature in Q-Q plot   | Misspecified distribution (e.g., skewed noise)                |
 
 ---
@@ -608,7 +608,7 @@ where $B_m$ is the $m$-th bin, $\text{acc}$ is the accuracy in the bin, and $\te
 - **Temperature scaling:** divide logits by a scalar $T > 0$ before softmax; $T > 1$ softens predictions (reduces overconfidence).
 - **Isotonic regression:** non-parametric monotone mapping.
 
-> **Forward pointer.** Neural networks are notoriously poorly calibrated (Guo et al., 2017). Temperature scaling becomes critical in [[Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)](../../04_neural_networks/week11_nn_from_scratch/theory.md)–[18](../../06_sequence_models/week18_transformers/theory.md).
+> **Forward pointer.** Neural networks are notoriously poorly calibrated (Guo et al., 2017). Temperature scaling becomes critical in [Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#8-the-training-loop)–[18](../../06_sequence_models/week18_transformers/theory.md#9-training-considerations).
 
 ---
 
@@ -683,7 +683,7 @@ Training multiple models and examining the spread of their predictions is a simp
 >
 > **Suggested experiment.** Plot ensemble variance as a function of $x$ and overlay it with BLR epistemic uncertainty $\mathbf{x}_*^\top\Sigma_{\text{post}}\mathbf{x}_*$. They should be nearly proportional.
 
-> **Forward pointer.** Ensembles of neural networks ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)+) are one of the most practical methods for uncertainty estimation in deep learning — "deep ensembles" (Lakshminarayanan et al., 2017).
+> **Forward pointer.** Ensembles of neural networks ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#9-regularisation-in-neural-networks)+) are one of the most practical methods for uncertainty estimation in deep learning — "deep ensembles" (Lakshminarayanan et al., 2017).
 
 ---
 
@@ -691,14 +691,14 @@ Training multiple models and examining the spread of their predictions is a simp
 
 | Week                            | Connection                                                                                 |
 | ------------------------------- | ------------------------------------------------------------------------------------------ |
-| **[Week 03](../../02_fundamentals/week03_linear_models/theory.md) (Linear Models)**     | OLS = MLE point estimate; BLR adds the posterior around it                                 |
-| **[Week 06](../../02_fundamentals/week06_regularization/theory.md) (Regularisation)**    | Ridge = posterior mean of BLR; $\lambda = \alpha\sigma^2$                                  |
-| **[Week 07](../week07_likelihood/theory.md) (Likelihood)**        | MLE = the "no prior" special case; NLL is the likelihood term in the posterior             |
-| **[Week 09](../week09_time_series/theory.md) (Time Series)**       | Bayesian AR models; uncertainty in multi-step forecasts grows over time                    |
-| **[Week 10](../week10_surrogate_models/theory.md) (Surrogate Models)**  | Gaussian processes are infinite-dimensional BLR; posterior predictive = GP mean + variance |
-| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NNs)**               | Weight decay = Gaussian prior; Bayesian neural networks extend BLR to non-linear models    |
-| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md) (Training at Scale)** | MC Dropout as approximate Bayesian inference; temperature scaling for calibration          |
-| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md) (Regularisation DL)** | Dropout at test time produces ensemble-like uncertainty estimates                          |
+| **[Week 03](../../02_fundamentals/week03_linear_models/theory.md#3-linear-regression) (Linear Models)**     | OLS = MLE point estimate; BLR adds the posterior around it                                 |
+| **[Week 06](../../02_fundamentals/week06_regularization/theory.md#35-bayesian-interpretation) (Regularisation)**    | Ridge = posterior mean of BLR; $\lambda = \alpha\sigma^2$                                  |
+| **[Week 07](../week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle) (Likelihood)**        | MLE = the "no prior" special case; NLL is the likelihood term in the posterior             |
+| **[Week 09](../week09_time_series/theory.md#6-autoregressive-models-arp) (Time Series)**       | Bayesian AR models; uncertainty in multi-step forecasts grows over time                    |
+| **[Week 10](../week10_surrogate_models/theory.md#5-gp-posterior-regression) (Surrogate Models)**  | Gaussian processes are infinite-dimensional BLR; posterior predictive = GP mean + variance |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#9-regularisation-in-neural-networks) (NNs)**               | Weight decay = Gaussian prior; Bayesian neural networks extend BLR to non-linear models    |
+| **[Week 14](../../05_deep_learning/week14_training_at_scale/theory.md#4-learning-rate-schedules) (Training at Scale)** | MC Dropout as approximate Bayesian inference; temperature scaling for calibration          |
+| **[Week 16](../../05_deep_learning/week16_regularization_dl/theory.md#3-dropout) (Regularisation DL)** | Dropout at test time produces ensemble-like uncertainty estimates                          |
 | **[Week 20](../../08_deployment/week20_deployment/theory.md) (Deployment)**        | Calibration and uncertainty reporting are requirements for responsible deployment          |
 
 ---

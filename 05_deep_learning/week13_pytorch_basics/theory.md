@@ -54,14 +54,14 @@
 
 ## 1. Scope and Purpose
 
-[[Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)](../../04_neural_networks/week11_nn_from_scratch/theory.md)–[12](../../04_neural_networks/week12_training_pathologies/theory.md) built and diagnosed neural networks using NumPy. Starting this week, **every remaining week uses PyTorch**. The goal is not to learn a new framework for its own sake — it is to automate the two things that make hand-coded deep learning painful:
+[Weeks 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#2-from-linear-models-to-neural-networks)–[12](../../04_neural_networks/week12_training_pathologies/theory.md#2-the-gradient-flow-problem) built and diagnosed neural networks using NumPy. Starting this week, **every remaining week uses PyTorch**. The goal is not to learn a new framework for its own sake — it is to automate the two things that make hand-coded deep learning painful:
 
-1. **Gradient computation.** PyTorch's autograd implements the chain rule ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md)) automatically for arbitrary computational graphs.
+1. **Gradient computation.** PyTorch's autograd implements the chain rule ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#5-backpropagation)) automatically for arbitrary computational graphs.
 2. **Boilerplate management.** Parameter tracking, mini-batching, GPU transfer, checkpointing — all standardised.
 
 After this week you should find writing a PyTorch model as natural as writing NumPy. The concepts are identical; only the tooling changes.
 
-**Prerequisites.** [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (backpropagation, chain rule), [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (training pathologies — you'll use `nn.BatchNorm1d`, gradient clipping, etc. in later weeks via their PyTorch APIs).
+**Prerequisites.** [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#5-backpropagation) (backpropagation, chain rule), [Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#7-fix-2-batch-normalisation) (training pathologies — you'll use `nn.BatchNorm1d`, gradient clipping, etc. in later weeks via their PyTorch APIs).
 
 ---
 
@@ -104,7 +104,7 @@ t_copy = torch.tensor(arr)                     # copy — independent
 | -------------------------------- | -------------- | ------------------------------------------- |
 | `torch.float32` (`torch.float`)  | 32-bit float   | Default for model weights and inputs        |
 | `torch.float64` (`torch.double`) | 64-bit float   | Numerical verification; rarely for training |
-| `torch.float16` (`torch.half`)   | 16-bit float   | Mixed-precision training ([Week 14](../week14_training_at_scale/theory.md))          |
+| `torch.float16` (`torch.half`)   | 16-bit float   | Mixed-precision training ([Week 14](../week14_training_at_scale/theory.md#6-mixed-precision-training))          |
 | `torch.int64` (`torch.long`)     | 64-bit integer | Class labels for `CrossEntropyLoss`         |
 | `torch.int32` (`torch.int`)      | 32-bit integer | Index tensors                               |
 | `torch.bool`                     | Boolean        | Masks                                       |
@@ -278,13 +278,13 @@ with torch.no_grad():
 
 ### 3.5 Autograd Is Just the Chain Rule
 
-The key insight connecting this week to [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md): PyTorch autograd computes exactly the same derivatives you computed by hand. For a two-layer network:
+The key insight connecting this week to [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#5-backpropagation): PyTorch autograd computes exactly the same derivatives you computed by hand. For a two-layer network:
 
 $$\hat{y} = W_2\,\text{relu}(W_1 x + b_1) + b_2$$
 
 $$\frac{\partial\mathcal{L}}{\partial W_1} = \frac{\partial\mathcal{L}}{\partial\hat{y}}\cdot\frac{\partial\hat{y}}{\partial h}\cdot\frac{\partial h}{\partial z_1}\cdot\frac{\partial z_1}{\partial W_1}$$
 
-In [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) you computed each factor manually. In PyTorch, `loss.backward()` does this automatically by traversing the graph. The mathematics is identical; only the implementation changes.
+In [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#5-backpropagation) you computed each factor manually. In PyTorch, `loss.backward()` does this automatically by traversing the graph. The mathematics is identical; only the implementation changes.
 
 > **Notebook reference.** Cell 6 verifies this: for $y = w_1 x_1 + w_2 x_2 + b$, autograd gives $\partial y/\partial w_1 = x_1$, matching the analytic result.
 
@@ -352,8 +352,8 @@ $$\text{Total} = (10 \times 50 + 50) + (50 \times 2 + 2) = 550 + 102 = 652$$
 | Sigmoid         | `nn.Sigmoid()`             | $y = 1/(1+e^{-x})$                                   |
 | Tanh            | `nn.Tanh()`                | $y = \tanh(x)$                                       |
 | Dropout         | `nn.Dropout(p)`            | Zeroes elements with probability $p$ during training |
-| BatchNorm       | `nn.BatchNorm1d(features)` | Normalise across batch ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md))                     |
-| LayerNorm       | `nn.LayerNorm(features)`   | Normalise across features ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md))                  |
+| BatchNorm       | `nn.BatchNorm1d(features)` | Normalise across batch ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#7-fix-2-batch-normalisation))                     |
+| LayerNorm       | `nn.LayerNorm(features)`   | Normalise across features ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#8-fix-3-layer-normalisation))                  |
 
 Activations can also be used as functions:
 
@@ -410,7 +410,7 @@ loss = criterion(logits, y_batch) # y_batch shape (N,), dtype=torch.long
 
 $$\mathcal{L}_i = -\log p(y_i\mid x_i) = -\log\text{softmax}(z_i)_{y_i} = -z_{i, y_i} + \log\sum_{c=1}^{C}e^{z_{i,c}}$$
 
-This is exactly the NLL from [Week 07](../../03_probability/week07_likelihood/theory.md) (Likelihood), now applied to neural network outputs.
+This is exactly the NLL from [Week 07](../../03_probability/week07_likelihood/theory.md#4-maximum-likelihood-estimation-mle) (Likelihood), now applied to neural network outputs.
 
 ---
 
@@ -456,7 +456,7 @@ optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
 
 ### 6.2 Adam
 
-Combines momentum and per-parameter adaptive learning rates ([[Weeks 01](../../02_fundamentals/week01_optimization/theory.md)](../../02_fundamentals/week01_optimization/theory.md)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md)):
+Combines momentum and per-parameter adaptive learning rates ([Weeks 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent)–[02](../../02_fundamentals/week02_advanced_optimizers/theory.md#81-adamw-decoupled-weight-decay)):
 
 $$m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t$$
 $$v_t = \beta_2 v_{t-1} + (1 - \beta_2)g_t^2$$
@@ -573,7 +573,7 @@ for batch_x, batch_y in train_loader:
     ...
 ```
 
-**Why mini-batches?** ([Week 01](../../02_fundamentals/week01_optimization/theory.md) review)
+**Why mini-batches?** ([Week 01](../../02_fundamentals/week01_optimization/theory.md#4-gradient-descent) review)
 
 | Batch size       | Gradient estimate       | Update speed        | Memory                   |
 | ---------------- | ----------------------- | ------------------- | ------------------------ |
@@ -781,7 +781,7 @@ A **scheduler** adjusts the learning rate during training. PyTorch provides many
 | `ExponentialLR(gamma)`                        | $\eta_t = \eta_0\cdot\gamma^t$                                                       | Smooth continuous decay                             |
 | `CosineAnnealingLR(T_max)`                    | $\eta_t = \eta_{\min} + \frac{1}{2}(\eta_0 - \eta_{\min})(1 + \cos(\pi t/T_{\max}))$ | Widely used; gentle decay and warm restart friendly |
 | `ReduceLROnPlateau(patience)`                 | Reduce LR when metric stops improving for `patience` epochs                          | Adaptive; good default                              |
-| `OneCycleLR(max_lr, epochs, steps_per_epoch)` | Warm-up → high LR → anneal                                                           | Super-convergence ([Week 14](../week14_training_at_scale/theory.md))                         |
+| `OneCycleLR(max_lr, epochs, steps_per_epoch)` | Warm-up → high LR → anneal                                                           | Super-convergence ([Week 14](../week14_training_at_scale/theory.md#4-learning-rate-schedules))                         |
 
 ```python
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=50)
@@ -830,13 +830,13 @@ At $t = 0$: $\eta = \eta_{\max}$. At $t = T_{\max}$: $\eta = \eta_{\min}$. The d
 
 | Week                                     | Connection                                                                                                   |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md) (NN from Scratch)**            | The NumPy network you built — PyTorch automates its gradient computation                                     |
-| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) (Training Pathologies)**       | `nn.BatchNorm1d`, `nn.init.kaiming_normal_`, `clip_grad_norm_` are one-line PyTorch calls                    |
-| **[Week 14](../week14_training_at_scale/theory.md) (Training at Scale)**          | DataLoader workers, LR schedulers, mixed precision, distributed training — all build on this week's patterns |
-| **[Week 15](../week15_cnn_representations/theory.md) (CNNs)**                       | `nn.Conv2d`, `nn.MaxPool2d` — same `nn.Module` API, just new layer types                                     |
-| **[Week 16](../week16_regularization_dl/theory.md) (Regularisation DL)**          | `nn.Dropout`, weight decay in optimiser, data augmentation in DataLoader transforms                          |
-| **[[Week 17](../../06_sequence_models/week17_attention/theory.md)](../../06_sequence_models/week17_attention/theory.md)–[18](../../06_sequence_models/week18_transformers/theory.md) (Attention, Transformers)** | `nn.MultiheadAttention`, custom `forward` with masks — built on Module patterns                              |
-| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md) (Fine-Tuning)**                | Loading pre-trained `state_dict`, freezing parameters, saving checkpoints                                    |
+| **[Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#2-from-linear-models-to-neural-networks) (NN from Scratch)**            | The NumPy network you built — PyTorch automates its gradient computation                                     |
+| **[Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#7-fix-2-batch-normalisation) (Training Pathologies)**       | `nn.BatchNorm1d`, `nn.init.kaiming_normal_`, `clip_grad_norm_` are one-line PyTorch calls                    |
+| **[Week 14](../week14_training_at_scale/theory.md#4-learning-rate-schedules) (Training at Scale)**          | DataLoader workers, LR schedulers, mixed precision, distributed training — all build on this week's patterns |
+| **[Week 15](../week15_cnn_representations/theory.md#8-building-a-cnn-in-pytorch) (CNNs)**                       | `nn.Conv2d`, `nn.MaxPool2d` — same `nn.Module` API, just new layer types                                     |
+| **[Week 16](../week16_regularization_dl/theory.md#3-dropout) (Regularisation DL)**          | `nn.Dropout`, weight decay in optimiser, data augmentation in DataLoader transforms                          |
+| **[Week 17](../../06_sequence_models/week17_attention/theory.md#31-the-query-key-value-framework)–[18](../../06_sequence_models/week18_transformers/theory.md#41-sub-layer-1-multi-head-self-attention) (Attention, Transformers)** | `nn.MultiheadAttention`, custom `forward` with masks — built on Module patterns                              |
+| **[Week 19](../../07_transfer_learning/week19_finetuning/theory.md#3-adaptation-strategies) (Fine-Tuning)**                | Loading pre-trained `state_dict`, freezing parameters, saving checkpoints                                    |
 | **[Week 20](../../08_deployment/week20_deployment/theory.md) (Deployment)**                 | `torch.jit`, ONNX export, model serialisation — extensions of `torch.save`                                   |
 
 ---
@@ -860,7 +860,7 @@ At $t = 0$: $\eta = \eta_{\max}$. At $t = T_{\max}$: $\eta = \eta_{\min}$. The d
 | Modification                                                                                     | What it reveals                                                                              |
 | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
 | Replace `Adam` with `SGD(lr=0.01, momentum=0.9)`                                                 | Demonstrates Adam's faster initial convergence vs. SGD's potential for better final accuracy |
-| Add `nn.BatchNorm1d(64)` after `fc1`                                                             | Shows immediate reduction in loss variance between epochs ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md) applied in PyTorch)       |
+| Add `nn.BatchNorm1d(64)` after `fc1`                                                             | Shows immediate reduction in loss variance between epochs ([Week 12](../../04_neural_networks/week12_training_pathologies/theory.md#7-fix-2-batch-normalisation) applied in PyTorch)       |
 | Double the hidden size to 128                                                                    | More parameters → faster fitting but check for overfitting by comparing train/test accuracy  |
 | Use `BCEWithLogitsLoss` with a single output neuron                                              | Binary classification with logits — compare to 2-class `CrossEntropyLoss`                    |
 | Add `nn.Dropout(0.3)` between layers and compare with/without `model.eval()`                     | Shows why `eval()` matters: dropout active at test time worsens accuracy                     |

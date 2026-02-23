@@ -163,7 +163,7 @@ The outer product of $\mathbf{a} \in \mathbb{R}^m$ and $\mathbf{b} \in \mathbb{R
 
 $$\mathbf{a} \mathbf{b}^\top = \begin{bmatrix} a_1 b_1 & a_1 b_2 & \cdots & a_1 b_n \\ a_2 b_1 & a_2 b_2 & \cdots & a_2 b_n \\ \vdots & \vdots & \ddots & \vdots \\ a_m b_1 & a_m b_2 & \cdots & a_m b_n \end{bmatrix} \in \mathbb{R}^{m \times n}$$
 
-This yields a **matrix**. It appears in gradient computations for weight matrices in neural networks ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation)): if the loss gradient with respect to the output is $\boldsymbol{\delta}$ and the layer input is $\mathbf{h}$, the gradient with respect to the weight matrix is $\boldsymbol{\delta} \mathbf{h}^\top$.
+This yields a **matrix**. It appears in gradient computations for weight matrices in neural networks ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#53-backprop-through-a-two-layer-network)): if the loss gradient with respect to the output is $\boldsymbol{\delta}$ and the layer input is $\mathbf{h}$, the gradient with respect to the weight matrix is $\boldsymbol{\delta} \mathbf{h}^\top$.
 
 ```python
 a = np.array([1, 2, 3])
@@ -204,7 +204,7 @@ Each entry $y_i$ is the dot product of the $i$-th row of $A$ with $\mathbf{x}$.
 >
 > This is why vectorised code (one matrix multiply) is vastly faster than a Python loop over samples.
 
-**Geometric interpretation.** Multiplying by a matrix is a **linear transformation**: it can rotate, scale, shear, or project vectors. A $2 \times 2$ matrix maps every point in the plane to a new point. Understanding this is key to understanding what each layer of a neural network does ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation)).
+**Geometric interpretation.** Multiplying by a matrix is a **linear transformation**: it can rotate, scale, shear, or project vectors. A $2 \times 2$ matrix maps every point in the plane to a new point. Understanding this is key to understanding what each layer of a neural network does ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#42-forward-pass-in-matrix-form)).
 
 #### Matrix–Matrix Multiplication
 
@@ -561,7 +561,7 @@ For a vector-valued function $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$, the *
 
 $$J = \frac{\partial \mathbf{f}}{\partial \mathbf{x}} = \begin{bmatrix} \frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\ \vdots & \ddots & \vdots \\ \frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n} \end{bmatrix} \in \mathbb{R}^{m \times n}$$
 
-Row $i$ is the gradient of $f_i$. The Jacobian generalises the gradient (a gradient is a Jacobian for $m = 1$) and is the fundamental object in the backpropagation algorithm ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation)).
+Row $i$ is the gradient of $f_i$. The Jacobian generalises the gradient (a gradient is a Jacobian for $m = 1$) and is the fundamental object in the backpropagation algorithm ([Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#5-backpropagation)).
 
 #### The Hessian
 
@@ -633,7 +633,7 @@ $$\nabla_{\mathbf{x}} f = J_{\mathbf{h}}^\top \nabla_{\mathbf{h}} g$$
 
 where $J_{\mathbf{h}}$ is the Jacobian of $\mathbf{h}$ with respect to $\mathbf{x}$.
 
-> **Connection to neural networks.** A neural network is a composition of $L$ layers: $f = g_L \circ g_{L-1} \circ \cdots \circ g_1$. By the chain rule, the gradient of the loss with respect to the parameters of layer $\ell$ involves the product of Jacobians from all subsequent layers. This product is computed efficiently by **backpropagation**, which caches intermediate results and propagates gradients backward through the network. This is the subject of [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#74-he-kaiming-initialisation).
+> **Connection to neural networks.** A neural network is a composition of $L$ layers: $f = g_L \circ g_{L-1} \circ \cdots \circ g_1$. By the chain rule, the gradient of the loss with respect to the parameters of layer $\ell$ involves the product of Jacobians from all subsequent layers. This product is computed efficiently by **backpropagation**, which caches intermediate results and propagates gradients backward through the network. This is the subject of [Week 11](../../04_neural_networks/week11_nn_from_scratch/theory.md#5-backpropagation).
 
 **Worked example.** Consider a single-neuron model: $\hat{y} = \sigma(\mathbf{w}^\top \mathbf{x} + b)$, where $\sigma$ is the sigmoid function, and the loss is binary cross-entropy $\mathcal{L} = -[y \ln \hat{y} + (1 - y) \ln(1 - \hat{y})]$.
 
