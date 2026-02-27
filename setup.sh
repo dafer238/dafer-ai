@@ -8,7 +8,7 @@ SERVICE_FILE="ai.service"
 
 # Activate venv and install dependencies
 source "$VENV_DIR/bin/activate"
-uv pip install -r "$SCRIPT_DIR/environment/requirements.txt"
+# uv pip install -r "$SCRIPT_DIR/environment/requirements.txt"
 
 # Nginx: symlink config to sites-available, then enable via sites-enabled
 sudo ln -sf "$SCRIPT_DIR/$NGINX_CONF" "/etc/nginx/sites-available/$NGINX_CONF"
